@@ -1,5 +1,6 @@
 ---
 helm:
-  repository: https://charts.bitnami.com/bitnami
+  feature_gate: enable_external_secrets
+  repository: https://charts.external-secrets.io
   chart: external-secrets
-  version: 10.1.0
+  version: "0.14.2"

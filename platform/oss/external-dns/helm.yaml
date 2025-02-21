@@ -1,5 +1,6 @@
 ---
 helm:
-  repository: https://charts.bitnami.com/bitnami
-  chart: external-dns
-  version: 10.1.0
+  feature_gate: enable_external_dns
+  repository: https://github.com/kubernetes-sigs/external-dns
+  path: charts/external-dns
+  version: v0.15.1

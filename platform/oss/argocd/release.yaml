@@ -1,8 +1,0 @@
----
-helm:
-  repository: https://charts.jetstack.io
-  chart: argocd
-  version: "1.17.0"
-
-sync:
-  duration: 20s

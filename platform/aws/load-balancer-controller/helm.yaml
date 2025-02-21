@@ -1,0 +1,6 @@
+helm:
+  ## TODO: Update to use private repo
+  feature_gate: enable_load_balancer_controller
+  repository: https://aws.github.io/eks-charts
+  chart: aws-load-balancer-controller
+  version: 2.11.0

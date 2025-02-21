@@ -18,3 +18,15 @@ cloud_vendor: unknown
 labels: {}
 ## Annotations for the tenant cluster
 annotations: {}
+## The tenant repository for the tenant cluster
+tenant_repository: unknown
+## The revision of the tenant repository
+tenant_revision: unknown
+## The cost center to use for the tenant cluster
+tenant_cost_center: unknown
+## The platform repository for the tenant cluster
+platform_repository: unknown
+## The revision of the platform repository
+platform_revision: unknown
+## The path to the platform repository
+platform_path: unknown

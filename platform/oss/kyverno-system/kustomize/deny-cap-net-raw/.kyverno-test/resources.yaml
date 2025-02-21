@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: goodpod
+spec:
+  containers:
+    - image: busybox:1.35
+      name: busybox
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: badpod
+spec:
+  containers:
+    - image: busybox:1.35
+      name: busybox
+      capabilities:
+        add:
+          - NET_RAW

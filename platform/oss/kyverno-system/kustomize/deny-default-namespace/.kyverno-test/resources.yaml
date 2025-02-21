@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: goodpod
+  namespace: not_default
+spec:
+  containers:
+    - image: busybox:1.35
+      name: busybox
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: badpod
+  namespace: default
+spec:
+  containers:
+    - image: busybox:1.35
+      name: busybox
+      volumeMounts:
+          - name: host-volume
+            mountPath: /data
+  volumes:
+    - name: host-volume
+      hostPath:
+        path: /host/data
+        type: DirectoryOrCreate

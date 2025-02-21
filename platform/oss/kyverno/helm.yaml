@@ -1,5 +1,0 @@
----
-helm:
-  repository: https://charts.bitnami.com/bitnami
-  chart: kyverno
-  version: 10.1.0

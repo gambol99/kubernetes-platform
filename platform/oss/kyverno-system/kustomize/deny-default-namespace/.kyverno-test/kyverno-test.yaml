@@ -1,0 +1,22 @@
+apiVersion: cli.kyverno.io/v1alpha1
+kind: Test
+metadata:
+  name: deny-default-namespace
+policies:
+  - ../policy.yaml
+resources:
+  - resources.yaml
+results:
+  - kind: Pod
+    policy: deny-default-namespace
+    resources:
+      - badpod
+    result: fail
+    rule: deny-default-namespace
+  - kind: Pod
+    policy: deny-default-namespace
+    resources:
+      - goodpod
+    result: pass
+    rule: deny-default-namespace
+

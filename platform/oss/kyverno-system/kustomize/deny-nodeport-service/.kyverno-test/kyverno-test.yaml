@@ -1,0 +1,22 @@
+apiVersion: cli.kyverno.io/v1alpha1
+kind: Test
+metadata:
+  name: deny-nodeport-service
+policies:
+  - ../policy.yaml
+resources:
+  - resources.yaml
+results:
+  - kind: Service
+    policy: deny-nodeport-service
+    resources:
+      - bad
+    result: fail
+    rule: deny-nodeport-service
+  - kind: Service
+    policy: deny-nodeport-service
+    resources:
+      - good
+    result: pass
+    rule: deny-nodeport-service
+

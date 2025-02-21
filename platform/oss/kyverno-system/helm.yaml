@@ -1,0 +1,6 @@
+---
+helm:
+  feature_gate: enable_kyverno
+  repository: https://kyverno.github.io/kyverno
+  chart: kyverno
+  version: "3.3.7"
