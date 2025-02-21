@@ -11,9 +11,6 @@ metadata:
   name: argocd-platform-config
   namespace: argocd
 data:
-  ## Any tools required for this plugin MUST be inside argoproj/argocd-repo-server container,
-  ## otherwise you need to import them, please see
-  ## https://argo-cd.readthedocs.io/en/release-2.2/user-guide/config-management-plugins/#configure-plugins-via-argo-cd-configmap
   plugin.yaml: |
     apiVersion: argoproj.io/v1alpha1
     kind: ConfigManagementPlugin
@@ -21,8 +18,16 @@ data:
       name: argocd-platform-config
     spec:
       version: v1.0
-      init:
-        command: [sh, -c, 'echo "Initializing"']
       generate:
-        command: [sh, -c]
-        args: ["kubectl -n argocd get configmap platform-config -o jsonpath='{.data}'"]
+        command:
+          - sh
+          - -c
+          - kubectl -n ${NAMESPACE} get configmap ${CONFIGMAP} -o jsonpath='{.data.platform\\.yaml}'
+        env:
+          - name: NAMESPACE
+            value: argocd
+          - name: CONFIGMAP
+            value: platform-config
+      init:
+        command: [sh, -c, 'echo -"Initializing"']
+        env:

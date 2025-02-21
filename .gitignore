@@ -1,1 +1,34 @@
-dev
+# Dependencies and build artifacts
+node_modules/
+dist/
+build/
+*.log
+
+# Environment and configuration
+.env
+.env.local
+.env.*.local
+*.tfvars
+.terraform/
+.terraform.lock.hcl
+
+# IDE and editor files
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+
+# Development environment
+dev/
+tmp/
+temp/
+
+# Logs and databases
+*.log
+*.sql
+*.sqlite
+
+# System Files
+.DS_Store
+Thumbs.db
