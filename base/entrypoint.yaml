@@ -1,0 +1,35 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: setup-platform
+  namespace: argocd
+spec:
+  ## Template out an application for each of the tenant applications
+  source:
+    repoURL: "{{ .Values.platform_repository }}"
+    targetRevision: "{{ .Values.platform_revision }}"
+    path: '{{ default "/overlays/release" .Values.platform_path }}'
+    plugin:
+      name: argocd-platform-config
+    kustomize: {}
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argocd
+
+  ## Sync policy for the application
+  syncPolicy:
+    automated:
+      selfHeal: true
+      prune: true
+
+    retry:
+      backoff:
+        duration: 180s
+        maxDuration: 5m
+
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true
+      - ApplyOutOfSyncOnly=true

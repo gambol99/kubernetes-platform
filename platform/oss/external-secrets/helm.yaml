@@ -1,0 +1,5 @@
+---
+helm:
+  repository: https://charts.bitnami.com/bitnami
+  chart: external-secrets
+  version: 10.1.0

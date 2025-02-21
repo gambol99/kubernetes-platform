@@ -1,0 +1,5 @@
+helm:
+  feature_gate: enable_karpenter
+  repository: https://charts.karpenter.sh
+  chart: karpenter
+  version: 0.26.0

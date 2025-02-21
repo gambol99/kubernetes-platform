@@ -1,0 +1,20 @@
+## Is the name of the cluster
+cluster_name: unknown
+## The environment to use for the tenant cluster
+environment: unknown
+## The cloud vendor to use for the tenant cluster
+cloud_vendor: unknown
+## The features to enable in the tenant cluster
+## i.e
+## labels:
+##   enable_argocd: "true"
+##   enable_cert_manager: "true"
+##   enable_ebs_driver: "true"
+##   enable_efs_driver: "true"
+##   enable_external_dns: "true"
+##   enable_kyverno: "true"
+##   enable_pod_identity: "true"
+##   enable_external_secrets: "true"
+labels: {}
+## Annotations for the tenant cluster
+annotations: {}

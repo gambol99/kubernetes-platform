@@ -1,0 +1,28 @@
+---
+#
+## The purpose of this plugin is to read the platform config (added by tenant) from the
+## argocd namespace. This is used throughout the ApplicationSet to template out their
+## repository, revision, environment and cluster name values. Ensure everything is
+## driven from the source of this truth.
+##
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: argocd-platform-config
+  namespace: argocd
+data:
+  ## Any tools required for this plugin MUST be inside argoproj/argocd-repo-server container,
+  ## otherwise you need to import them, please see
+  ## https://argo-cd.readthedocs.io/en/release-2.2/user-guide/config-management-plugins/#configure-plugins-via-argo-cd-configmap
+  plugin.yaml: |
+    apiVersion: argoproj.io/v1alpha1
+    kind: ConfigManagementPlugin
+    metadata:
+      name: argocd-platform-config
+    spec:
+      version: v1.0
+      init:
+        command: [sh, -c, 'echo "Initializing"']
+      generate:
+        command: [sh, -c]
+        args: ["kubectl -n argocd get configmap platform-config -o jsonpath='{.data}'"]
