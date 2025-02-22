@@ -37,8 +37,6 @@ spec:
                 - secondary
 
   ## Generate applications from the platform repository
-  ## NOTICE: These generators are patched in the kustomize/overlays/release/platform.yaml
-  ## file. So if you are making any changes here, please make sure to update the overlay file.
   generators:
     - matrix:
         generators:

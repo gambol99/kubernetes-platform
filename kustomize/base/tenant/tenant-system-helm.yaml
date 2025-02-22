@@ -10,7 +10,6 @@ metadata:
   namespace: argocd
   annotations:
     argocd.argoproj.io/sync-wave: "1"
-    kustomize.patch.appset.tenant: "true"
 spec:
   goTemplate: true
 
@@ -41,19 +40,26 @@ spec:
   ## NOTICE: These generators are patched in the kustomize/overlays/release/platform.yaml
   ## file. So if you are making any changes here, please make sure to update the overlay file.
   generators:
-    - git:
-        repoURL: TENANT_REPO
-        revision: TENANT_REPO_REVISION
-        files:
-          - path: "workloads/system/**/{{ .cluster_name }}.yaml"
-      selector:
-        matchExpressions:
-          - key: helm.chart
-            operator: Exists
-          - key: helm.version
-            operator: Exists
-          - key: helm.repository
-            operator: Exists
+    - matrix:
+        generators:
+          - clusters:
+              selector:
+                matchExpressions:
+                  - key: environment
+                    operator: Exists
+          - git:
+              repoURL: "{{ .metadata.annotations.tenant_repository }}"
+              revision: "{{ .metadata.annotations.tenant_revision }}"
+              files:
+                - path: "workloads/system/**/{{ .metadata.labels.cluster_name }}.yaml"
+            selector:
+              matchExpressions:
+                - key: helm.chart
+                  operator: Exists
+                - key: helm.version
+                  operator: Exists
+                - key: helm.repository
+                  operator: Exists
 
   ## Sync Policy for the ApplicationSet
   syncPolicy:

@@ -10,7 +10,7 @@ metadata:
   namespace: argocd
   annotations:
     argocd.argoproj.io/sync-wave: "1"
-    kustomize.patch.appset.platform: "true"
+    #kustomize.patch.appset.platform: "true"
 spec:
   goTemplate: true
 
