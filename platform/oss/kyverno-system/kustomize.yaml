@@ -1,2 +1,3 @@
 kustomize:
-  overlays: kustomize
+  feature: enable_kyverno
+  path: kustomize
