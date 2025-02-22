@@ -28,25 +28,33 @@ spec:
     and CRDs are included in this project.
   sourceRepos:
     - "*"
+  destinations:
+    - namespace: "!argocd"
+      server: "*"
+    - namespace: "!cert-manager"
+      server: "*"
+    - namespace: "!default"
+      server: "*"
+    - namespace: "!external-dns"
+      server: "*"
+    - namespace: "!external-secrets"
+      server: "*"
+    - namespace: "!kube-node-lease"
+      server: "*"
+    - namespace: "!kube-public"
+      server: "*"
+    - namespace: "!kube-system"
+      server: "*"
+    - namespace: "!kyverno-system"
+      server: "*"
+    - namespace: "*"
+      server: "*"
   clusterResourceWhitelist:
     - group: "*"
       kind: "*"
   clusterResourceBlacklist:
     - kind: ArgoprojProject
       group: argoproj.io
-  destinations:
-    - namespace: "!default"
-      server: "*"
-    - namespace: "!kube-public"
-      server: "*"
-    - namespace: "!kube-node-lease"
-      server: "*"
-    - namespace: "!argocd"
-      server: "*"
-    - namespace: "!cert-manager"
-      server: "*"
-    - namespace: "*"
-      server: "*"
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: AppProject
@@ -63,15 +71,23 @@ spec:
   ## List of destinations we are permitted to create
   ## resources in
   destinations:
-    - namespace: "!kube-system"
-      server: "*"
     - namespace: "!argocd"
+      server: "*"
+    - namespace: "!cert-manager"
       server: "*"
     - namespace: "!default"
       server: "*"
-    - namespace: "!kube-public"
+    - namespace: "!external-dns"
+      server: "*"
+    - namespace: "!external-secrets"
       server: "*"
     - namespace: "!kube-node-lease"
+      server: "*"
+    - namespace: "!kube-public"
+      server: "*"
+    - namespace: "!kube-system"
+      server: "*"
+    - namespace: "!kyverno-system"
       server: "*"
     - namespace: "*"
       server: "*"
