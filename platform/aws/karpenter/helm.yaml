@@ -1,5 +1,5 @@
 helm:
   feature: enable_karpenter
-  repository: https://charts.karpenter.sh
+  repository: oci://public.ecr.aws/karpenter/karpenter
   chart: karpenter
-  version: 0.26.0
+  version: "1.2.1"

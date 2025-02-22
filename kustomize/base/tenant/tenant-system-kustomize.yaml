@@ -119,11 +119,12 @@ spec:
       source: 
         kustomize:
           patches:
+            {{- $context := . }}
             {{- range .kustomize.patches }}
             - target:
                 kind: {{ .target.kind }}
                 name: {{ .target.name }}
               path: {{ .path }}
-              value: {{ index . .value }}
+              value: {{ default (default "" .value) (index $context .value) }}
             {{- end }}
     {{- end }}

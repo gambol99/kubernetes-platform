@@ -1,0 +1,9 @@
+kustomize:
+  feature: enable_external_secrets
+  path: kustomize
+  patches:
+    - target:
+        kind: SecretStore
+        name: secrets-store
+      path: /spec/provider/aws/region
+      value: metadata.annotations.region

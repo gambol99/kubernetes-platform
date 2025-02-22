@@ -1,5 +1,6 @@
 ---
 kustomize:
+  feature: enable_karpenter
   path: kustomize
   patches:
     - target:
@@ -22,3 +23,15 @@ kustomize:
         name: default
       path: /spec/tags/Product
       value: tenant
+    - target:
+        kind: NodePool
+        name: default-amd64
+      path: /spec/weight
+      value: metadata.annotations.karpenter_amd64_weight
+      default: 100
+    - target:
+        kind: NodePool
+        name: default-graviton
+      path: /spec/weight
+      value: metadata.annotations.karpenter_graviton_weight
+      default: 50
