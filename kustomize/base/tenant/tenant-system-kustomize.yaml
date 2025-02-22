@@ -47,7 +47,7 @@ spec:
               repoURL: TENANT_REPO
               revision: TENANT_REPO_REVISION
               files:
-                - path: "workloads/system/**/kustomize.yaml"
+                - path: "workloads/system/**/{{ .cluster_name }}.yaml"
             selector:
               matchExpressions:
                 - key: kustomize.path

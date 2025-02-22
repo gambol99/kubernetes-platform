@@ -47,7 +47,7 @@ spec:
               repoURL: TENANT_REPO
               revision: TENANT_REPO_REVISION
               files:
-                - path: "workloads/applications/**/helm.yaml"
+                - path: "workloads/applications/**/{{ .cluster_name }}.yaml"
             selector:
               matchExpressions:
                 - key: helm.chart
