@@ -118,8 +118,8 @@ spec:
   ## the responsibility of the repository to control the floating revisions.
   templatePatch: |
     {{- if gt (len (default list .kustomize.patches)) 0 }}
-    spec: 
-      source: 
+    spec:
+      source:
         kustomize:
           patches:
             {{- $context := . }}
