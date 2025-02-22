@@ -7,3 +7,6 @@ kustomize:
         name: secrets-store
       path: /spec/provider/aws/region
       value: metadata.annotations.region
+
+sync:
+  phase: secondary
