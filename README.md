@@ -1,8 +1,29 @@
-# ArgosCD Environment Demo
+# EKS Platform
 
-## Overview
+This repository contains a pattern for the configuration of management of a collection of Kubernetes clusters, usign ArgoCD as the deployment framework.
 
-This repository contains a demo of how to use ArgoCD to manage applications across different environments. We are assuming here we have an environment, two clusters made up of green and yellow stages, and we a self service platform that allows our development teams to deploy their applications to the clusters.
+## Operating Model
+
+The following depicts the operating model for the platform.
+
+- A platform is made of up a minimum of two repositories, acting as the source of truth
+  - `EKS Platform`: (this repository) provides a baseline configuration and collection of tested components.
+  - `Tenant Repository`: both a consumer of this package, and the source of truth for the applications deployed to the platform.
+
+### The Platform Team
+
+- The platform team has ownership of the EKS Platform repository, this responsibility includes:
+  - Keep the platform up to date with the latest version of the Kubernetes, and the components deployed to it.
+  - Provide a tested and approved collection of components, to produce an outcome.
+  - Provide a mechanism for development teams to deploy their applications to the platform.
+  - Provide a security baseline for workloads running on the platform.
+  - Work with the development teams to improve the platform, and the applications running on it.
+
+## The Tenant (Development) Team
+
+- The `Tenant Repository` is owned by the development teams, and is used to deploy their applications to the platform.
+  - The consumer the platform repository as a software dependency.
+  - They are responsible iterating the platform repository the revisions through the software development lifecycle i.e promoting the revisions though dev, test, and production to ensure the application stack is aligned.
 
 ## Requirements
 

@@ -65,7 +65,7 @@ spec:
   ## Sync Policy for the ApplicationSet
   syncPolicy:
     # Prevents ApplicationSet controller from modifying Applications. Delete is allowed.
-    applicationsSync: '{{ default "create-delete" .sync.application_sync }}'
+    applicationsSync: create-delete
 
   ## Template out an application for each of the tenant applications
   template:
