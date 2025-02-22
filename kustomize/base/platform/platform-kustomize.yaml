@@ -75,7 +75,7 @@ spec:
         app.kubernetes.io/instance: platform
         app.kubernetes.io/part-of: argocd
         app.kubernetes.io/type: kustomize
-        phase: "{{ default "secondary" .sync.phase }}"
+        phase: primary
 
     spec:
       ## The project to use for the application
