@@ -85,7 +85,7 @@ spec:
       source:
         repoURL: "{{ .metadata.annotations.platform_repository }}"
         targetRevision: "{{ .metadata.annotations.platform_revision }}"
-        path: '{{ printf "%s/overlay/release" .kustomize.path }}'
+        path: '{{ printf "%s/%s" .path.path .kustomize.path }}'
         kustomize: {}
 
       ## Destination is the cluster to deploy to
