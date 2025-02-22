@@ -61,6 +61,9 @@ spec:
                     operator: Exists
                   - key: environment
                     operator: Exists
+                  - key: enable_cert_manager
+                    operator: In
+                    values: ["true"]
 
   ## Sync Policy for the ApplicationSet
   syncPolicy:
