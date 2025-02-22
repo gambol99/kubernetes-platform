@@ -118,7 +118,7 @@ spec:
     {{- if gt (len .kustomize.patches) 0 }}
     spec: 
       source: 
-        {{- $patch := .kustomize.patches }}
+        {{- $patch := range .kustomize.patches }}
         kustomize:
           patches:
             - target:
