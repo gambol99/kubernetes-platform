@@ -60,6 +60,17 @@ spec:
                   value: "{{ .platform_revision }}"
 
             - target:
+                kind: ApplicationSet
+                name: platform-kustomize
+              patch: |
+                - op: replace
+                  path: /spec/generators/0/matrix/generators/0/git/repoURL
+                  value: "{{ .platform_repository }}"
+                - op: replace
+                  path: /spec/generators/0/matrix/generators/0/git/revision
+                  value: "{{ .platform_revision }}"
+
+            - target:
                 kind: Application
                 name: registration
               patch: |
