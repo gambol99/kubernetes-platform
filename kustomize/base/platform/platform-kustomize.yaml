@@ -9,7 +9,6 @@ metadata:
   name: platform-kustomize
   namespace: argocd
   annotations:
-    argocd.argoproj.io/sync-wave: "2"
     kustomize.patch.appset.platform: "true"
 spec:
   goTemplate: true
@@ -78,7 +77,7 @@ spec:
         app.kubernetes.io/instance: platform
         app.kubernetes.io/part-of: argocd
         app.kubernetes.io/type: kustomize
-        phase: primary
+        phase: '{{ default "primary" .sync.phase }}'
 
     spec:
       ## The project to use for the application

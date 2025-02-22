@@ -4,3 +4,8 @@ kustomize:
   path: kustomize
   ## We override the namespace name (by default the folder name)
   namespace: kyverno-system
+
+## Synchronization options
+sync:
+  ## We want to deploy kyverno after the platform
+  phase: secondary
