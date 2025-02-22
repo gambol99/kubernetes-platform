@@ -1,0 +1,28 @@
+---
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: deny-daemonsets
+spec:
+  rules:
+    - name: deny-daemonsets
+      match:
+        resources:
+          kinds:
+            - DaemonSet
+      exclude:
+        namespaceSelector:
+          matchExpressions:
+            - key: platform.local/type
+              operator: In
+              values:
+                - tenant
+      validate:
+        message: "Daemonsets are not allowed to be created in the tenant namespace"
+        deny:
+          conditions:
+            all:
+              - key: "{{ request.kind }}"
+                value: "DaemonSet"
+                effect: "Deny"
+§

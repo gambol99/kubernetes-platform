@@ -1,0 +1,21 @@
+apiVersion: cli.kyverno.io/v1alpha1
+kind: Test
+metadata:
+  name: deny-latest-image
+policies:
+  - ../policy.yaml
+resources:
+  - resources.yaml
+results:
+  - kind: Pod
+    policy: deny-latest-image
+    resources:
+      - badpod
+    result: fail
+    rule: deny-latest-image
+  - kind: Pod
+    policy: deny-latest-image
+    resources:
+      - goodpod
+    result: pass
+    rule: deny-latest-image

@@ -2,7 +2,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: sync-platform
+  name: system-platform
   namespace: argocd
 spec:
   goTemplate: true
@@ -44,12 +44,12 @@ spec:
       source:
         repoURL: "{{ .platform_repository }}"
         targetRevision: "{{ .platform_revision }}"
-        path: "kustomize/base"
+        path: "kustomize/apps"
         kustomize:
           patches:
             - target:
                 kind: Application
-                name: registration
+                name: system-registration
               patch: |
                 - op: replace
                   path: /spec/sources/0/repoURL
@@ -68,10 +68,27 @@ spec:
             # to use the platform repository and revision.
             - target:
                 kind: ApplicationSet
-                annotationSelector: "kustomize.patch.appset.platform=true"
+                name: system-helm
               patch: |
                 - op: replace
-                  path: /spec/generators/0/matrix/generators/0/git/repoURL  
+                  path: /spec/generators/0/matrix/generators/0/git/files/0/path
+                  value: "addons/helm/{{ .cloud_vendor }}/**/helm.yaml"
+                - op: replace
+                  path: /spec/generators/0/matrix/generators/0/git/repoURL
+                  value: "{{ .platform_repository }}"
+                - op: replace
+                  path: /spec/generators/0/matrix/generators/0/git/revision
+                  value: "{{ .platform_revision }}"
+
+            - target:
+                kind: ApplicationSet
+                name: system-kustomize
+              patch: |
+                - op: replace
+                  path: /spec/generators/0/matrix/generators/0/git/files/0/path
+                  value: "addons/kustomize/{{ .cloud_vendor }}/**/kustomize.yaml"
+                - op: replace
+                  path: /spec/generators/0/matrix/generators/0/git/repoURL
                   value: "{{ .platform_repository }}"
                 - op: replace
                   path: /spec/generators/0/matrix/generators/0/git/revision

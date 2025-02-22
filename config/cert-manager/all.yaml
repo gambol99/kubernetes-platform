@@ -1,0 +1,9 @@
+---
+## Options for the CRDs
+crds:
+  ## Ensure the CRD are installed with the chart
+  enabled: true
+
+## Prometheus
+prometheus:
+  enabled: true

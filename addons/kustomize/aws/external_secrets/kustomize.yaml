@@ -1,0 +1,13 @@
+---
+kustomize:
+  feature: external_secrets
+  path: kustomize
+  patches:
+    - target:
+        kind: SecretStore
+        name: secrets-store
+      path: /spec/provider/aws/region
+      value: metadata.annotations.region
+
+sync:
+  phase: secondary

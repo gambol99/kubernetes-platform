@@ -1,0 +1,55 @@
+---
+## Deny all traffic to the tenant namespace
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: default-deny
+  labels:
+    app.kubernetes.io/managed-by: argocd
+    platform.local/type: tenant
+spec:
+  podSelector: {}
+  policyTypes:
+    - Ingress
+---
+## Permit all traffic from the prometheus namespace
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-prometheus
+  labels:
+    app.kubernetes.io/managed-by: argocd
+    platform.local/type: tenant
+spec:
+  podSelector: {}
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: prometheus
+      ports:
+        - protocol: TCP
+          port: 9090
+  policyTypes:
+    - Ingress
+---
+## Permit all HTTP challenge via cert-manager
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-cert-manager
+  labels:
+    app.kubernetes.io/managed-by: argocd
+    platform.local/type: tenant
+spec:
+  podSelector: {}
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: cert-manager
+      ports:
+        - protocol: TCP
+          port: 8080
+  policyTypes:
+    - Ingress

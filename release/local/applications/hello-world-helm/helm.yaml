@@ -1,0 +1,14 @@
+---
+## The Helm application being deployed
+helm:
+  ## The repository containing the helm repository
+  repository: https://kubernetes.github.io/ingress-nginx
+  ## The chart to install
+  chart: ingress-nginx
+  ## The chart version to install
+  version: "4.11.1"
+
+## Options for the namespace
+namespace:
+  ## The SKU size to use
+  sku: small

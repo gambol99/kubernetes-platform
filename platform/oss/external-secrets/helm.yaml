@@ -1,6 +1,0 @@
----
-helm:
-  feature: enable_external_secrets
-  repository: https://charts.external-secrets.io
-  chart: external-secrets
-  version: "0.14.2"

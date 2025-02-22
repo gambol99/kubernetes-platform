@@ -1,0 +1,22 @@
+---
+apiVersion: cli.kyverno.io/v1alpha1
+kind: Test
+metadata:
+  name: deny-daemonsets
+policies:
+  - ../policy.yaml
+resources:
+  - resources.yaml
+results:
+  - kind: DaemonSet
+    policy: deny-daemonsets
+    resources:
+      - bad
+    result: fail
+    rule: deny-daemonsets
+  - kind: DaemonSet
+    policy: deny-daemonsets
+    resources:
+      - good
+    result: pass
+    rule: deny-daemonsets

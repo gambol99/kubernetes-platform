@@ -1,0 +1,15 @@
+---
+apiVersion: scheduling.k8s.io/v1
+kind: PriorityClass
+metadata:
+  name: system-critical
+  labels:
+    app.kubernetes.io/name: system-critical
+    app.kubernetes.io/part-of: platform
+    app.kubernetes.io/type: kustomize
+    app.kubernetes.io/managed-by: argocd
+  annotations:
+    platform.local/type: platform
+value: 1000000
+globalDefault: false
+description: "This priority class is used for platform critical resources."

@@ -1,0 +1,26 @@
+---
+kustomize:
+  ## Human friendly description
+  description: ""
+  ## The feature flag used to enable the feature
+  feature: enable_<FEATURE>
+  ## The path to the kustomize overlay
+  path: base
+  ## Optional patches to apply to the kustomize overlay
+  patches:
+    - target:
+        kind: <KIND>
+        name: <NAME>
+      path: <PATH>
+      key: <KEY>
+      default: <DEFAULT>
+
+## The namespace options
+namespace:
+  ## The name of the namespace to deploy the application
+  name: kube-system
+
+## Synchronization options
+sync:
+  ## How to order the deployment of the resources
+  phase: primary

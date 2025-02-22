@@ -1,5 +1,0 @@
-helm:
-  feature: enable_karpenter
-  repository: oci://public.ecr.aws/karpenter/karpenter
-  chart: karpenter
-  version: "1.2.1"

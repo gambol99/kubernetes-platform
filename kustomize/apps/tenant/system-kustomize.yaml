@@ -1,0 +1,165 @@
+---
+##
+## This application set is used to create Applications for each of the
+## platform kustomize charts, defined in the ./platform directory.
+##
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: tenant-system-kustomize
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "20"
+spec:
+  goTemplate: true
+
+  ## Add a strategy permiting us to control the ordering of resources
+  ## by using labelling.
+  strategy:
+    type: RollingSync
+    rollingSync:
+      steps:
+        - matchExpressions:
+            - key: phase
+              operator: In
+              values:
+                - primary
+        - matchExpressions:
+            - key: phase
+              operator: In
+              values:
+                - secondary
+        - matchExpressions:
+            - key: phase
+              operator: NotIn
+              values:
+                - primary
+                - secondary
+
+  ## Generate applications from the platform repository
+  generators:
+    - matrix:
+        generators:
+          - clusters:
+              selector:
+                matchExpressions:
+                  - key: environment
+                    operator: Exists
+          - git:
+              repoURL: "{{ .metadata.annotations.tenant_repository }}"
+              revision: "{{ .metadata.annotations.tenant_revision }}"
+              files:
+                - path: "{{ .metadata.annotations.tenant_path }}/workloads/system/**/{{ .metadata.labels.cluster_name }}.yaml"
+            selector:
+              matchExpressions:
+                - key: kustomize.path
+                  operator: Exists
+                - key: kustomize.revision
+                  operator: Exists
+
+  ## Sync Policy for the ApplicationSet
+  syncPolicy:
+    # Prevents ApplicationSet controller from modifying Applications. Delete is allowed.
+    applicationsSync: create-delete
+
+  ## Template out an application for each of the tenant applications
+  template:
+    metadata:
+      name: "tenant-kustomize-{{ .path.basenameNormalized }}"
+      namespace: argocd
+      labels:
+        app.kubernetes.io/name: tenant-kustomize
+        app.kubernetes.io/managed-by: argocd
+        app.kubernetes.io/instance: tenant-kustomize
+        app.kubernetes.io/part-of: tenant-kustomize
+        app.kubernetes.io/type: kustomize
+        phase: '{{ default "secondary" .sync.phase }}'
+
+    spec:
+      ## The project to use for the application
+      project: tenant-system
+
+      ## The sources to use for the application
+      sources:
+        ## The kustomize folder includes the default settings and manifests
+        ## for all namespace creations for the tenant applications - i.e.
+        ## service accounts, network policies, etc.
+        - repoURL: "{{ .metadata.annotations.platform_repository }}"
+          targetRevision: "{{ .metadata.annotations.platform_revision }}"
+          path: "kustomize/apps/tenant/namespace"
+          kustomize:
+            patches:
+              - target:
+                  kind: Namespace
+                  labelSelector: "platform.local/namespace=tenant"
+                patch: |
+                  - op: replace
+                    path: /metadata/name
+                    value: "{{ index .path.segments 2 }}"
+
+        ## We either use the tenant repository of the kustomize.repository
+        - repoURL: "{{ default .metadata.annotations.tenant_repository .kustomize.repository }}"
+          ## We either use the tenant revision of the kustomize.revision (external revision)
+          targetRevision: "{{ default .metadata.annotations.tenant_revision .kustomize.revision }}"
+          ## The path to the kustomize.yaml file
+          path: '{{ printf "%s/%s" .path.path .kustomize.path }}'
+          ## Kustomize options
+          kustomize: {}
+
+      ## Destination is the cluster to deploy to
+      destination:
+        server: "{{ .server }}"
+        ## /applications/TYPE/[2]/FILE.yaml
+        namespace: "{{ index .path.segments 2 }}"
+
+      ## Sync policy for the application
+      syncPolicy:
+        automated:
+          selfHeal: true
+          prune: true
+        retry:
+          backoff:
+            duration: '{{ default "30s" .sync.duration }}'
+            maxDuration: '{{ default "5m" .sync.max_duration }}'
+          limit: 10
+        # Use server-side apply for better efficiency and interop
+        # between controllers making partial changes to manifests.
+        # Also enable apply out of sync only rather than trying to
+        # apply all resources in the application.
+        syncOptions:
+          - CreateNamespace=false
+          - ServerSideApply=true
+
+  ## If a kustomize.repository is defines we use the environment as the targetRevision. Its
+  ## the responsibility of the repository to control the floating revisions.
+  templatePatch: |
+    {{- if and .kustomize.patches (gt (len .kustomize.patches) 0) }}
+    ## Save the context for the dig function
+    {{- $context := toJson . | fromJson }}
+    spec:
+      source:
+        kustomize:
+          patches:
+            {{- range $change := .kustomize.patches }}
+            - target:
+                kind: {{ $change.target.kind }}
+                name: {{ $change.target.name }}
+              {{- range $patch := $change.patch }}
+              {{- $params := splitList "." $patch.key }}
+              {{- $value := $patch.default }}
+              patch: |
+                - op: {{ $patch.op }}
+                  path: {{ $patch.path }}
+                  {{- if eq (len $params) 1 }}
+                  {{- $value = dig (index $params 0) "" $context }}
+                  {{- else if eq (len $params) 2 }}
+                  {{- $value = dig (index $params 0) (index $params 1) "" $context }}
+                  {{- else if eq (len $params) 3 }}
+                  {{- $value = dig (index $params 0) (index $params 1) (index $params 2) "" $context }}
+                  {{- else if eq (len $params) 4 }}
+                  {{- $value = dig (index $params 0) (index $params 1) (index $params 2) (index $params 3) "" $context }}
+                  {{- end }}
+                  value: {{ default $patch.default $value }}
+              {{- end }}
+            {{- end }}
+    {{- end }}

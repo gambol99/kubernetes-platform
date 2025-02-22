@@ -1,0 +1,18 @@
+---
+kustomize:
+  ## Human friendly description
+  description: "Deploy priority classes to the kube-system namespace"
+  ## The feature flag used to enable the feature
+  feature: default
+  ## The path to the kustomize overlay
+  path: base
+
+## The namespace options
+namespace:
+  ## The name of the namespace to deploy the application
+  name: kube-system
+
+## Synchronization options
+sync:
+  ## How to order the deployment of the resources
+  phase: primary

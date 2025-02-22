@@ -27,8 +27,9 @@ The following depicts the operating model for the platform.
 
 ## Requirements
 
-- Onboarding should be configuration driven.
-- Teams are only exposed the minimum amount of variabes to get the applications in.
+- No centralized control plane for deployments; due to sensitivity of access, centralizing the deployments would prove problamatic for security and tenants.
+- On boarding should be configuration driven, and require minimal effort from tenants.
+- Teams are only exposed the minimum amount of variables to get the applications in.
 - Teams should not need the assistance of the platform team to deploy or promote their applications.
 - We want to support Helm and Kustomize only for a application deployments.
 - We want to support external repositories, allowing teams to take full control.

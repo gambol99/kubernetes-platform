@@ -1,6 +1,0 @@
----
-helm:
-  feature: enable_external_dns
-  repository: https://github.com/kubernetes-sigs/external-dns
-  path: charts/external-dns
-  version: v0.15.1

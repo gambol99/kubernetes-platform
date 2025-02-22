@@ -1,0 +1,151 @@
+---
+##
+## This application set is used to create Applications for each of the
+## platform helm charts, defined in the ./platform directory.
+##
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: system-helm
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+    kustomize.patch.appset.platform: "true"
+spec:
+  goTemplate: true
+
+  ## Add a strategy permiting us to control the ordering of resources
+  ## by using labelling.
+  strategy:
+    type: RollingSync
+    rollingSync:
+      steps:
+        - matchExpressions:
+            - key: phase
+              operator: In
+              values:
+                - primary
+        - matchExpressions:
+            - key: phase
+              operator: In
+              values:
+                - secondary
+        - matchExpressions:
+            - key: phase
+              operator: NotIn
+              values:
+                - primary
+                - secondary
+
+  ## Generate applications from the platform repository
+  ## NOTICE: These generators are patched in the kustomize/overlays/release/platform.yaml
+  ## file. So if you are making any changes here, please make sure to update the overlay file.
+  generators:
+    - matrix:
+        generators:
+          - git:
+              repoURL: PLATFORM_REPO
+              revision: PLATFORM_REVISION
+              files:
+                - path: "addons/helm/cloud/{{ .cloud_vendor }}/*.yaml"
+                - path: "addons/helm/*.yaml"
+            selector:
+              matchExpressions:
+                - key: chart
+                  operator: Exists
+                - key: version
+                  operator: Exists
+                - key: repository
+                  operator: Exists
+                - key: namespace
+                  operator: Exists
+          - clusters:
+              selector:
+                matchExpressions:
+                  - key: environment
+                    operator: Exists
+                  - key: "enable_{{ .feature }}"
+                    operator: In
+                    values: ["true"]
+
+  ## Sync Policy for the ApplicationSet
+  syncPolicy:
+    # Prevents ApplicationSet controller from modifying Applications. Delete is allowed.
+    applicationsSync: create-delete
+
+  ## Template out an application for each of the tenant applications
+  template:
+    metadata:
+      name: "system-{{ normalize .chart }}"
+      namespace: argocd
+      labels:
+        app.kubernetes.io/managed-by: argocd
+        app.kubernetes.io/name: system-helm
+        app.kubernetes.io/type: helm
+        argocd.argoproj.io/sync-wave: '{{ default "10" .sync.wave }}'
+        phase: primary
+        platform.local/type: platform
+
+    spec:
+      ## The project to use for the application
+      project: system
+
+      ## The sources to use for the application
+      sources:
+        - repoURL: "{{ .repository }}"
+          targetRevision: "{{ .version }}"
+          chart: '{{ default "" .chart }}'
+          path: '{{ default "" .repository_path }}'
+          helm:
+            releaseName: "{{ default .chart .release_name }}"
+            ignoreMissingValueFiles: true
+            valueFiles:
+              - "$values/config/{{ .feature }}/{{ .metadata.labels.cluster_name }}.yaml"
+              - "$values/config/{{ .feature }}/{{ .metadata.labels.environment }}.yaml"
+              - "$values/config/{{ .feature }}/{{ .metadata.labels.tenant }}.yaml"
+              - "$values/config/{{ .feature }}/all.yaml"
+
+        - repoURL: "{{ .metadata.annotations.platform_repository }}"
+          targetRevision: "{{ .metadata.annotations.platform_revision }}"
+          ref: values
+
+        - repoURL: "{{ .metadata.annotations.tenant_repository }}"
+          targetRevision: "{{ .metadata.annotations.tenant_revision }}"
+          ref: tenant
+
+      ## Destination is the cluster to deploy to
+      destination:
+        server: "{{ .server }}"
+        ## /applications/TYPE/[2]/FILE.yaml or .helm.namespace
+        namespace: "{{ default .namespace }}"
+
+      ## Sync policy for the application
+      syncPolicy:
+        automated:
+          selfHeal: true
+          prune: true
+        retry:
+          backoff:
+            duration: '{{ default "60s" .sync.duration }}'
+            maxDuration: '{{ default "3m" .sync.max_duration }}'
+          limit: 10
+        # Use server-side apply for better efficiency and interop
+        # between controllers making partial changes to manifests.
+        # Also enable apply out of sync only rather than trying to
+        # apply all resources in the application.
+        syncOptions:
+          - CreateNamespace=true
+          - ServerSideApply=true
+
+  ## If the helm chart permits the values to be overridden, we apply a patch
+  ## allowing for the tenant values to be used.
+  templatePatch: |
+    {{ if eq (default "false" .helm.enable_tenant) "true" }}
+    spec:
+      sources:
+        - helm:
+            valueFiles:
+              - "$tenant/config/{{ .feature }}/{{ .metadata.labels.cluster_name }}.yaml"
+              - "$tenant/config/{{ .feature }}/{{ .metadata.labels.environment }}.yaml"
+              - "$tenant/config/{{ .feature }}/{{ .metadata.labels.tenant }}.yaml"
+    {{ end }}

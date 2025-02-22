@@ -1,0 +1,117 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: system
+  namespace: argocd
+spec:
+  description: >
+    The project used to configure additional platform level resources
+  sourceRepos:
+    - "*"
+  clusterResourceWhitelist:
+    - group: "*"
+      kind: "*"
+  destinations:
+    - namespace: "*"
+      server: "*"
+---
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: tenant-system
+  namespace: argocd
+spec:
+  description: >
+    The project is used to contain workloads for the tenant platform which
+    requires additional permissions to be granted. Items such as operators
+    and CRDs are included in this project.
+  sourceRepos:
+    - "*"
+  destinations:
+    - namespace: "!argocd"
+      server: "*"
+    - namespace: "!cert-manager"
+      server: "*"
+    - namespace: "!default"
+      server: "*"
+    - namespace: "!external-dns"
+      server: "*"
+    - namespace: "!external-secrets"
+      server: "*"
+    - namespace: "!kube-node-lease"
+      server: "*"
+    - namespace: "!kube-public"
+      server: "*"
+    - namespace: "!kube-system"
+      server: "*"
+    - namespace: "!kyverno-system"
+      server: "*"
+    - namespace: "*"
+      server: "*"
+  clusterResourceWhitelist:
+    - group: "*"
+      kind: "*"
+  clusterResourceBlacklist:
+    - kind: ArgoprojProject
+      group: argoproj.io
+---
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: tenant-apps
+  namespace: argocd
+spec:
+  description: >
+    This project is used to contain the workloads for the tenant applications.
+    The project has a number of restrictions to ensure the applications
+    are not able to impact the platform.
+  sourceRepos:
+    - "*"
+  ## List of destinations we are permitted to create
+  ## resources in
+  destinations:
+    - namespace: "!argocd"
+      server: "*"
+    - namespace: "!cert-manager"
+      server: "*"
+    - namespace: "!default"
+      server: "*"
+    - namespace: "!external-dns"
+      server: "*"
+    - namespace: "!external-secrets"
+      server: "*"
+    - namespace: "!kube-node-lease"
+      server: "*"
+    - namespace: "!kube-public"
+      server: "*"
+    - namespace: "!kube-system"
+      server: "*"
+    - namespace: "!kyverno-system"
+      server: "*"
+    - namespace: "*"
+      server: "*"
+  ## List of resources we are not permitted to create
+  clusterResourceBlacklist:
+    - group: rbac.authorization.k8s.io
+      kind: ClusterRole
+    - group: rbac.authorization.k8s.io
+      kind: ClusterRoleBinding
+    - group: apps
+      kind: Daemonsets
+    - group: kyverno
+      kind: ClusterPolicy
+    - group: apiextensions.k8s.io
+      kind: CustomResourceDefinition
+    - kind: RuntimeClass
+      group: node.k8s.io
+    - kind: ValidatingWebhookConfiguration
+      group: admissionregistration.k8s.io
+    - kind: MutatingWebhookConfiguration
+      group: admissionregistration.k8s.io
+    - kind: ArgoprojProject
+      group: argoproj.io
+  ## List of resources we are permitted to create
+  clusterResourceWhitelist:
+    - group: "*"
+      kind: "*"

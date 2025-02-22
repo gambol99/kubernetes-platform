@@ -1,0 +1,96 @@
+---
+- feature: metrics_server
+  chart: metrics-server
+  repository: https://kubernetes-sigs.github.io/metrics-server
+  version: "3.12.2"
+  namespace: kube-system
+
+- feature: volcano
+  chart: volcano
+  repository: https://volcano-sh.github.io/helm-charts
+  version: "1.9.0"
+  namespace: volcano-system
+
+- feature: cert_manager
+  chart: cert-manager
+  repository: https://charts.jetstack.io
+  version: "v1.15.2"
+  namespace: cert-manager
+
+- feature: cluster_autoscaler
+  chart: cluster-autoscaler
+  repository: https://kubernetes.github.io/autoscaler
+  version: "9.37.0"
+  namespace: kube-system
+
+- feature: external_dns
+  chart: external-dns
+  repository: https://kubernetes-sigs.github.io/external-dns
+  version: "1.14.5"
+  namespace: kube-system
+
+- feature: external_secrets
+  chart: external-secrets
+  repository: https://charts.external-secrets.io
+  version: "0.10.0"
+  namespace: external-secrets
+
+- feature: argo_events
+  chart: argo-events
+  repository: https://argoproj.github.io/argo-helm
+  version: "2.4.13"
+  namespace: argocd
+
+- feature: argo_rollouts
+  chart: argo-rollouts
+  repository: https://argoproj.github.io/argo-helm
+  version: "2.39.0"
+  namespace: argocd-rollouts
+
+- feature: argo_workflows
+  chart: argo-workflows
+  repository: https://argoproj.github.io/argo-helm
+  version: "0.45.8"
+  namespace: argo-workflows
+
+- feature: ingress_nginx
+  chart: ingress-nginx
+  repository: https://kubernetes.github.io/ingress-nginx
+  version: "4.11.1"
+  namespace: ingress-nginx
+
+- feature: keda
+  chart: keda
+  repository: https://kedacore.github.io/charts
+  version: "2.15.0"
+  namespace: keda-system
+
+- feature: kube_prometheus_stack
+  chart: kube-prometheus-stack
+  repository: https://prometheus-community.github.io/helm-charts
+  version: "69.6.0"
+  namespace: prometheus
+
+- feature: kyverno
+  chart: kyverno
+  repository: https://kyverno.github.io/kyverno
+  version: "3.2.6"
+  namespace: kyverno-system
+
+- feature: prometheus_adapter
+  chart: prometheus-adapter
+  repository: https://prometheus-community.github.io/helm-charts
+  version: "4.10.0"
+  namespace: prometheus
+
+- feature: secrets_store_csi_driver
+  chart: secrets-store-csi-driver
+  repository: https://kubernetes-sigs.github.io/secrets-store-csi-driver/charts
+  version: "1.4.4"
+  namespace: kube-system
+
+- feature: vpa
+  chart: vpa
+  repository: https://charts.fairwinds.com/stable
+  version: "4.5.0"
+  namespace: kube-system

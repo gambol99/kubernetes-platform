@@ -1,0 +1,15 @@
+---
+kustomize:
+  ## The features to enable in the tenant cluster
+  feature: kyverno
+  ## The path to the kustomize overlay
+  path: base
+
+namespace:
+  ## Name of the namespace to deploy the application
+  name: kyverno-system
+
+## Synchronization options
+sync:
+  ## We want to deploy kyverno after the platform
+  phase: secondary

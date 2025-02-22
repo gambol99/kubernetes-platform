@@ -1,0 +1,21 @@
+apiVersion: cli.kyverno.io/v1alpha1
+kind: Test
+metadata:
+  name: deny-no-limits
+policies:
+  - ../policy.yaml
+resources:
+  - resources.yaml
+results:
+  - kind: Pod
+    policy: deny-no-limits
+    resources:
+      - badpod
+    result: fail
+    rule: deny-no-limits
+  - kind: Pod
+    policy: deny-no-limits
+    resources:
+      - goodpod
+    result: pass
+    rule: deny-no-limits
