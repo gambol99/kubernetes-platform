@@ -1,16 +1,16 @@
 ---
 ##
 ## This application set is used to create Applications for each of the
-## platform kustomize charts, defined in the ./platform directory.
+## platform helm charts, defined in the ./platform directory.
 ##
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: platform-kustomize
+  name: tenant-system-helm
   namespace: argocd
   annotations:
     argocd.argoproj.io/sync-wave: "1"
-    kustomize.patch.appset.platform: "true"
+    kustomize.patch.appset.tenant: "true"
 spec:
   goTemplate: true
 
@@ -44,58 +44,69 @@ spec:
     - matrix:
         generators:
           - git:
-              repoURL: PLATFORM_REPO
-              revision: PLATFORM_REPO_REVISION
+              repoURL: TENANT_REPO
+              revision: TENANT_REPO_REVISION
               files:
-                - path: "platform/{{ .cloud_vendor }}/**/kustomize.yaml"
-                - path: "platform/oss/**/kustomize.yaml"
+                - path: "workloads/system/**/helm.yaml"
             selector:
               matchExpressions:
-                - key: kustomize.path
+                - key: helm.chart
+                  operator: Exists
+                - key: helm.version
+                  operator: Exists
+                - key: helm.repository
                   operator: Exists
           - clusters:
               selector:
                 matchExpressions:
                   - key: environment
                     operator: Exists
-                  - key: "{{ .kustomize.feature }}"
-                    operator: In
-                    values: ["true"]
 
   ## Sync Policy for the ApplicationSet
   syncPolicy:
     # Prevents ApplicationSet controller from modifying Applications. Delete is allowed.
-    applicationsSync: create-delete
+    applicationsSync: '{{ default "create-delete" .sync.application_sync }}'
 
   ## Template out an application for each of the tenant applications
   template:
     metadata:
-      name: "system-kustomize-{{ .path.basenameNormalized }}"
+      name: "tenant-helm{{ .path.basenameNormalized }}"
       namespace: argocd
       labels:
         app.kubernetes.io/name: argocd
-        app.kubernetes.io/managed-by: platform
-        app.kubernetes.io/instance: platform
+        app.kubernetes.io/managed-by: tenant
+        app.kubernetes.io/instance: tenant
         app.kubernetes.io/part-of: argocd
-        app.kubernetes.io/type: kustomize
-        phase: primary
+        app.kubernetes.io/type: helm
+        phase: '{{ default "secondary" .sync.phase }}'
 
     spec:
       ## The project to use for the application
-      project: system
+      project: tenant-system
 
       ## The sources to use for the application
-      source:
-        repoURL: "{{ .metadata.annotations.platform_repository }}"
-        targetRevision: "{{ .metadata.annotations.platform_revision }}"
-        path: '{{ printf "%s/%s" .path.path .kustomize.path }}'
-        kustomize: {}
+      sources:
+        - repoURL: "{{ .helm.repository }}"
+          targetRevision: "{{ .helm.version }}"
+          chart: '{{ default "" .helm.chart }}'
+          path: '{{ default "" .helm.path }}'
+          helm:
+            releaseName: "{{ default .path.basenameNormalized .helm.release_name }}"
+            ignoreMissingValueFiles: true
+            valueFiles:
+              - "$values/{{ .path.path }}/values/all.yaml"
+              - "$values/{{ .path.path }}/values/{{ .cluster_name }}.yaml"
+              - "$values/{{ .path.path }}/values/{{ .environment }}.yaml"
+        # Source the platform values
+        - repoURL: "{{ .metadata.annotations.tenant_repository }}"
+          targetRevision: "{{ .metadata.annotations.tenant_revision }}"
+          ref: values
 
       ## Destination is the cluster to deploy to
       destination:
         server: https://kubernetes.default.svc
-        ## /applications/TYPE/[2]/FILE.yaml or .helm.namespace
-        namespace: "{{ default (index .path.segments 2) .kustomize.namespace }}"
+        ## /applications/TYPE/[2]/FILE.yaml
+        namespace: "{{ index .path.segments 2 }}"
 
       ## Sync policy for the application
       syncPolicy:
@@ -104,8 +115,8 @@ spec:
           prune: true
         retry:
           backoff:
-            duration: 60s
-            maxDuration: 2m
+            duration: '{{ default "60s" .sync.backoff_duration }}'
+            maxDuration: '{{ default "2m" .sync.backoff_max_duration }}'
         # Use server-side apply for better efficiency and interop
         # between controllers making partial changes to manifests.
         # Also enable apply out of sync only rather than trying to
