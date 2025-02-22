@@ -1,0 +1,6 @@
+---
+kustomize:
+  feature: enable_kyverno
+  path: kustomize
+  ## We override the namespace name (by default the folder name)
+  namespace: kyverno-system

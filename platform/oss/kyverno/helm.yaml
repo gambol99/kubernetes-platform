@@ -4,3 +4,5 @@ helm:
   repository: https://kyverno.github.io/kyverno
   chart: kyverno
   version: "3.3.7"
+  ## We override the namespace name (by default the folder name)
+  namespace: kyverno-system
