@@ -61,7 +61,7 @@ spec:
                     operator: Exists
                   - key: environment
                     operator: Exists
-                  - key: enable_cert_manager
+                  - key: "{{ .helm.feature }}"
                     operator: In
                     values: ["true"]
 

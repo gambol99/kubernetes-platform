@@ -1,6 +1,6 @@
 ---
 helm:
-  feature_gate: enable_cert_manager
+  feature: enable_cert_manager
   repository: https://charts.jetstack.io
   chart: cert-manager
   version: "1.17.0"
