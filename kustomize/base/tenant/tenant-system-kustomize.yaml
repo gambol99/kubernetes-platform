@@ -9,7 +9,7 @@ metadata:
   name: tenant-system-kustomize
   namespace: argocd
   annotations:
-    argocd.argoproj.io/sync-wave: "1"
+    argocd.argoproj.io/sync-wave: "2"
 spec:
   goTemplate: true
 
@@ -110,3 +110,21 @@ spec:
         syncOptions:
           - CreateNamespace=true
           - ServerSideApply=true
+
+  ## If a kustomize.repository is defines we use the environment as the targetRevision. Its
+  ## the responsibility of the repository to control the floating revisions.
+  templatePatch: |
+    ## Is .kustomize.patches is greater than 0
+    {{- if gt (len .kustomize.patches) 0 }}
+    spec: 
+      source: 
+        {{- $patch := .kustomize.patches }}
+        kustomize:
+          patches:
+            - target:
+                kind: {{ $patch.target.kind }}
+                name: {{ $patch.target.name }}
+              path: {{ $patch.path }}
+              value: {{ index . $patch.value }}
+        {{- end }}
+    {{- end }}

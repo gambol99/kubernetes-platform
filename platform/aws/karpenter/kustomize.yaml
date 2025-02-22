@@ -1,0 +1,24 @@
+---
+kustomize:
+  path: kustomize
+  patches:
+    - target:
+        kind: EC2NodeClass
+        name: default
+      path: /spec/securityGroupSelectorTerms/0/tags/karpenter.sh\/discovery
+      value: cluster_name
+    - target:
+        kind: EC2NodeClass
+        name: default
+      path: /spec/subnetSelectorTerms/0/tags/karpenter.sh\/discovery
+      value: cluster_name
+    - target:
+        kind: EC2NodeClass
+        name: default
+      path: /spec/tags/Environment
+      value: environment
+    - target:
+        kind: EC2NodeClass
+        name: default
+      path: /spec/tags/Product
+      value: tenant
