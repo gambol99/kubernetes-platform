@@ -72,10 +72,10 @@ spec:
       name: "tenant-helm-{{ .path.basenameNormalized }}"
       namespace: argocd
       labels:
-        app.kubernetes.io/name: argocd
-        app.kubernetes.io/managed-by: tenant
-        app.kubernetes.io/instance: tenant
-        app.kubernetes.io/part-of: argocd
+        app.kubernetes.io/name: tenant-helm
+        app.kubernetes.io/managed-by: argocd
+        app.kubernetes.io/instance: tenant-helm
+        app.kubernetes.io/part-of: tenant-helm
         app.kubernetes.io/type: helm
         phase: '{{ default "secondary" .sync.phase }}'
 

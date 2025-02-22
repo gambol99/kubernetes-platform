@@ -68,10 +68,10 @@ spec:
       name: "tenant-kustomize-{{ .path.basenameNormalized }}"
       namespace: argocd
       labels:
-        app.kubernetes.io/name: argocd
-        app.kubernetes.io/managed-by: tenant
-        app.kubernetes.io/instance: tenant
-        app.kubernetes.io/part-of: argocd
+        app.kubernetes.io/name: tenant-kustomize
+        app.kubernetes.io/managed-by: argocd
+        app.kubernetes.io/instance: tenant-kustomize
+        app.kubernetes.io/part-of: tenant-kustomize
         app.kubernetes.io/type: kustomize
         phase: '{{ default "secondary" .sync.phase }}'
 

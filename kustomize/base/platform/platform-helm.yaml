@@ -77,10 +77,10 @@ spec:
       name: "system-{{ .path.basenameNormalized }}"
       namespace: argocd
       labels:
-        app.kubernetes.io/name: argocd
-        app.kubernetes.io/managed-by: platform
-        app.kubernetes.io/instance: platform
-        app.kubernetes.io/part-of: argocd
+        app.kubernetes.io/name: platform-helm
+        app.kubernetes.io/managed-by: argocd
+        app.kubernetes.io/instance: platform-helm
+        app.kubernetes.io/part-of: platform-helm
         app.kubernetes.io/type: helm
         phase: primary
 
