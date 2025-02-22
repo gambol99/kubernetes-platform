@@ -95,10 +95,10 @@ spec:
                 annotationSelector: "kustomize.patch.appset.tenant=true"
               patch: |
                 - op: replace
-                  path: /spec/generators/0/matrix/generators/0/git/repoURL
+                  path: /spec/generators/0/git/repoURL
                   value: "{{ .tenant_repository }}"
                 - op: replace
-                  path: /spec/generators/0/matrix/generators/0/git/revision
+                  path: /spec/generators/0/git/revision
                   value: "{{ .tenant_revision }}"
 
       ## The destination to deploy the resources

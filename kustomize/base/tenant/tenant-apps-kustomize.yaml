@@ -41,24 +41,17 @@ spec:
   ## NOTICE: These generators are patched in the kustomize/overlays/release/platform.yaml
   ## file. So if you are making any changes here, please make sure to update the overlay file.
   generators:
-    - matrix:
-        generators:
-          - git:
-              repoURL: TENANT_REPO
-              revision: TENANT_REPO_REVISION
-              files:
-                - path: "workloads/applications/**/{{ .cluster_name }}.yaml"
-            selector:
-              matchExpressions:
-                - key: kustomize.path
-                  operator: Exists
-                - key: kustomize.revision
-                  operator: Exists
-          - clusters:
-              selector:
-                matchExpressions:
-                  - key: environment
-                    operator: Exists
+    - git:
+        repoURL: TENANT_REPO
+        revision: TENANT_REPO_REVISION
+        files:
+          - path: "workloads/applications/**/{{ .cluster_name }}.yaml"
+      selector:
+        matchExpressions:
+          - key: kustomize.path
+            operator: Exists
+          - key: kustomize.revision
+            operator: Exists
 
   ## Sync Policy for the ApplicationSet
   syncPolicy:
