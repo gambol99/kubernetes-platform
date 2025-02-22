@@ -63,7 +63,7 @@ spec:
   ## Template out an application for each of the tenant applications
   template:
     metadata:
-      name: "tenant-helm{{ .path.basenameNormalized }}"
+      name: "tenant-helm-{{ .path.basenameNormalized }}"
       namespace: argocd
       labels:
         app.kubernetes.io/name: argocd

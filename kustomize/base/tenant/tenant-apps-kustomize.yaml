@@ -38,20 +38,25 @@ spec:
                 - secondary
 
   ## Generate applications from the platform repository
-  ## NOTICE: These generators are patched in the kustomize/overlays/release/platform.yaml
-  ## file. So if you are making any changes here, please make sure to update the overlay file.
   generators:
-    - git:
-        repoURL: TENANT_REPO
-        revision: TENANT_REPO_REVISION
-        files:
-          - path: "workloads/applications/**/{{ .cluster_name }}.yaml"
-      selector:
-        matchExpressions:
-          - key: kustomize.path
-            operator: Exists
-          - key: kustomize.revision
-            operator: Exists
+    - matrix:
+        generators:
+          - clusters:
+              selector:
+                matchExpressions:
+                  - key: environment
+                    operator: Exists
+          - git:
+              repoURL: "{{ .metadata.annotations.tenant_repository }}"
+              revision: "{{ .metadata.annotations.tenant_revision }}"
+              files:
+                - path: "workloads/applications/**/{{ .metadata.labels.cluster_name }}.yaml"
+            selector:
+              matchExpressions:
+                - key: kustomize.path
+                  operator: Exists
+                - key: kustomize.revision
+                  operator: Exists
 
   ## Sync Policy for the ApplicationSet
   syncPolicy:

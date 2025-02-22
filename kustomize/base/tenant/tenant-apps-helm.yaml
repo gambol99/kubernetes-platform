@@ -10,7 +10,6 @@ metadata:
   namespace: argocd
   annotations:
     argocd.argoproj.io/sync-wave: "1"
-    #kustomize.patch.appset.tenant: "true"
 spec:
   goTemplate: true
 
@@ -49,10 +48,10 @@ spec:
                   - key: environment
                     operator: Exists
           - git:
-              repoURL: https://github.com/gambol99/eks-tenant.git
-              revision: main
+              repoURL: "{{ .metadata.annotations.tenant_repository }}"
+              revision: "{{ .metadata.annotations.tenant_revision }}"
               files:
-                - path: "workloads/applications/**/{{ .cluster_name }}.yaml"
+                - path: "workloads/applications/**/{{ .metadata.labels.cluster_name }}.yaml"
             selector:
               matchExpressions:
                 - key: helm.chart
@@ -70,7 +69,7 @@ spec:
   ## Template out an application for each of the tenant applications
   template:
     metadata:
-      name: "tenant-helm{{ .path.basenameNormalized }}"
+      name: "tenant-helm-{{ .path.basenameNormalized }}"
       namespace: argocd
       labels:
         app.kubernetes.io/name: argocd
