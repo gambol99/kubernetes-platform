@@ -44,8 +44,8 @@ spec:
               repoURL: PLATFORM_REPO
               revision: PLATFORM_REPO_REVISION
               files:
-                - path: "platform/{{ .cloud_vendor }}/**/*.yaml"
-                - path: "platform/oss/**/*.yaml"
+                - path: "platform/{{ .cloud_vendor }}/**/helm.yaml"
+                - path: "platform/oss/**/helm.yaml"
             selector:
               matchExpressions:
                 - key: helm.chart
