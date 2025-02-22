@@ -114,17 +114,16 @@ spec:
   ## If a kustomize.repository is defines we use the environment as the targetRevision. Its
   ## the responsibility of the repository to control the floating revisions.
   templatePatch: |
-    ## Is .kustomize.patches is greater than 0
     {{- if gt (len .kustomize.patches) 0 }}
     spec: 
       source: 
-        {{- $patch := range .kustomize.patches }}
         kustomize:
           patches:
+            {{- range .kustomize.patches }}
             - target:
-                kind: {{ $patch.target.kind }}
-                name: {{ $patch.target.name }}
-              path: {{ $patch.path }}
-              value: {{ index . $patch.value }}
-        {{- end }}
+                kind: {{ .target.kind }}
+                name: {{ .target.name }}
+              path: {{ .path }}
+              value: {{ index . .value }}
+            {{- end }}
     {{- end }}
