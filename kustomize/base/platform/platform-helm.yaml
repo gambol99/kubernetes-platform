@@ -97,7 +97,6 @@ spec:
             valueFiles:
               - "$values/{{ .path.path }}/values/all.yaml"
               - "$values/{{ .path.path }}/values/release.yaml"
-              - "$values/{{ .path.path }}/values/ci.yaml"
         # Source the platform values
         - repoURL: "{{ .metadata.annotations.platform_repository }}"
           targetRevision: "{{ .metadata.annotations.platform_revision }}"
