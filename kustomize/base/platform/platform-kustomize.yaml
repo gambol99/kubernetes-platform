@@ -1,12 +1,12 @@
 ---
 ##
 ## This application set is used to create Applications for each of the
-## platform helm charts, defined in the ./platform directory.
+## platform kustomize charts, defined in the ./platform directory.
 ##
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: platform-helm
+  name: platform-kustomize
   namespace: argocd
   annotations:
     argocd.argoproj.io/sync-wave: "1"
@@ -44,22 +44,18 @@ spec:
               repoURL: PLATFORM_REPO
               revision: PLATFORM_REPO_REVISION
               files:
-                - path: "platform/{{ .cloud_vendor }}/**/helm.yaml"
-                - path: "platform/oss/**/helm.yaml"
+                - path: "platform/{{ .cloud_vendor }}/**/kustomize.yaml"
+                - path: "platform/oss/**/kustomize.yaml"
             selector:
               matchExpressions:
-                - key: helm.chart
-                  operator: Exists
-                - key: helm.version
-                  operator: Exists
-                - key: helm.repository
+                - key: kustomize.path
                   operator: Exists
           - clusters:
               selector:
                 matchExpressions:
                   - key: environment
                     operator: Exists
-                  - key: "{{ .helm.feature }}"
+                  - key: "{{ .kustomize.feature }}"
                     operator: In
                     values: ["true"]
 
@@ -78,39 +74,25 @@ spec:
         app.kubernetes.io/managed-by: platform
         app.kubernetes.io/instance: platform
         app.kubernetes.io/part-of: argocd
-        app.kubernetes.io/type: helm
-        phase: primary
+        app.kubernetes.io/type: kustomize
+        phase: "{{ default "secondary" .sync.phase }}"
 
     spec:
       ## The project to use for the application
       project: system
 
       ## The sources to use for the application
-      sources:
-        - repoURL: "{{ .helm.repository }}"
-          targetRevision: "{{ .helm.version }}"
-          chart: '{{ default "" .helm.chart }}'
-          path: '{{ default "" .helm.path }}'
-          helm:
-            releaseName: "{{ default .path.basenameNormalized .helm.release_name }}"
-            ignoreMissingValueFiles: true
-            valueFiles:
-              - "$values/{{ .path.path }}/values/all.yaml"
-              - "$values/{{ .path.path }}/values/release.yaml"
-              - "$values/{{ .path.path }}/values/ci.yaml"
-        # Source the platform values
-        - repoURL: "{{ .metadata.annotations.platform_repository }}"
-          targetRevision: "{{ .metadata.annotations.platform_revision }}"
-          ref: values
-        - repoURL: "{{ .metadata.annotations.tenant_repository }}"
-          targetRevision: "{{ .metadata.annotations.tenant_revision }}"
-          ref: tenant
+      source:
+        repoURL: "{{ .metadata.annotations.platform_repository }}"
+        targetRevision: "{{ .metadata.annotations.platform_revision }}"
+        path: "{{ .kustomize.path }}"
+        kustomize: {}
 
       ## Destination is the cluster to deploy to
       destination:
         server: https://kubernetes.default.svc
         ## /applications/TYPE/[2]/FILE.yaml or .helm.namespace
-        namespace: "{{ default (index .path.segments 2) .helm.namespace }}"
+        namespace: "{{ default (index .path.segments 2) .kustomize.namespace }}"
 
       ## Sync policy for the application
       syncPolicy:
@@ -128,15 +110,3 @@ spec:
         syncOptions:
           - CreateNamespace=true
           - ServerSideApply=true
-
-  ## If the helm chart permits the values to be overridden, we apply a patch
-  ## allowing for the tenant values to be used.
-  templatePatch: |
-    {{ if eq (default "false" .helm.enable_tenant_values) "true" }}
-    spec:
-      sources:
-        - helm:
-            valueFiles:
-              - "$tenant/applications/{{ .path.basenameNormalized }}/values/{{ .environment }}.yaml"
-              - "$tenant/platform/{{ .path.basenameNormalized }}/values/{{ .environment }}.yaml"
-    {{ end }}
