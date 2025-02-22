@@ -12,10 +12,10 @@ spec:
   ## the configuration to produce a platform application set for each
   generators:
     - git:
-        repoURL: https://github.com/gambol99/eks-tenant.git
+        repoURL: TENANT_REPO_REVISION
         revision: HEAD
         files:
-          - path: clusters/grn.yaml
+          - path: clusters/NEED_TO_PATCH.yaml
 
   ## Sync Policy for the ApplicationSet
   syncPolicy:
