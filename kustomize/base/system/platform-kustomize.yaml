@@ -104,8 +104,9 @@ spec:
           prune: true
         retry:
           backoff:
-            duration: 60s
-            maxDuration: 2m
+            duration: "{{ default 30s .sync.duration }}"
+            maxDuration: "{{ default 5m .sync.retry.max_duration }}"
+          limit: "{{ default 3 .sync.limit }}"
         # Use server-side apply for better efficiency and interop
         # between controllers making partial changes to manifests.
         # Also enable apply out of sync only rather than trying to

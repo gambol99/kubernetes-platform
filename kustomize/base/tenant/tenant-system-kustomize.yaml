@@ -101,8 +101,9 @@ spec:
           prune: true
         retry:
           backoff:
-            duration: '{{ default "60s" .sync.backoff_duration }}'
-            maxDuration: '{{ default "2m" .sync.backoff_max_duration }}'
+            duration: "{{ default 30s .sync.duration }}"
+            maxDuration: "{{ default 5m .sync.retry.max_duration }}"
+          limit: "{{ default 3 .sync.limit }}"
         # Use server-side apply for better efficiency and interop
         # between controllers making partial changes to manifests.
         # Also enable apply out of sync only rather than trying to
@@ -115,8 +116,8 @@ spec:
   ## the responsibility of the repository to control the floating revisions.
   templatePatch: |
     {{- if gt (len (default list .kustomize.patches)) 0 }}
-    spec: 
-      source: 
+    spec:
+      source:
         kustomize:
           patches:
             {{- $context := . }}
