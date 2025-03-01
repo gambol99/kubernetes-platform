@@ -26,7 +26,7 @@ spec:
         valueFiles:
           - "$values/clusters/{{ .cluster_name }}.yaml"
     - repoURL: TENANT_REPO
-      targetRevision: TENANT_REPO_REVISION
+      targetRevision: HEAD
       ref: values
 
   destination:

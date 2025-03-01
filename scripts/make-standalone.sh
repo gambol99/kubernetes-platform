@@ -22,7 +22,7 @@ Options:
   -h, --help               Show this help message and exit
 EOF
   if [[ ${#} -gt 0   ]]; then
-    echo "Error: ${@}"
+    echo "Error: ${*}"
     exit 1
   fi
 }
@@ -32,7 +32,7 @@ setup_cluster() {
   local cluster_name=$1
   local cluster_context="kind-${cluster_name}"
 
-  echo "Provisioning cluster: \"${cluster_name}\""
+  echo "Provisioning Cluster: \"${cluster_name}\""
   # Create cluster
   kind create cluster --name "${cluster_name}" 2> /dev/null
 
@@ -101,7 +101,7 @@ spec:
   source:
     repoURL: ${platform_repo}
     targetRevision: ${platform_revision}
-    path: kustomize/overlays/release
+    path: kustomize/overlays/standalone
     kustomize:
       patches:
         - target:
@@ -117,26 +117,6 @@ spec:
             - op: replace
               path: /spec/generators/0/git/files/0/path
               value: release/local/clusters/${cluster_name}.yaml
-
-            ## Only required for local development
-            - op: replace
-              path: /spec/template/spec/source/kustomize/patches/0/patch
-              value: |
-                - op: replace
-                  path: /spec/sources/0/repoURL
-                  value: "${platform_repo}"
-                - op: replace
-                  path: /spec/sources/0/targetRevision
-                  value: "${platform_revision}"
-                - op: replace
-                  path: /spec/sources/0/helm/valueFiles/0
-                  value: "\$values/release/local/clusters/${cluster_name}.yaml"
-                - op: replace
-                  path: /spec/sources/1/repoURL
-                  value: "${platform_repo}"
-                - op: replace
-                  path: /spec/sources/1/targetRevision
-                  value: "${platform_revision}"
 
   ## The destination to deploy the resources
   destination:

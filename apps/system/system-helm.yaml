@@ -100,9 +100,7 @@ spec:
             releaseName: "{{ default .chart .release_name }}"
             ignoreMissingValueFiles: true
             valueFiles:
-              - "$values/config/{{ .feature }}/{{ .metadata.labels.cluster_name }}.yaml"
-              - "$values/config/{{ .feature }}/{{ .metadata.labels.environment }}.yaml"
-              - "$values/config/{{ .feature }}/{{ .metadata.labels.tenant }}.yaml"
+              - "$tenant/{{ .tenant_path }}/config/{{ .feature }}/all.yaml"
               - "$values/config/{{ .feature }}/all.yaml"
 
         - repoURL: "{{ .metadata.annotations.platform_repository }}"
@@ -140,7 +138,7 @@ spec:
   ## If the helm chart permits the values to be overridden, we apply a patch
   ## allowing for the tenant values to be used.
   templatePatch: |
-    {{ if eq (default "false" .helm.enable_tenant) "true" }}
+    {{ if eq (default "false" .helm.enable_tenant_config) "true" }}
     spec:
       sources:
         - helm:

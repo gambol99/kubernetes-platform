@@ -30,3 +30,5 @@ platform_repository: unknown
 platform_revision: unknown
 ## The path to the platform repository
 platform_path: unknown
+## Configuration for the cluster authentication
+cluster_authentication: {}

@@ -1,15 +1,10 @@
 # Makefile for the development clusters
 
-default: dev
 
-
-dev:
-	@scripts/make-local.sh -C --cluster dev \
+standalone:
+	@echo "Provisioning Standalone Cluster (dev)"
+	@scripts/make-standalone.sh -C --cluster dev \
 		--github-token "${GITHUB_TOKEN_personal}"
-
-prod:
-	@scripts/make-local.sh -C --cluster prod \
-	--github-token "${GITHUB_TOKEN_personal}"
 
 clean:
 	@echo "Deleting development clusters..."

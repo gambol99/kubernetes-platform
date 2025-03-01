@@ -1,0 +1,83 @@
+---
+#
+## The sole purpose of this application set it to provision an application per enabled
+## cluster. We watch the cluster definitions from then tenant repository and create an
+## application per cluster.
+##
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: system-registration
+  namespace: argocd
+spec:
+  goTemplate: true
+  ## We read in the cluster definition from the tenant repository, using
+  ## the configuration to produce a platform application set for each
+  generators:
+    - git:
+        repoURL: TENANT_REPO
+        revision: TENANT_REPO_REVISION
+        files:
+          - path: TENANT_PATH/clusters/*.yaml
+
+      selector:
+        matchExpressions:
+          - key: enabled
+            operator: In
+            values: ["true"]
+
+  ## Sync Policy for the ApplicationSet
+  syncPolicy:
+    # Prevents ApplicationSet controller from modifying Applications.
+    applicationsSync: create-update
+
+  ## Render a platform application set from the cluster definition
+  template:
+    metadata:
+      name: "system-registration-{{ .cluster_name }}"
+      namespace: argocd
+      labels:
+        platform.local/tenant: "{{ .tenant }}"
+        platform.local/environment: "{{ .environment }}"
+      annotations:
+        app.kubernetes.io/managed-by: argocd
+        app.kubernetes.io/environment: "{{ .environment }}"
+        app.kubernetes.io/type: platform
+
+    ## The source to read the platform resources from
+    spec:
+      project: default
+      sources:
+        ## Provision the cluster registration application for each cluster
+        - repoURL: "{{ .platform_repository }}"
+          targetRevision: "{{ .platform_revision }}"
+          path: "charts/cluster-registration"
+          helm:
+            releaseName: "registration-{{ .cluster_name }}"
+            ignoreMissingValueFiles: true
+            valueFiles:
+              - "$values/{{ .tenant_repository_path }}/clusters/{{ .cluster_name }}.yaml"
+
+        ## We use the cluster definition from the tenant repository to
+        - repoURL: "{{ .metadata.annotations.platform_repository }}"
+          targetRevision: "{{ .metadata.annotations.platform_revision }}"
+          ref: values
+
+      ## The destination to deploy the resources
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: argocd
+
+      ## Sync policy for the application
+      syncPolicy:
+        automated:
+          selfHeal: true
+          prune: true
+        retry:
+          limit: 20
+          backoff:
+            duration: 60s
+            maxDuration: 3m
+        syncOptions:
+          - CreateNamespace=false
+          - ServerSideApply=true
