@@ -1,5 +1,5 @@
 ## The name of the tenant cluster
-cluster_name: release
+cluster_name: prod
 ## The cloud vendor to use for the tenant cluster
 cloud_vendor: kind
 ## The environment to use for the tenant cluster
@@ -30,4 +30,4 @@ labels:
   enable_pod_identity: "true"
 ## Annotations are using for additional metadata about the tenant cluster
 annotations:
-  platform.local/tenant: grn
+  platform.local/tenant: tenant

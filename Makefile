@@ -1,20 +1,20 @@
 # Makefile for the development clusters
 
-default: local
+default: dev
 
 
-local:
-	@scripts/make-local.sh -C --cluster local \
+dev:
+	@scripts/make-local.sh -C --cluster dev \
 		--github-token "${GITHUB_TOKEN_personal}"
 
-tenant:
-	@scripts/make-local.sh -C --cluster tenant \
+prod:
+	@scripts/make-local.sh -C --cluster prod \
 	--github-token "${GITHUB_TOKEN_personal}"
 
 clean:
 	@echo "Deleting development clusters..."
-	@kind delete cluster --name local 2>/dev/null || true
-	@kind delete cluster --name tenant 2>/dev/null || true
+	@kind delete cluster --name dev 2>/dev/null || true
+	@kind delete cluster --name prod 2>/dev/null || true
 
 test:
 	@echo "--> Testing the configuration..."
