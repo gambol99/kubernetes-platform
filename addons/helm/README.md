@@ -2,6 +2,9 @@
 
 This directory contains the helm charts for the open source and cloud specific addons.
 
+- `oss`: The open source helm charts.
+- `cloud`: The cloud specific helm charts.
+
 ## Helm Entry Format
 
 The helm entry format is as follows:
