@@ -9,7 +9,7 @@ environment: release
 ## The repository containing the tenant configuration
 tenant_repository: https://github.com/gambol99/kubernetes-platform.git
 ## The revision to use for the tenant repository
-tenant_revision: working
+tenant_revision: main
 ## The path inside the tenant repository to use for the tenant cluster
 tenant_path: release/local
 ## The cost center to use for the tenant cluster
@@ -17,7 +17,7 @@ tenant_cost_center: "123456"
 ## The repository containing the platform configuration
 platform_repository: https://github.com/gambol99/kubernetes-platform.git
 ## The revision to use for the platform repository
-platform_revision: working
+platform_revision: main
 ## The path to the kustomize overlay to use for the tenant cluster
 platform_path: overlays/release
 ## The name of the tenant
@@ -29,6 +29,7 @@ labels:
   enable_efs_driver: "true"
   enable_external_dns: "false"
   enable_external_secrets: "true"
+  enable_kro: "true"
   enable_kyverno: "true"
   enable_metrics_server: "false"
   enable_pod_identity: "true"

@@ -65,6 +65,12 @@
   version: "2.15.0"
   namespace: keda-system
 
+- feature: kro
+  repository_path: helm
+  repository: https://github.com/kro-run/kro
+  version: "0.2.1"
+  namespace: kro-system
+
 - feature: kube_prometheus_stack
   chart: kube-prometheus-stack
   repository: https://prometheus-community.github.io/helm-charts
