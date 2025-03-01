@@ -7,7 +7,7 @@ environment: release
 ## The repository containing the tenant configuration
 tenant_repository: https://github.com/gambol99/kubernetes-platform.git
 ## The revision to use for the tenant repository
-tenant_revision: rework
+tenant_revision: main
 ## The path inside the tenant repository to use for the tenant cluster
 tenant_path: release/local
 ## The cost center to use for the tenant cluster
@@ -15,7 +15,7 @@ tenant_cost_center: "123456"
 ## The repository containing the platform configuration
 platform_repository: https://github.com/gambol99/kubernetes-platform.git
 ## The revision to use for the platform repository
-platform_revision: rework
+platform_revision: main
 ## The path to the kustomize overlay to use for the tenant cluster
 platform_path: overlays/release
 ## We use labels to enable/disable features in the tenant cluster
