@@ -8,3 +8,4 @@ This directory contains the scripts used to bootstrap the platform.
 - `validate-kustomize.sh`: Used to validate the Kustomize configuration from overlay to applications.
 - `validate-kyverno.sh`: Used to validate the Kyverno policies conform to the expected format.
 - `validate-helm-charts.sh`: Used to ensure the embedded helm charts are valid.
+- `update-helm-charts.sh`: Used to update the cluster secret from the definition, without waiting for the sync to occur.

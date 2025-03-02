@@ -50,7 +50,7 @@ setup_cluster() {
     fi
     # Wait for ArgoCD to be ready
   fi
-  echo "Waiting for ArgoCD pods to be ready..."
+  echo "Waiting for ArgoCD to be ready..."
   kubectl -n argocd wait \
     --for=condition=Ready pods \
     --all -l app.kubernetes.io/name=argocd-repo-server \
