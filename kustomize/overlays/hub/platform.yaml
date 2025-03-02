@@ -45,18 +45,18 @@ spec:
           kustomize:
             patches:
               - target:
-                  kind: Application
+                  kind: ApplicationSet
                   name: system-registration
                 patch: |
                   - op: replace
-                    path: /spec/sources/0/repoURL
+                    path: /spec/generators/0/repoURL
                     value: "{{ .tenant_repository }}"
                   - op: replace
-                    path: /spec/sources/0/targetRevision
+                    path: /spec/generators/0/targetRevision
                     value: "{{ .tenant_revision }}"
                   - op: replace
-                    path: /spec/sources/0/helm/valueFiles/0
-                    value: "$values/{{ .tenant_path }}/clusters/*.yaml"
+                    path: /spec/generators/0/files/0/path
+                    value: "{{ .tenant_path }}/clusters/*.yaml"
 
         ## Source in the tenant application sets
         - repoURL: "{{ .platform_repository }}"
