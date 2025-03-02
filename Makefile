@@ -20,6 +20,7 @@ validate:
 	@echo "--> Validating the configuration..."
 	@$(MAKE) validate-helm-addons
 	@$(MAKE) validate-kustomize
+	@$(MAKE) validate-helm-charts
 	@$(MAKE) validate-kyverno
 
 validate-helm-addons:
@@ -33,6 +34,10 @@ validate-kyverno:
 validate-kustomize:
 	@echo "--> Validating the kustomize configuration..."
 	@scripts/validate-kustomize.sh
+
+validate-helm-charts:
+	@echo "--m "Validating Helm Charts..."
+	@scipts/validate-helm-charts.sh
 
 lint-yaml:
 	@echo "--> Linting YAML files..."
