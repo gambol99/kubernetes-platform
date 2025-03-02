@@ -35,6 +35,12 @@
   version: "0.10.0"
   namespace: external-secrets
 
+- feature: argocd
+  chart: argo-cd
+  repository: https://argoproj.github.io/argo-helm
+  version: "7.8.5"
+  namespace: argocd
+
 - feature: argo_events
   chart: argo-events
   repository: https://argoproj.github.io/argo-helm
