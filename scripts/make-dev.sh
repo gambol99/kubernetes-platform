@@ -193,7 +193,7 @@ while [[ ${#} -gt 0   ]]; do
       CREDENTIALS=true
       shift 2
       ;;
-    -t | --type)
+    -t | --cluster-type)
       CLUSTER_TYPE="${2}"
       shift 2
       ;;
