@@ -1,0 +1,44 @@
+---
+name: ci
+
+# yamllint disable-line rule:truthy
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  validate-chart:
+    name: Validate Chart
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: helm/chart-testing-action@v2.7.0
+      - run: make validate-helm-charts
+
+  validate-yaml:
+    name: Validate YAML
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: pip install yamllint
+      - run: make lint-yaml
+
+  validate-helm-addons:
+    name: Validate Helm Addons
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: sudo apt install -y yq
+      - run: make validate-helm-addons
+
+  validate-kustomize:
+    name: Validate Kustomize
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: azure/setup-kubectl@v4
+      - run: make validate-kustomize
