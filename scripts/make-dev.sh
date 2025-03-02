@@ -34,8 +34,7 @@ setup_cluster() {
   local cluster_name=$1
   local cluster_context="kind-${cluster_name}"
 
-  echo "Provisioning Cluster: \"${cluster_name}\""
-  echo "Cluster Type: \"${CLUSTER_TYPE}\""
+  echo "Provisioning Cluster: \"${cluster_name}\", Type: \"${CLUSTER_TYPE}\""
 
   # Create cluster
   kind create cluster --name "${cluster_name}" 2> /dev/null

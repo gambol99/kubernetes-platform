@@ -20,7 +20,7 @@ tenant_repository: https://github.com/gambol99/kubernetes-platform.git
 ## The revision to use for the tenant repository
 tenant_revision: main
 ## The path inside the tenant repository to use for the tenant cluster
-tenant_path: release/local
+tenant_path: release/hub
 ## The cost center to use for the tenant cluster
 tenant_cost_center: "123456"
 ## The repository containing the platform configuration
