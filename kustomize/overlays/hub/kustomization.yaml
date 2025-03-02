@@ -8,3 +8,4 @@ commonLabels:
 
 resources:
   - platform.yaml
+  - ../../apps/argocd
