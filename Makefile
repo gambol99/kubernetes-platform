@@ -19,11 +19,8 @@ hub:
 
 spoke:
 	@echo "Provisioning Spoke Cluster (spoke)"
-	@scripts/make-dev.sh \
-		--cluster-type spoke \
-		--cluster spoke \
-		--credentials \
-		--github-token "${GITHUB_TOKEN_personal}":
+	@scripts/make-spoke.sh \
+		--cluster spoke
 
 clean:
 	@echo "Deleting development clusters..."
