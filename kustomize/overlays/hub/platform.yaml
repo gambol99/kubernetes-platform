@@ -56,7 +56,7 @@ spec:
                     value: "{{ .tenant_revision }}"
                   - op: replace
                     path: /spec/sources/0/helm/valueFiles/0
-                    value: "$values/{{ .tenant_repository_path }}/clusters/*.yaml"
+                    value: "$values/{{ .tenant_path }}/clusters/*.yaml"
 
         ## Source in the tenant application sets
         - repoURL: "{{ .platform_repository }}"
