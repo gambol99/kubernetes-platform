@@ -33,7 +33,21 @@ update_cluster_secret() {
     charts/cluster-registration | kubectl -n argocd apply -f - > /dev/null; then
     return 1
   fi
-  echo "Successfully updated the cluster secret"
+
+  ## Check if the system registration is paused
+  if grep -E -q "cluster_type: (hub|spoke)" "${CLUSTER_PATH}"; then
+    if ! kubectl -n argocd patch applicationset system-registration --type merge -p '{"spec": {"syncPolicy": {"automated": null}}}' > /dev/null; then
+      echo "Failed to update and pause the applicationset for registration"
+      return 1
+    fi
+  else
+    if ! kubectl -n argocd patch application system-registration --type merge -p '{"spec": {"syncPolicy": {"automated": null}}}' > /dev/null; then
+      echo "Failed to update and pause the application for registration"
+      return 1
+    fi
+  fi
+
+  echo "Successfully updated the cluster secret, and paused synchronization"
 }
 
 ## Parse the command line arguments
