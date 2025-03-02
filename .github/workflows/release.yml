@@ -18,13 +18,24 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+      - uses: actions/setup-ruby@v1
+        with:
+          ruby-version: 2.7
+      - name: Install Changelog
+        run: gem install github_changelog_generator
+      - name: Generate Changelog
+        run: |
+          ## Get the latest tag
+          LATEST_TAG=$(git tag --sort=-version:refname | head -n 1)
+          ## Generate the changelog
+          github_changelog_generator \
+            --since-tag $LATEST_TAG \
+            --user ${GITHUB_ORG} \
+            --project ${GITHUB_REPO} > ${{ github.workspace }}-CHANGELOG.txt
       - name: Create Release
         id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
-          draft: false
-          prerelease: false
+          body_path: ${{ github.workspace }}-CHANGELOG.txt
+          repository: my_gh_org/my_gh_repo
+          token: ${{ secrets.GITHUB_TOKEN }}
