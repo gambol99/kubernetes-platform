@@ -12,7 +12,7 @@ hub:
 	@echo "Provisioning Hub Cluster (dev)"
 	@scripts/make-dev.sh \
 		--cluster-type hub \
-		--cluster dev \
+		--cluster hub \
 		--github-token "${GITHUB_TOKEN_personal}"
 
 clean:

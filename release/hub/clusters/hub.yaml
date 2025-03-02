@@ -1,7 +1,7 @@
 ## Indicate the cluster is enabled
 enabled: true
 ## The name of the tenant cluster
-cluster_name: prod
+cluster_name: hub
 ## The cloud vendor to use for the tenant cluster
 cloud_vendor: kind
 ## The environment to use for the tenant cluster
