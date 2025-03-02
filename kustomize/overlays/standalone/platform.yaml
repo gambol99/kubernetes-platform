@@ -38,7 +38,7 @@ spec:
     spec:
       project: default
       sources:
-        ## Provision the cluster registration package
+        ## Source in the registration application set
         - repoURL: "{{ .platform_repository }}"
           targetRevision: "{{ .platform_revision }}"
           path: "apps/registration/standalone"
@@ -64,10 +64,15 @@ spec:
                     path: /spec/sources/1/targetRevision
                     value: "{{ .tenant_revision }}"
 
-        ## We also need to source in the applications
+        ## Source in the tenant application sets
         - repoURL: "{{ .platform_repository }}"
           targetRevision: "{{ .platform_revision }}"
-          path: "apps"
+          path: "app/tenant"
+
+        ## Source in in the system application sets
+        - repoURL: "{{ .platform_repository }}"
+          targetRevision: "{{ .platform_revision }}"
+          path: "apps/system"
           kustomize:
             patches:
               - target:
