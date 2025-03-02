@@ -15,9 +15,11 @@ cloud_vendor: unknown
 ##   enable_kyverno: "true"
 ##   enable_pod_identity: "true"
 ##   enable_external_secrets: "true"
-labels: {}
+labels:
+  app.kubernetes.io/managed-by: argocd
 ## Annotations for the tenant cluster
-annotations: {}
+annotations:
+  app.kubernetes.io/managed-by: argocd
 ## The tenant repository for the tenant cluster
 tenant_repository: unknown
 ## The revision of the tenant repository
@@ -32,3 +34,5 @@ platform_revision: unknown
 platform_path: unknown
 ## Configuration for the cluster authentication
 cluster_authentication: {}
+## The cluster type (standalone, spoke or hub)
+cluster_type: standalone

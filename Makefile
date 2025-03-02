@@ -45,8 +45,8 @@ validate-kustomize:
 	@scripts/validate-kustomize.sh
 
 validate-helm-charts:
-	@echo "--m "Validating Helm Charts..."
-	@scipts/validate-helm-charts.sh
+	@echo "--> Validating Helm Charts..."
+	@scripts/validate-helm-charts.sh
 
 lint-yaml:
 	@echo "--> Linting YAML files..."

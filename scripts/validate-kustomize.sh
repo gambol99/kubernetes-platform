@@ -28,4 +28,3 @@ for x in "${KUSTOMIZE_DIRS[@]}"; do
     fi
   done
 done
-
