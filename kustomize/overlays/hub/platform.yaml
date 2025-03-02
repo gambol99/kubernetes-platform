@@ -61,7 +61,7 @@ spec:
         ## Source in the tenant application sets
         - repoURL: "{{ .platform_repository }}"
           targetRevision: "{{ .platform_revision }}"
-          path: "app/tenant"
+          path: "apps/tenant"
 
         ## Source in in the system application sets
         - repoURL: "{{ .platform_repository }}"
