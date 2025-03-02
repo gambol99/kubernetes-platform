@@ -35,10 +35,15 @@ test:
 
 validate:
 	@echo "--> Validating the configuration..."
+	@$(MAKE) validation-actions
 	@$(MAKE) validate-helm-addons
 	@$(MAKE) validate-kustomize
 	@$(MAKE) validate-helm-charts
 	@$(MAKE) validate-kyverno
+
+validate-actions:
+	@echo "--> Validating Github Actions..."
+	@actionlint
 
 validate-helm-addons:
 	@echo "--> Validating the helm addons..."

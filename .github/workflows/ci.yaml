@@ -1,5 +1,5 @@
 ---
-name: ci
+name: Validation
 
 # yamllint disable-line rule:truthy
 on:
@@ -42,3 +42,4 @@ jobs:
       - uses: actions/checkout@v4
       - uses: azure/setup-kubectl@v4
       - run: make validate-kustomize
+
