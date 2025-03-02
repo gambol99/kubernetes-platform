@@ -49,13 +49,13 @@ spec:
                   name: system-registration
                 patch: |
                   - op: replace
-                    path: /spec/generators/0/repoURL
+                    path: /spec/generators/0/git/repoURL
                     value: "{{ .tenant_repository }}"
                   - op: replace
-                    path: /spec/generators/0/targetRevision
+                    path: /spec/generators/0/git/targetRevision
                     value: "{{ .tenant_revision }}"
                   - op: replace
-                    path: /spec/generators/0/files/0/path
+                    path: /spec/generators/0/git/files/0/path
                     value: "{{ .tenant_path }}/clusters/*.yaml"
 
         ## Source in the tenant application sets
