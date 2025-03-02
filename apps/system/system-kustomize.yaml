@@ -74,7 +74,7 @@ spec:
   ## Template out an application for each of the tenant applications
   template:
     metadata:
-      name: "system-kustomize-{{ .path.basenameNormalized }}"
+      name: "system-kustomize-{{ .path.basenameNormalized }}-{{ .metadata.labels.cluster_name }}"
       namespace: argocd
       labels:
         app.kubernetes.io/managed-by: argocd
