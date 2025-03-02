@@ -19,7 +19,7 @@ platform_repository: https://github.com/gambol99/kubernetes-platform.git
 ## The revision to use for the platform repository
 platform_revision: main
 ## The path to the kustomize overlay to use for the tenant cluster
-platform_path: overlays/release
+platform_path: overlays/release/hub
 ## The type of cluster we are (standalone, spoke or hub)
 cluster_type: hub
 ## We use labels to enable/disable features in the tenant cluster
