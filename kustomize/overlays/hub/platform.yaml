@@ -71,9 +71,11 @@ spec:
             patches:
               - target:
                   kind: ApplicationSet
-                  annotationSelector:
-                    kustomize.patch.appset.platform: "true"
+                  name: system-helm
                 patch: |
+                  - op: replace
+                    path: /spec/generators/0/matrix/generators/0/git/files/0/path
+                    value: "addons/helm/{{ .cloud_vendor }}/**/helm.yaml"
                   - op: replace
                     path: /spec/generators/0/matrix/generators/0/git/repoURL
                     value: "{{ .platform_repository }}"
@@ -83,19 +85,17 @@ spec:
 
               - target:
                   kind: ApplicationSet
-                  name: system-helm
-                patch: |
-                  - op: replace
-                    path: /spec/generators/0/matrix/generators/0/git/files/0/path
-                    value: "addons/helm/{{ .cloud_vendor }}/**/helm.yaml"
-
-              - target:
-                  kind: ApplicationSet
                   name: system-kustomize
                 patch: |
                   - op: replace
                     path: /spec/generators/0/matrix/generators/0/git/files/0/path
                     value: "addons/kustomize/{{ .cloud_vendor }}/**/kustomize.yaml"
+                  - op: replace
+                    path: /spec/generators/0/matrix/generators/0/git/repoURL
+                    value: "{{ .platform_repository }}"
+                  - op: replace
+                    path: /spec/generators/0/matrix/generators/0/git/revision
+                    value: "{{ .platform_revision }}"
 
       ## The destination to deploy the resources
       destination:
