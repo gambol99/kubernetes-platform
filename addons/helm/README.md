@@ -1,4 +1,4 @@
-# Helm Addons
+# Helm Add-ons
 
 This directory contains the helm charts for the open source and cloud specific addons.
 
