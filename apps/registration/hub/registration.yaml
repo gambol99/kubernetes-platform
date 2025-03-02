@@ -56,11 +56,11 @@ spec:
             releaseName: "registration-{{ .cluster_name }}"
             ignoreMissingValueFiles: true
             valueFiles:
-              - "$values/{{ .tenant_repository_path }}/clusters/{{ .cluster_name }}.yaml"
+              - "$values/{{ .tenant_path }}/clusters/{{ .cluster_name }}.yaml"
 
         ## We use the cluster definition from the tenant repository to
-        - repoURL: "{{ .metadata.annotations.platform_repository }}"
-          targetRevision: "{{ .metadata.annotations.platform_revision }}"
+        - repoURL: "{{ .metadata.annotations.tenant_repository }}"
+          targetRevision: "{{ .metadata.annotations.tenant_revision }}"
           ref: values
 
       ## The destination to deploy the resources
