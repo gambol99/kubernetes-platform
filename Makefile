@@ -2,14 +2,23 @@
 
 
 standalone:
-	@echo "Provisioning Standalone Cluster (dev)"
-	@scripts/make-standalone.sh -C --cluster dev \
+	@echo "Provisioning Standalone Cluster"
+	@scripts/make-dev.sh \
+		--cluster-type standalone \
+	  --cluster dev \
+		--github-token "${GITHUB_TOKEN_personal}"
+
+hub:
+	@echo "Provisioning Hub Cluster (dev)"
+	@scripts/make-dev.sh \
+		--cluster-type hub \
+		--cluster dev \
 		--github-token "${GITHUB_TOKEN_personal}"
 
 clean:
 	@echo "Deleting development clusters..."
 	@kind delete cluster --name dev 2>/dev/null || true
-	@kind delete cluster --name prod 2>/dev/null || true
+	@kind delete cluster --name hub 2>/dev/null || true
 
 test:
 	@echo "--> Testing the configuration..."

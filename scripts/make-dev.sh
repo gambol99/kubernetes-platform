@@ -5,8 +5,9 @@
 set -euo pipefail
 
 ## The cluster name to use for the local development
-CLUSTER_NAME=""
-CREDENTIALS=false
+CLUSTER_NAME="dev"
+CLUSTER_TYPE="standalone"
+CREDENTIALS=true
 ARGOCD_VERSION="7.8.5"
 GITHUB_USER="gambol99"
 
@@ -15,10 +16,11 @@ usage() {
 Usage: ${0} [options]
 
 Options:
-  -C, --credentials       Set the credentials for the platform repository
-  -c, --cluster            Set the cluster name (default: "")
-  -G, --github-user        Set the GitHub user (default: "${GITHUB_USER}")
-  -g, --github-token       Set the GitHub token (default: "GITHUB_TOKEN")
+  -C, --credentials        Set the credentials for the platform repository (default: ${CREDENTIALS})
+  -c, --cluster NAME       Set the cluster name (default: ${CLUSTER_NAME})
+  -G, --github-user USER   Set the GitHub user (default: ${GITHUB_USER})
+  -g, --github-token PASS  Set the GitHub token (default: "GITHUB_TOKEN")
+  -t, --type TYPE          The type of cluster to create, i.e. hub or standalone (default: ${CLUSTER_TYPE})
   -h, --help               Show this help message and exit
 EOF
   if [[ ${#} -gt 0   ]]; then
@@ -33,6 +35,8 @@ setup_cluster() {
   local cluster_context="kind-${cluster_name}"
 
   echo "Provisioning Cluster: \"${cluster_name}\""
+  echo "Cluster Type: \"${CLUSTER_TYPE}\""
+
   # Create cluster
   kind create cluster --name "${cluster_name}" 2> /dev/null
 
@@ -81,11 +85,37 @@ stringData:
 EOF
 }
 
-## Used to bootstrap the cluster with the platform repository
-setup_application() {
-  local platform_repo=$1
-  local platform_revision=$2
-  local cluster_name=$3
+## Provision a standalone cluster
+setup_bootstrap() {
+  local cluster_definition
+
+  cluster_definition="release/${CLUSTER_TYPE}/clusters/${CLUSTER_NAME}.yaml"
+
+  ## Check the cluster definition exists
+  if [[ ! -f ${cluster_definition} ]]; then
+    usage "Cluster definition for \"${CLUSTER_NAME}\" not found"
+  fi
+
+  ## Check we have a repository to use
+  platform_repo=$(grep "platform_repository" "${cluster_definition}" | cut -d' ' -f2)
+  platform_revision=$(grep "platform_revision" "${cluster_definition}" | cut -d' ' -f2)
+
+  ## Check we have a repository
+  if [[ -z ${platform_repo}   ]]; then
+    usage "Invalid cluster definition for \"${CLUSTER_NAME}\""
+  fi
+
+  ## Check we have a revision
+  if [[ -z ${platform_revision}   ]]; then
+    usage "Invalid cluster definition for \"${CLUSTER_NAME}\""
+  fi
+
+  ## Check if we need to provision the repository secret
+  if [[ ${CREDENTIALS} == "true"   ]]; then
+    if ! setup_credentails "${platform_repo}"; then
+      usage "Failed to setup credentials for \"${CLUSTER_NAME}\""
+    fi
+  fi
 
   cat << EOF | kubectl apply -f -
 ---
@@ -101,7 +131,7 @@ spec:
   source:
     repoURL: ${platform_repo}
     targetRevision: ${platform_revision}
-    path: kustomize/overlays/standalone
+    path: kustomize/overlays/${CLUSTER_TYPE}
     kustomize:
       patches:
         - target:
@@ -116,7 +146,7 @@ spec:
               value: ${platform_revision}
             - op: replace
               path: /spec/generators/0/git/files/0/path
-              value: release/local/clusters/${cluster_name}.yaml
+              value: ${cluster_definition}
 
   ## The destination to deploy the resources
   destination:
@@ -137,6 +167,8 @@ spec:
       - CreateNamespace=false
       - ServerSideApply=true
 EOF
+
+  echo "Successfully provisioned cluster: \"${CLUSTER_NAME}\""
 }
 
 ## Parse the command line arguments
@@ -148,19 +180,23 @@ while [[ ${#} -gt 0   ]]; do
       ;;
     -g | --github-token)
       GITHUB_TOKEN="${2}"
-      shift
+      shift 2
       ;;
     -G | --github-user)
       GITHUB_USER="${2}"
-      shift
+      shift 2
       ;;
     -c | --cluster)
       CLUSTER_NAME="${2}"
-      shift
+      shift 2
       ;;
     -C | --credentials)
       CREDENTIALS=true
-      shift
+      shift 2
+      ;;
+    -t | --type)
+      CLUSTER_TYPE="${2}"
+      shift 2
       ;;
     *)
       shift
@@ -168,45 +204,12 @@ while [[ ${#} -gt 0   ]]; do
   esac
 done
 
-## Check the cluster name is set
-if [[ -z ${CLUSTER_NAME}   ]]; then
-  usage "Cluster name is not set, please use the -c|--cluster option"
-fi
-
-## Check the cluster definition exists
-if [[ ! -f "release/local/clusters/${CLUSTER_NAME}.yaml" ]]; then
-  usage "Cluster definition for \"${CLUSTER_NAME}\" not found"
-fi
-
-## Check we have a repository to use
-platform_repo=$(grep "platform_repository" "release/local/clusters/${CLUSTER_NAME}.yaml" | cut -d' ' -f2)
-platform_revision=$(grep "platform_revision" "release/local/clusters/${CLUSTER_NAME}.yaml" | cut -d' ' -f2)
-
-## Check we have a repository
-if [[ -z ${platform_repo}   ]]; then
-  usage "Invalid cluster definition for \"${CLUSTER_NAME}\""
-fi
-
-## Check we have a revision
-if [[ -z ${platform_revision}   ]]; then
-  usage "Invalid cluster definition for \"${CLUSTER_NAME}\""
+## Check cluster type is hub or standalone
+if [[ ${CLUSTER_TYPE} != "hub" && ${CLUSTER_TYPE} != "standalone"       ]]; then
+  usage "Invalid cluster type: \"${CLUSTER_TYPE}\", must be 'hub' or 'standalone'"
 fi
 
 ## Step: Provision the cluster
-if ! setup_cluster "${CLUSTER_NAME}"; then
-  usage "Failed to setup cluster: \"${CLUSTER_NAME}\""
-fi
-
-## Step: Provision the credentials if required
-if [[ ${CREDENTIALS} == "true"   ]]; then
-  if ! setup_credentails "${platform_repo}"; then
-    usage "Failed to setup credentials for \"${CLUSTER_NAME}\""
-  fi
-fi
-
-## Step: Bootstrap the cluster for Application
-if ! setup_application "${platform_repo}" "${platform_revision}" "${CLUSTER_NAME}"; then
-  usage "Failed to bootstrap cluster: \"${CLUSTER_NAME}\""
-fi
-
-echo "Successfully provisioned cluster: \"${CLUSTER_NAME}\""
+setup_cluster "${CLUSTER_NAME}"   || usage "Failed to setup cluster"
+## Step: bootstrap the platform
+setup_bootstrap "${CLUSTER_NAME}" || usage "Failed to setup the bootstrap application"
