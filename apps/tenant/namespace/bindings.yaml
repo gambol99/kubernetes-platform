@@ -6,11 +6,10 @@ metadata:
   labels:
     app.kubernetes.io/managed-by: argocd
     platform.local/type: tenant
-spec:
-  roleRef:
-    apiGroup: rbac.authorization.k8s.io
-    kind: Role
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: namespace-admin
+subjects:
+  - kind: ServiceAccount
     name: namespace-admin
-  subjects:
-    - kind: ServiceAccount
-      name: namespace-admin

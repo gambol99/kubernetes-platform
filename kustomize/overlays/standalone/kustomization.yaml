@@ -4,6 +4,7 @@ kind: Kustomization
 
 commonAnnotations:
   app.kubernetes.io/managed-by: argocd
+  platform.local/type: standalone
 
 resources:
   - platform.yaml

@@ -18,14 +18,14 @@ spec:
     helm:
       releaseName: argocd
       values: |
-        ## The global configuration for the argocd server 
+        ## The global configuration for the argocd server
         global:
           ## Options for the network policy
           networkPolicy:
             ## Enable the creation of the network policy
             create: true
             ## Deny all ingress traffic by default
-            defaultDenyIngress: true 
+            defaultDenyIngress: true
 
         configs:
           ## Set the timeout for the reconciliation to 180 seconds

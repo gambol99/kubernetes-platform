@@ -19,7 +19,7 @@ rules:
   comments-indentation: disable
   document-end: disable
   document-start: disable
-  empty-lines: enable
+  empty-lines: disable
   empty-values: disable
   float-values: disable
   hyphens: enable

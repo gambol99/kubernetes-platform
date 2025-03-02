@@ -45,7 +45,5 @@ lint:
 
 lint-platform-applications:
 	@echo "--> Linting the platform applications..."
-	@kubeconform \
-		-ignore-missing-schemas \
-		kustomize/apps
+	@kubeconform -ignore-missing-schemas apps
 

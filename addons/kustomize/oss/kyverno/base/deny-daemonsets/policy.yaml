@@ -25,4 +25,4 @@ spec:
               - key: "{{ request.kind }}"
                 value: "DaemonSet"
                 effect: "Deny"
-§
+
