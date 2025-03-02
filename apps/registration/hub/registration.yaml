@@ -37,8 +37,9 @@ spec:
       name: "system-registration-{{ .cluster_name }}"
       namespace: argocd
       labels:
-        platform.local/tenant: "{{ .tenant }}"
+        platform.local/cluster: "{{ .cluster_name }}"
         platform.local/environment: "{{ .environment }}"
+        platform.local/tenant: "{{ .tenant }}"
       annotations:
         app.kubernetes.io/managed-by: argocd
         app.kubernetes.io/environment: "{{ .environment }}"

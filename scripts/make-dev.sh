@@ -7,7 +7,7 @@ set -euo pipefail
 ## The cluster name to use for the local development
 CLUSTER_NAME="dev"
 CLUSTER_TYPE="standalone"
-CREDENTIALS=true
+CREDENTIALS=false
 ARGOCD_VERSION="7.8.5"
 GITHUB_USER="gambol99"
 
@@ -191,7 +191,7 @@ while [[ ${#} -gt 0   ]]; do
       ;;
     -C | --credentials)
       CREDENTIALS=true
-      shift 2
+      shift 1
       ;;
     -t | --cluster-type)
       CLUSTER_TYPE="${2}"
