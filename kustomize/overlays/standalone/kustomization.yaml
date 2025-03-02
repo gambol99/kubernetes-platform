@@ -8,4 +8,4 @@ commonAnnotations:
 
 resources:
   - platform.yaml
-  - ../../apps/argocd
+  - ../../../apps/argocd
