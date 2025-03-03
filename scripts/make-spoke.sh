@@ -33,7 +33,7 @@ setup_spoke() {
 ## Parse the command line arguments
 while [[ $# -gt 0 ]]; do
   case "$1" in
-    -c | --cluster-name)
+    -c | --cluster)
       CLUSTER_NAME="$2"
       shift 2
       ;;
@@ -51,4 +51,3 @@ setup_spoke || {
   echo "Failed to setup the spoke cluster"
   exit 1
 }
-
