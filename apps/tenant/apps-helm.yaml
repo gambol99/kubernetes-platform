@@ -88,7 +88,7 @@ spec:
         ## service accounts, network policies, etc.
         - repoURL: "{{ .metadata.annotations.platform_repository }}"
           targetRevision: "{{ .metadata.annotations.platform_revision }}"
-          path: "kustomize/apps/tenant/namespace"
+          path: "apps/tenant/namespace"
           kustomize:
             patches:
               - target:
