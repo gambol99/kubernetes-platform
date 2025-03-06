@@ -6,16 +6,15 @@ metadata:
   labels:
     platform.local/type: tenant
     app.kubernetes.io/managed-by: argocd
-spec:
-  rules:
-    - apiGroups:
-        - "*"
-      resources:
-        - "*"
-      verbs:
-        - create
-        - delete
-        - get
-        - list
-        - patch
-        - update
+rules:
+  - apiGroups:
+      - "*"
+    resources:
+      - "*"
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
