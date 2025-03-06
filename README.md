@@ -35,25 +35,6 @@ The following depicts the operating model for the platform.
   - The consumer the platform repository as a software dependency.
   - They are responsible iterating the platform repository the revisions through the software development lifecycle i.e promoting the revisions though dev, test, and production to ensure the application stack is aligned.
 
-## Platform Tenets
+## Documentation
 
-Too often, platforms are designed from a purely technical standpoint, packed with cutting-edge tools and complex abstractions—yet they fail to deliver a great developer experience. They become rigid, overwhelming, and unintuitive, forcing teams to navigate layers of complexity just to deploy and operate their workloads.
-
-This is where strong platform tenets come in.
-
-- Treat the platform as a product, not just infrastructure—it should have clear users, a roadmap, and continuous improvements.
-- Focus on developer experience make workflows intuitive and efficient.
-- Provide self-service capabilities for developers to deploy and manage workloads independently.
-- Ensure guardrails, not gates—provide secure defaults but allow flexibility when needed.
-- Optimize for usability and maintainability, not just technical capability.
-- Reduce cognitive load by abstracting unnecessary infrastructure details.
-- Follow opinionated defaults but allow extensibility for advanced use cases.
-
-## Deployment Options
-
-Currently the platform is supported in two flavors
-
-- Central Hub: here we are using the fanout pattern of ArgoCD to act as a central control plane across multiple clusters.
-- Standalone: under the this model a cluster is bootstrapped with ArgoCD, and the platform and tenant repositories manage the cluster underneath.
-
-## Getting Started
+You can find the documentation for the platform in the [https://gambol99.github.io/kubernetes-platform](https://gambol99.github.io/kubernetes-platform/)
