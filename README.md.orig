@@ -41,6 +41,14 @@ Too often, platforms are designed from a purely technical standpoint, packed wit
 
 This is where strong platform tenets come in.
 
+<<<<<<< HEAD
+- We support two projects, `applications` and `platform`.
+- The `applications` project is meant to be used by the development teams to deploy their applications.
+- The `applications` project is limited by sources and resources types its permitted to deploy.
+- The `platform` project is meant to be used to deploy the platform resources.
+- We support deploying by either helm or kustomize (local and remote)
+- The name of folder `applications/NAME` or `platform/NAME` is used to define the namespace the application will be deployed to.
+=======
 - Treat the platform as a product, not just infrastructure—it should have clear users, a roadmap, and continuous improvements.
 - Focus on developer experience make workflows intuitive and efficient.
 - Provide self-service capabilities for developers to deploy and manage workloads independently.
@@ -57,3 +65,4 @@ Currently the platform is supported in two flavors
 - Standalone: under the this model a cluster is bootstrapped with ArgoCD, and the platform and tenant repositories manage the cluster underneath.
 
 ## Getting Started
+>>>>>>> feat/docs
