@@ -51,8 +51,6 @@ spec:
                 - path: "addons/helm/*.yaml"
             selector:
               matchExpressions:
-                - key: chart
-                  operator: Exists
                 - key: version
                   operator: Exists
                 - key: repository

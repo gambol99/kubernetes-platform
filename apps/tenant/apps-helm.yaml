@@ -52,8 +52,6 @@ spec:
                 - path: "{{ .metadata.annotations.tenant_path }}/workloads/applications/**/{{ .metadata.labels.cluster_name }}.yaml"
             selector:
               matchExpressions:
-                - key: helm.chart
-                  operator: Exists
                 - key: helm.version
                   operator: Exists
                 - key: helm.repository
