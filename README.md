@@ -1,4 +1,4 @@
-# EKS Platform
+# Kubernetes Platform
 
 This repository contains a pattern for the configuration of management of a collection of Kubernetes clusters, usign ArgoCD as the deployment framework.
 
