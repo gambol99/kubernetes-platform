@@ -1,6 +1,6 @@
 # Kubernetes Platform
 
-This repository contains a pattern for the configuration of management of a collection of Kubernetes clusters, usign ArgoCD as the deployment framework.
+This repository contains a pattern for the configuration of management of a collection of Kubernetes clusters, usign ArgoCD as the deployment framework. You can view the full documentation [https://gambol99.github.io/kubernetes-platform/](https://gambol99.github.io/kubernetes-platform/)
 
 ## Why This Pattern?
 
