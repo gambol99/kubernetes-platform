@@ -16,7 +16,7 @@ The tenancy repository imports the platform repository as a dependency, allowing
 
 ## Deployment Options
 
-Currently we support two deplopment options, standalone or hub and spoke.
+Currently we support two deployment options, standalone or hub and spoke.
 
 ### Standalone Installation
 

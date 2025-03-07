@@ -4,7 +4,7 @@ repo_url: https://github.com/gambol99/kubernetes-platform
 nav:
   - Home: index.md
   - Architecture:
-      - Overview: architecture.md
+      - Overview: index.md
       - Bootstrapping: architecture/bootstrapping.md
       - System Applications: architecture/system-applications.md
   - Getting Started:
@@ -23,6 +23,9 @@ plugins:
   - search
 
 markdown_extensions:
+  - attr_list
+  - md_in_html
+  - pymdownx.blocks.caption
   - pymdownx.tasklist:
       custom_checkbox: true
   - pymdownx.highlight:
@@ -36,3 +39,6 @@ markdown_extensions:
         - name: mermaid
           class: mermaid
           format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg

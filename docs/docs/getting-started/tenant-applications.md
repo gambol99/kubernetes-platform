@@ -47,7 +47,7 @@ sync:
   max_duration: 5m
 ```
 
-In order to use helm values, you need to create a values.yaml file.
+In order to use helm values, you need to create a `values.yaml` file.
 
 1. For the helm values, create a folder called `values` inside the folder you created in step 1.
 2. Add a `all.yaml` file to the values folder, which will be used to deploy the application.

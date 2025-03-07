@@ -5,5 +5,5 @@ The tenancy repository acts as the entry point and orchestrator, importing and c
 - Environment-specific configurations
 - Application definitions and deployments
 - Multi-environment management
-- Tenant onboarding and configuration
+- Tenant on boarding and configuration
 - Custom policies and overrides#

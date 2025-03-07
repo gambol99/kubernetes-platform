@@ -1,3 +1,3 @@
 # Local Development
 
-## Standalone Deplpyment
+## Standalone Deployment

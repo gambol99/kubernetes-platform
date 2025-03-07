@@ -18,7 +18,7 @@ addons/helm
 └── oss.yaml
 ```
 
-The application set will sources all the `oss.yaml` items, and using the `{{ .cloud_vendor }}` attribute associated to the cluster, the appropreiate cloud vendor file. Each of the files is a collection of Helm entries i.e
+The application set will sources all the `oss.yaml` items, and using the `{{ .cloud_vendor }}` attribute associated to the cluster, the appropriate cloud vendor file. Each of the files is a collection of Helm entries i.e
 
 ```YAML
 - feature: metrics_server

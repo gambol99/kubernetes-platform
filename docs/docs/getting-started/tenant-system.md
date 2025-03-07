@@ -43,8 +43,8 @@ helm:
   release_name: platform
   ## (Required) The version of the chart to use for the deployment.
   version: 0.1.0
-  
-namespace: 
-  ## Override the namesapce 
-  name: kube-system  
+
+namespace:
+  ## Override the namespace
+  name: kube-system
 ```
