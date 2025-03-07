@@ -40,6 +40,17 @@ jobs:
       - run: sudo apt install -y yq
       - run: make validate-helm-addons
 
+  validate-scripts:
+    name: Validate Scripts
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: shellcheck
+        uses: reviewdog/action-shellcheck@v1
+        with:
+          github_token: ${{ secrets.github_token }}
+          path: scripts
+
   validate-kustomize:
     name: Validate Kustomize
     runs-on: ubuntu-latest
