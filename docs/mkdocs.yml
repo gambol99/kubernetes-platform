@@ -5,32 +5,56 @@ nav:
   - Platform: index.md
   - Architecture:
       - Overview: architecture/overview.md
-      - Bootstrapping: architecture/bootstrapping.md
-      - System Applications: architecture/system-applications.md
+      - Platform Setup: architecture/setup.md
+      - System Application Sets: architecture/system-appsets.md
+      - Tenant Application Sets: architecture/tenant-appsets.md
+      - Tenant Namespaces: architecture/tenant-namespace.md
   - Getting Started:
       - Local Development: getting-started/local-development.md
       - Standalone: getting-started/standalone.md
       - Hub & Spoke: getting-started/central.md
-  - Tenant Applications:
-      - Tenant Namespace: getting-started/tenant-namespace.md
-      - Tenant Applications: getting-started/tenant-applications.md
-      - Tenant System: getting-started/tenant-system.md
+  - Tenant Services:
+      - Tenant Applications: tenant/applications.md
+      - Tenant System: tenant/system.md
+
 theme:
   name: material
   palette:
-    primary: indigo
+    - scheme: default
+      toggle:
+        icon: material/weather-night
+        name: Light mode
+      primary: indigo
+      accent: deep purple
+    - scheme: slate
+      toggle:
+        icon: material/weather-sunny
+        name: Dark mode
+      primary: indigo
+      accent: deep purple
+  features:
+    - navigation.footer
 
 plugins:
   - search
 
+extra:
+  social:
+    - icon: simple/github
+      link: https://github.com/gambol99
+
+## Copyright
+copyright: Copyright &copy; 2025 Rohith Jayawardene
+
 markdown_extensions:
   - attr_list
   - md_in_html
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
   - pymdownx.blocks.caption
   - pymdownx.inlinehilite
   - pymdownx.snippets
-  - pymdownx.tasklist:
-      custom_checkbox: true
   - pymdownx.highlight:
       anchor_linenums: true
       line_spans: __span

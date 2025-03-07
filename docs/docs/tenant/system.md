@@ -1,6 +1,4 @@
-# Tenant System Applications
-
-## Overview
+# :material-application-cog: Tenant System Applications
 
 System applications deployed under `workloads/system/` have elevated privileges compared to regular applications. These system-level applications:
 
@@ -16,7 +14,11 @@ This higher privilege level allows system applications to:
 - Set up monitoring and logging infrastructure
 - Deploy shared services used by multiple applications
 
-## Usage Guidelines
+## :material-hazard-lights: Usage Guidelines
+
+!!! note "Note"
+
+    System applications have elevated permissions and can affect the entire cluster. Use caution when deploying system applications to avoid unintended consequences.
 
 When deploying system applications:
 
@@ -27,7 +29,7 @@ When deploying system applications:
 
 The separation between system and regular applications helps maintain proper security boundaries while enabling necessary cluster-wide functionality.
 
-## Namespace Override
+## :material-cog-outline: Namespace Override
 
 By default, applications are deployed into a namespace matching their folder name. However, system applications can override this default namespace using the `namespace` field:
 

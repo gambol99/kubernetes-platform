@@ -1,6 +1,4 @@
-# Tenant Applications
-
-## Overview
+# :material-application-cog: Tenant Applications
 
 Applications for tenants can be deployed using a GitOps approach directly from the tenant repository. The workloads folder contains two main directories:
 
@@ -15,11 +13,7 @@ By simply adding Helm charts or Kustomize configurations into the appropriate di
 
 This separation of applications and system components allows for proper access control while maintaining a simple deployment model.
 
-## Deployments
-
-Applications can be deployed using either Helm or Kustomize formats. The following fields and attributes are available for configuring deployments:
-
-### Helm Applications
+## :material-application-array-outline: Helm Applications
 
 You can deploy using a helm chart, by adding a `CLUSTER_NAME.yaml`.
 
@@ -52,7 +46,7 @@ In order to use helm values, you need to create a `values.yaml` file.
 1. For the helm values, create a folder called `values` inside the folder you created in step 1.
 2. Add a `all.yaml` file to the values folder, which will be used to deploy the application.
 
-### Helm with Multiple Charts
+## :material-application-array-outline: Helm with Multiple Charts
 
 Similar to the helm deployment, create a folder for your deployments. Taking the example of two charts, frontend and backend, you would create a folder called `frontend` and `backend`.
 
@@ -63,7 +57,7 @@ Similar to the helm deployment, create a folder for your deployments. Taking the
 5. Add a `values` folder to the `frontend` folder, and add a `all.yaml` file to the values folder.
 6. Add a `values` folder to the `backend` folder, and add a `all.yaml` file to the values folder.
 
-### Kustomize
+## :material-application-array-outline: Kustomize
 
 You can deploy using kustomize, by adding a `CLUSTER_NAME.yaml`.
 

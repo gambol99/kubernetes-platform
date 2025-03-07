@@ -4,6 +4,10 @@
   ![Image title](assets/images/platform-banner.webp){ align=center }
 </figure>
 
+!!! note "Note"
+
+    This documentation is a work in progress and is subject to change. Please check back regularly for updates.
+
 ---
 
 ## :fontawesome-regular-newspaper: Platform Overview

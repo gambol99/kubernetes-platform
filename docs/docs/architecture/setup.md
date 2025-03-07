@@ -1,4 +1,4 @@
-# Platform Bootstaping
+# :material-reload: Platform Setup
 
 ## Overview
 
