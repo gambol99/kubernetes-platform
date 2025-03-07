@@ -27,14 +27,9 @@ tenant: development
 ## We use labels to enable/disable features in the tenant cluster
 labels:
   enable_cert_manager: "true"
-  enable_ebs_driver: "true"
-  enable_efs_driver: "true"
-  enable_external_dns: "false"
   enable_external_secrets: "true"
   enable_kro: "true"
   enable_kyverno: "true"
-  enable_metrics_server: "false"
-  enable_pod_identity: "true"
 ## Annotations are using for additional metadata about the tenant cluster
 annotations:
   platform.local/tenant: tenant

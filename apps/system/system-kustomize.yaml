@@ -47,7 +47,7 @@ spec:
               repoURL: PLATFORM_REPO
               revision: PLATFORM_REVISION
               files:
-                - path: "addons/kustomize/{{ .cloud_vendor }}/**/kustomize.yaml"
+                - path: "addons/kustomize/{{ .metadata.annotations.cloud_vendor }}/**/kustomize.yaml"
                 - path: "addons/kustomize/oss/**/kustomize.yaml"
             selector:
               matchExpressions:

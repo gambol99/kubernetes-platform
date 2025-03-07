@@ -2,8 +2,8 @@
 ## The Helm application being deployed
 helm:
   ## The repository containing the helm repository
-  repository: https://helm.github.io/examples
+  repository: https://kubernetes.github.io/ingress-nginx
   ## The chart to install
-  chart: hello-world
+  chart: ingress-nginx
   ## The chart version to install
-  version: "0.1.0"
+  version: "4.11.1"

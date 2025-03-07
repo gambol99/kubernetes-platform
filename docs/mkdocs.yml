@@ -2,7 +2,7 @@ site_name: Kubernetes Platform
 repo_url: https://github.com/gambol99/kubernetes-platform
 
 nav:
-  - Home: index.md
+  - Platform: index.md
   - Architecture:
       - Overview: architecture/overview.md
       - Bootstrapping: architecture/bootstrapping.md
