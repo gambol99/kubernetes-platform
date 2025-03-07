@@ -74,7 +74,7 @@ spec:
   ## Template out an application for each of the tenant applications
   template:
     metadata:
-      name: "system-{{ normalize .chart }}-{{ .metadata.labels.cluster_name }}"
+      name: "system-{{ normalize .feature }}-{{ .metadata.labels.cluster_name }}"
       namespace: argocd
       labels:
         app.kubernetes.io/managed-by: argocd
@@ -95,10 +95,10 @@ spec:
           chart: '{{ default "" .chart }}'
           path: '{{ default "" .repository_path }}'
           helm:
-            releaseName: "{{ default .chart .release_name }}"
+            releaseName: "{{ normalize (default .feature .release_name) }}"
             ignoreMissingValueFiles: true
             valueFiles:
-              - "$tenant/{{ .tenant_path }}/config/{{ .feature }}/all.yaml"
+              - "$tenant/{{ .metadata.annotations.tenant_path }}/config/{{ .chart }}/all.yaml"
               - "$values/config/{{ .feature }}/all.yaml"
 
         - repoURL: "{{ .metadata.annotations.platform_repository }}"

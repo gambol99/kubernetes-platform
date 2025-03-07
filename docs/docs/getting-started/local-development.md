@@ -26,12 +26,12 @@ As a platform engineer you need to validate a new feature on a standalone deploy
 
 1. Create a branch for the feature `git checkout -b feat/my-feature`
 2. Update the `release/standalone/clusters/dev.yaml`, changing the branch of the tenant and platform to the `feta/my-feature` branch.
-3. Commit the changes and run `make dev`
+3. Commit the changes and run `make standalone`
 4. The makefile will build a Kubernetes cluster in kind, using the `release/standalone` and the base tenant repository.
 5. Any changes made to the branch will be reflected within the cluster, and changes are polled from the branch.
 6. Once the changes have been tested, we can merge to main.
 
-Note, if want validate changes between multiple clusters you can provision another cluster via `make prod`.
+Note, if want validate changes between multiple clusters you can provision another cluster via `scripts/make-dev -c prod`.
 
 Additional clusters can be added, simply by adding a new cluster to the `release/standalone/clusters` directory, and calling
 

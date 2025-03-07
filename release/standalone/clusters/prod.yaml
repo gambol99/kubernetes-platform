@@ -1,5 +1,3 @@
-## Indicate the cluster is enabled
-enabled: false
 ## The name of the tenant cluster
 cluster_name: prod
 ## The cloud vendor to use for the tenant cluster
