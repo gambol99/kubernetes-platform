@@ -1,20 +1,52 @@
-# Architectural Overview
+# Architecture
 
-The following provides an overview of the components which make up the platform and the available deployment options.
+The platform currently support both a standalone and hub and spoke architecture.
 
-![Image title](images/image.png){ align=left }
-hello
+## Repository Structure
 
-## Platform Repository
+The platform is composed of two main repositories that work together, This two-repository approach enables:
 
-Forms the baseline of all clusters, providing a tested collection of add-ons, policies and components, collectivity referred to as the platform, for the application teams to consume. The platform team is responsible for iterating and developing this base component, independently of the application stack; providing a reusable stack.
+- Clear separation of platform and environment-specific concerns
+- Reuse of core platform components across different deployments
+- Independent versioning of platform and tenant configurations
+- Simplified environment management and promotion
+- Standardized yet flexible application deployment patterns
 
-## Tenant Repository
+The tenancy repository imports the platform repository as a dependency, allowing it to leverage the core capabilities while adding environment-specific customizations and applications.
 
-The tenant repository is the consumer of a revision of the platform, and where the application developers define their applications, and additional software if required.
+## Deployment Options
 
-Which can be deployed two flavors, a central hub or a standalone instance.
+Currently we support two deployment options, standalone or hub and spoke.
 
-## Central Hub Deployment
+### Standalone Installation
 
-When using a central hub, we make use of [ArgoCD's](https://argo-cd.readthedocs.io/en/stable/) fan-out pattern, where a central Kubernetes cluster running the ArgoCD stack is used to deploy to one or more clusters.
+In a standalone installation, the platform is deployed to a single EKS cluster and manages itself. This self-hosted approach means the platform components (ArgoCD, controllers, etc.) run within the same cluster they are managing.
+
+Key characteristics of standalone mode:
+
+- Single cluster deployment - Platform runs in the same cluster it manages
+- Self-hosted GitOps - ArgoCD manages its own configuration and other platform components
+- Simplified architecture - No external dependencies or control plane
+- Suitable for:
+  - Development/testing environments
+  - Small-scale production deployments
+  - Single-cluster use cases
+
+The standalone mode provides a simpler starting point while still delivering the core platform capabilities. It can later be expanded into a hub-spoke model as needs grow.
+
+### Hub & Spoke
+
+The hub and spoke architecture provides a centralized control plane for managing multiple Kubernetes clusters. In this model, a dedicated management cluster (the "hub") hosts the platform components and orchestrates deployments across multiple workload clusters (the "spokes").
+
+Key characteristics of hub-spoke mode:
+
+- Centralized management - Platform components run in a dedicated control plane cluster
+- Multi-cluster orchestration - Single hub can manage many spoke clusters
+- Separation of concerns - Clear distinction between management and workload clusters
+- Enhanced scalability - Easier to add/remove clusters without affecting platform
+- Suitable for:
+  - Enterprise environments
+  - Multi-cluster/multi-region deployments
+  - Production workloads requiring strict separation
+
+The hub cluster runs ArgoCD and other platform components, which then manage the configuration and deployments across all registered spoke clusters. This provides a single point of control while maintaining isolation between the management plane and workload environments.
