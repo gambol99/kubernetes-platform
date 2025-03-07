@@ -61,6 +61,14 @@ validate-helm-charts:
 	@echo "--> Validating Helm Charts..."
 	@scripts/validate-helm-charts.sh
 
+validate-docs:
+	@echo "--> Validating the documentation..."
+	@$(MAKE) validate-docs-spelling
+
+validate-docs-spelling:
+	@echo "--> Spell Checking Docs"
+	@misspell docs
+
 lint-yaml:
 	@echo "--> Linting YAML files..."
 	@yamllint .
