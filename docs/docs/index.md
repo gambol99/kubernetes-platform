@@ -1,7 +1,7 @@
 # Kubernetes Platform
 
 <figure markdown="span">
-  ![Image title](../assets/images/platform-banner.webp){ align=center }
+  ![Image title](assets/images/platform-banner.webp){ align=center }
 </figure>
 
 ---
