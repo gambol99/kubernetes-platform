@@ -33,6 +33,11 @@ test:
 	@$(MAKE) validate
 	@$(MAKE) lint
 
+e2e:
+	@echo "--> Running the e2e tests..."
+	@$(MAKE) standalone
+	@tests/check-suite.sh
+
 validate:
 	@echo "--> Validating the configuration..."
 	@$(MAKE) validation-actions
