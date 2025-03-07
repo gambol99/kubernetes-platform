@@ -12,11 +12,10 @@ on:
 
 permissions:
   contents: read
-  ## Permissions required to write to pull requests comments
   pull-requests: write
 
 jobs:
-  validate-chart:
+  validate-charts:
     name: Validate Chart
     runs-on: ubuntu-latest
     steps:
@@ -67,3 +66,36 @@ jobs:
       - uses: reviewdog/action-misspell@v1
         with:
           github_token: ${{ secrets.github_token }}
+
+  publish-docs:
+    if: github.ref == 'refs/heads/main'
+    name: Publish Docs
+    runs-on: ubuntu-latest
+    needs:
+      - validate-charts
+      - validate-docs-spelling
+      - validate-helm-addons
+      - validate-kustomize
+      - validate-scripts
+      - validate-yaml
+    defaults:
+      run:
+        working-directory: ./docs
+    steps:
+      - uses: actions/checkout@v4
+      - name: Configure Git Credentials
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email github-actions[bot]@users.noreply.github.com
+      - uses: actions/setup-python@v5
+        with:
+          python-version: 3.x
+      - run: echo "cache_id=$(date --utc '+%V')" >> $GITHUB_ENV
+      - uses: actions/cache@v4
+        with:
+          key: mkdocs-material-${{ env.cache_id }}
+          path: .cache
+          restore-keys: |
+            mkdocs-material-
+      - run: pip install mkdocs-material
+      - run: mkdocs gh-deploy --force
