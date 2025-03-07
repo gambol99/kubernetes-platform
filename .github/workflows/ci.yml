@@ -71,6 +71,8 @@ jobs:
     if: github.ref == 'refs/heads/main'
     name: Publish Docs
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     needs:
       - validate-charts
       - validate-docs-spelling
