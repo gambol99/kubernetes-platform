@@ -4,7 +4,7 @@ repo_url: https://github.com/gambol99/kubernetes-platform
 nav:
   - Home: index.md
   - Architecture:
-      - Overview: overview.md
+      - Overview: architecture/overview.md
       - Bootstrapping: architecture/bootstrapping.md
       - System Applications: architecture/system-applications.md
   - Getting Started:
