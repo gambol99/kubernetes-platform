@@ -1,12 +1,20 @@
-# Kubernetes Platform Pattern
+# Kubernetes Platform
 
-## Overview
+<figure markdown="span">
+  ![Image title](../assets/images/platform-banner.webp){ align=center }
+</figure>
 
-Designed for DevOps, Platform Engineers, and SREs, this approach eliminates operational overhead, automates deployments at scale, and ensures consistency across clusters—whether you choose a distributed or hub-and-spoke architecture.
+---
 
-Say goodbye to manual cluster management and hello to a scalable, self-healing, and declarative solution that empowers teams to move faster with confidence.
+## :fontawesome-regular-newspaper: Platform Overview
 
-## Why This Pattern?
+Built for DevOps, Platform Engineers, and SREs, this solution streamlines cluster management by eliminating operational overhead, automating deployments at scale, and enforcing consistency across environments—whether using a distributed or hub-and-spoke architecture.
+
+Reduce complexity, embrace automation, and accelerate delivery with a scalable, self-healing, and declarative approach to Kubernetes management.
+
+---
+
+## :fontawesome-regular-pen-to-square: Why This Pattern?
 
 Managing multiple Kubernetes clusters across different environments presents challenges in consistency, scalability, and automation. This solution provides:
 
@@ -16,7 +24,9 @@ Managing multiple Kubernetes clusters across different environments presents cha
 - Secure multi-cluster operations – Enforce policies, RBAC, and secrets management at scale.
 - Tenants Applications - Provides tenants consumers an easy way to onboard their workloads.
 
-## Platform Tenets
+---
+
+## :fontawesome-regular-handshake: Platform Tenets
 
 Too often, platforms are designed from a purely technical standpoint, packed with cutting-edge tools and complex abstractions—yet they fail to deliver a great developer experience. They become rigid, overwhelming, and unintuitive, forcing teams to navigate layers of complexity just to deploy and operate their workloads.
 
@@ -29,3 +39,5 @@ This is where strong platform tenets come in.
 - Optimize for usability and maintainability, not just technical capability.
 - Reduce cognitive load by abstracting unnecessary infrastructure details.
 - Follow opinionated defaults but allow extensibility for advanced use cases.
+
+---

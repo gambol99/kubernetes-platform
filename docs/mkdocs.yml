@@ -8,6 +8,7 @@ nav:
       - Bootstrapping: architecture/bootstrapping.md
       - System Applications: architecture/system-applications.md
   - Getting Started:
+      - Local Development: getting-started/local-development.md
       - Standalone: getting-started/standalone.md
       - Hub & Spoke: getting-started/central.md
   - Tenant Applications:
