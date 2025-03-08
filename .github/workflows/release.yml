@@ -13,36 +13,38 @@ permissions:
 
 jobs:
   e2e:
+    name: Running E2E
     uses: ./.github/workflows/e2e.yml
     secrets: inherit
 
   build:
-    name: Create Release
+    name: Release
     needs: e2e
     runs-on: ubuntu-latest
-    env:
-      GH_TOKEN: ${{ github.token }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      - uses: ruby/setup-ruby@v1
         with:
-          ruby-version: "3.3"
-      - name: Install Changelog
-        run: gem install github_changelog_generator
-      - name: Generate Changelog
+          fetch-depth: 0
+      - name: Previous Release
+        id: previous_release
         run: |
-          ## Get the latest tag
-          LATEST_TAG=$(git tag --sort=-version:refname | head -n 1)
-          ## Generate the changelog
-          github_changelog_generator \
-            --since-tag "$LATEST_TAG" \
-            --user ${{ github.repository_owner }} \
-            --project kubernetes-platform \
-            --output CHANGELOG.txt
+          LAST_TAG=$(git tag --sort=-version:refname | head -n 2 | tail -n 1)
+          echo "LAST_TAG=${LAST_TAG}" >> "${GITHUB_ENV}"
+      - name: Generate a changelog
+        uses: orhun/git-cliff-action@v3
+        with:
+          config: cliff.toml
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+          args: "--verbose ${{ env.LAST_TAG }}..HEAD"
+        env:
+          OUTPUT: CHANGELOG.md
+          GITHUB_REPO: ${{ github.repository }}
       - name: Create Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gh release create "${{ github.ref_name }}" \
             --latest \
-            --notes-file CHANGELOG.txt \
-            --title "Release ${{ github.ref_name }}" 
+            --notes-file CHANGELOG.md \
+            --title "Release ${{ github.ref_name }}"
