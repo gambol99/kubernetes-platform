@@ -77,10 +77,16 @@ jobs:
         uses: azure/setup-kubectl@v4
         with:
           version: v1.32.0
+      - name: Install Helm
+        uses: azure/setup-helm@v4
       - name: Install Kind
         run: |
           curl -sL https://github.com/kubernetes-sigs/kind/releases/download/v0.27.0/kind-linux-amd64 -o kind
           chmod +x kind
+      - name: Install ArgoCD Helm Repository
+        run: |
+          helm repo add argo https://argoproj.github.io/argo-helm
+          helm repo update
       - name: Provision Cluster
         run: make standalone
       - name: Running E2E
