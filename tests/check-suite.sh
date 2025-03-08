@@ -7,7 +7,7 @@ BATS_OPTIONS=${BATS_OPTIONS:-""}
 CLOUD="kind"
 CLUSTER_TYPE="standalone"
 UNITS="tests/e2e/integration"
-GIT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
+GIT_COMMIT=$(git rev-parse HEAD)
 
 usage() {
   cat << EOF
@@ -28,7 +28,7 @@ EOF
 
 run_bats() {
   echo -e "Running units: ${*}\n"
-  CLOUD=${CLOUD} GIT_BRANCH=${GIT_BRANCH} bats ${BATS_OPTIONS} ${@} || exit 1
+  CLOUD=${CLOUD} GIT_COMMIT=${GIT_COMMIT} bats ${BATS_OPTIONS} ${@} || exit 1
 }
 
 # run-checks runs a collection checks
@@ -47,7 +47,6 @@ run_checks() {
   # Run in the installation
   run_bats "${UNITS}/setup.sh"
   if [[ -n ${CLOUD}   ]]; then
-    echo -e "Running suite on: ${CLOUD^^}\n"
     for x in "${CLOUD_FILES[@]}"; do
       if [[ -f ${x}   ]]; then
         run_bats "${x}" || exit 1

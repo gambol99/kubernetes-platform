@@ -32,7 +32,7 @@ jobs:
       - name: Install Bats
         uses: bats-core/bats-action@3.0.0
       - name: Provision Cluster
-        run: scripts/make-dev.sh --cluster-type standalone --cluster dev
+        run: scripts/make-dev.sh --cluster-type standalone --cluster dev --use-git-commit
       - name: Running E2E
         run: |
           tests/check-suite.sh --cloud kind --cluster-type standalone
@@ -59,7 +59,7 @@ jobs:
       - name: Install Bats
         uses: bats-core/bats-action@3.0.0
       - name: Provision Cluster
-        run: scripts/make-dev.sh --cluster-type hub --cluster hub
+        run: scripts/make-dev.sh --cluster-type hub --cluster hub --use-git-commit
       - name: Running E2E
         run: |
           tests/check-suite.sh --cloud kind --cluster-type hub
