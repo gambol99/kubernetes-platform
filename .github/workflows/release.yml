@@ -42,5 +42,5 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           body_path: ${{ github.workspace }}-CHANGELOG.txt
-          repository: my_gh_org/my_gh_repo
+          repository: ${{ github.repository }}
           token: ${{ secrets.GITHUB_TOKEN }}
