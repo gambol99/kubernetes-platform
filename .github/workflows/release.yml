@@ -1,5 +1,5 @@
 ---
-name: Releaes
+name: Release
 # yamllint disable-line rule:truthy
 on:
   push:
