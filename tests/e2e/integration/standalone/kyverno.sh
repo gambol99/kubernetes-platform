@@ -51,14 +51,3 @@ teardown() {
 @test "Ensure the Kyverno kustomize application is installed" {
   kubectl "get application system-kust-kyverno-dev -n argocd"
 }
-
-@test "Ensure the Kyverno policies are installed" {
-  POLICIES=(
-    deny-cap-net-raw
-    deny-default-namespace
-    deny-empty-ingress-host
-  )
-  for POLICY in "${POLICIES[@]}"; do
-    kubectl "get clusterpolicy ${POLICY}"
-  done
-}

@@ -1,5 +1,6 @@
 # Makefile for the development clusters
 
+GIT_BRANCH := $(shell git rev-parse --abbrev-ref HEAD)
 
 standalone:
 	@echo "Provisioning Standalone Cluster (dev)"
@@ -15,8 +16,7 @@ hub:
 
 spoke:
 	@echo "Provisioning Spoke Cluster (spoke)"
-	@scripts/make-spoke.sh \
-		--cluster spoke
+	@scripts/make-spoke.sh --cluster spoke
 
 clean:
 	@echo "Deleting development clusters..."
@@ -33,6 +33,10 @@ e2e:
 	@echo "--> Running the e2e tests..."
 	@$(MAKE) standalone
 	@tests/check-suite.sh
+
+trigger-e2e:
+	echo "--> Triggering the e2e tests..."
+	@gh workflow run e2e.yml --ref ${GIT_BRANCH}
 
 validate:
 	@echo "--> Validating the configuration..."

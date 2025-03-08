@@ -69,5 +69,5 @@ jobs:
           git push origin e2e -f
       - name: Running E2E
         run: |
-          tests/check-suite.sh --cloud kind --cluster-type hub
+          tests/check-suite.sh --cloud kind --cluster-type hub --cluster-name e2e
 
