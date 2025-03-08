@@ -20,6 +20,8 @@ jobs:
     name: Create Release
     needs: e2e
     runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -36,11 +38,11 @@ jobs:
           github_changelog_generator \
             --since-tag "$LATEST_TAG" \
             --user ${{ github.repository_owner }} \
-            --project kubernetes-platform > ${{ github.workspace }}-CHANGELOG.txt
+            --project kubernetes-platform \
+            --output CHANGELOG.txt
       - name: Create Release
-        id: create_release
-        uses: softprops/action-gh-release@v2
-        with:
-          body_path: ${{ github.workspace }}-CHANGELOG.txt
-          repository: ${{ github.repository }}
-          token: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release create "${{ github.ref_name }}" \
+            --latest \
+            --notes-file CHANGELOG.txt \
+            --title "Release ${{ github.ref_name }}" 
