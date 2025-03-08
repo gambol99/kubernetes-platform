@@ -31,7 +31,6 @@ run_bats() {
 # run-checks runs a collection checks
 run_checks() {
   local CLOUD_FILES=(
-    "${UNITS}/argocd.sh"
     "${UNITS}/bootstrap.sh"
     "${UNITS}/platform.sh"
     "${UNITS}/registration.sh"

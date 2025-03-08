@@ -5,17 +5,13 @@ standalone:
 	@echo "Provisioning Standalone Cluster (dev)"
 	@scripts/make-dev.sh \
 		--cluster-type standalone \
-	  --cluster dev \
-		--credentials \
-		--github-token "${GITHUB_TOKEN_personal}"
+	  --cluster dev
 
 hub:
 	@echo "Provisioning Hub Cluster (hub)"
 	@scripts/make-dev.sh \
 		--cluster-type hub \
-		--cluster hub \
-		--credentials \
-		--github-token "${GITHUB_TOKEN_personal}"
+		--cluster hub
 
 spoke:
 	@echo "Provisioning Spoke Cluster (spoke)"

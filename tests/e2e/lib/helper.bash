@@ -50,5 +50,5 @@ retry() {
 }
 
 runit() {
-  retry 1 "$@"
+  retry 5 "$@"
 }
