@@ -31,7 +31,7 @@ jobs:
       - name: Install Bats
         uses: bats-core/bats-action@3.0.0
       - name: Provision Cluster
-        run: scripts/make-dev.sh --cluster-type standalone --cluster-name e2e
+        run: scripts/make-dev.sh --cluster-type standalone --cluster e2e
       - name: Update E2E Target
         run: |
           git tag e2e -f
@@ -62,12 +62,12 @@ jobs:
       - name: Install Bats
         uses: bats-core/bats-action@3.0.0
       - name: Provision Cluster
-        run: scripts/make-dev.sh --cluster-type hub --cluster-name e2e
+        run: scripts/make-dev.sh --cluster-type hub --cluster e2e
       - name: Update E2E Target
         run: |
           git tag e2e -f
           git push origin e2e -f
       - name: Running E2E
         run: |
-          tests/check-suite.sh --cloud kind --cluster-type hub --cluster-name e2e
+          tests/check-suite.sh --cloud kind --cluster-type hub
 
