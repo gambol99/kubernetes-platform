@@ -9,7 +9,10 @@ CLUSTER_NAME="dev"
 CLUSTER_TYPE="standalone"
 CREDENTIALS=false
 ARGOCD_VERSION="7.8.5"
-GITHUB_USER="gambol99"
+GITHUB_USER=""
+GIT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
+GIT_COMMIT=$(git rev-parse HEAD)
+USE_GIT_COMMIT=false
 
 usage() {
   cat << EOF
@@ -21,6 +24,7 @@ Options:
   -G, --github-user USER   Set the GitHub user (default: ${GITHUB_USER})
   -g, --github-token PASS  Set the GitHub token (default: "GITHUB_TOKEN")
   -t, --type TYPE          The type of cluster to create, i.e. hub or standalone (default: ${CLUSTER_TYPE})
+  -I, --use-git-commit     Indicate to use the git commit as the revision, instead of branch (default: ${GIT_COMMIT})
   -h, --help               Show this help message and exit
 EOF
   if [[ ${#} -gt 0   ]]; then
@@ -97,7 +101,12 @@ setup_bootstrap() {
 
   ## Check we have a repository to use
   platform_repo=$(grep "platform_repository" "${cluster_definition}" | cut -d' ' -f2)
-  platform_revision=$(grep "platform_revision" "${cluster_definition}" | cut -d' ' -f2)
+  platform_revision=${GIT_BRANCH}
+
+  ## If we are using the git commit, use that instead of the branch
+  if [[ ${USE_GIT_COMMIT} == "true" ]]; then
+    platform_revision=${GIT_COMMIT}
+  fi
 
   echo "Using repository: \"${platform_repo}\""
   echo "Using revision: \"${platform_revision}\""
@@ -127,7 +136,7 @@ spec:
   ## The source is patched in the overlay
   source:
     repoURL: ${platform_repo}
-    targetRevision: ${platform_revision} # We overrde this for local development purposes
+    targetRevision: ${platform_revision}
     path: kustomize/overlays/${CLUSTER_TYPE}
     kustomize:
       patches:
@@ -144,6 +153,12 @@ spec:
             - op: replace
               path: /spec/generators/0/git/files/0/path
               value: ${cluster_definition}
+            - op: replace
+              path: /spec/generators/0/git/values/override_platform
+              value: ${platform_revision}
+            - op: replace
+              path: /spec/generators/0/git/values/override_tenant
+              value: ${platform_revision}
 
   ## The destination to deploy the resources
   destination:
@@ -189,6 +204,10 @@ while [[ ${#} -gt 0   ]]; do
       ;;
     -C | --credentials)
       CREDENTIALS=true
+      shift 1
+      ;;
+    -I | --use-git-commit)
+      USE_GIT_COMMIT="true"
       shift 1
       ;;
     -t | --cluster-type)
