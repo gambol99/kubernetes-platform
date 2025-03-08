@@ -87,6 +87,8 @@ jobs:
         run: |
           helm repo add argo https://argoproj.github.io/argo-helm
           helm repo update
+      - name: Install Bats
+        uses: bats-core/bats-action@3.0.0
       - name: Provision Cluster
         run: make standalone
       - name: Running E2E
