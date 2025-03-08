@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   validate-standalone-e2e:
-    name: Validate E2E
+    name: Validate Standalone E2E
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
