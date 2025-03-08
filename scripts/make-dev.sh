@@ -10,7 +10,6 @@ CLUSTER_TYPE="standalone"
 CREDENTIALS=false
 ARGOCD_VERSION="7.8.5"
 GITHUB_USER="gambol99"
-GIT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
 
 usage() {
   cat << EOF
