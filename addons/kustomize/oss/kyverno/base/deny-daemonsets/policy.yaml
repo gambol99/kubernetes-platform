@@ -13,7 +13,7 @@ spec:
       exclude:
         namespaceSelector:
           matchExpressions:
-            - key: platform.local/type
+            - key: platform.local/namespace
               operator: In
               values:
                 - tenant
@@ -25,4 +25,3 @@ spec:
               - key: "{{ request.kind }}"
                 value: "DaemonSet"
                 effect: "Deny"
-
