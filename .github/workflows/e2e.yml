@@ -1,0 +1,73 @@
+---
+name: E2E
+
+# yamllint disable-line rule:truthy
+on:
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  validate-standalone-e2e:
+    name: Validate E2E
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Kubectl
+        uses: azure/setup-kubectl@v4
+        with:
+          version: v1.32.0
+      - name: Install Helm
+        uses: azure/setup-helm@v4
+      - name: Install Kind
+        run: |
+          curl -sL https://github.com/kubernetes-sigs/kind/releases/download/v0.27.0/kind-linux-amd64 -o kind
+          chmod +x kind
+      - name: Install ArgoCD Helm Repository
+        run: |
+          helm repo add argo https://argoproj.github.io/argo-helm
+          helm repo update
+      - name: Install Bats
+        uses: bats-core/bats-action@3.0.0
+      - name: Provision Cluster
+        run: scripts/make-dev.sh --cluster-type standalone --cluster-name e2e
+      - name: Update E2E Target
+        run: |
+          git tag e2e -f
+          git push origin e2e -f
+      - name: Running E2E
+        run: |
+          tests/check-suite.sh --cloud kind --cluster-type standalone
+
+  validate-hub-e2e:
+    name: Validate Hub E2E
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Kubectl
+        uses: azure/setup-kubectl@v4
+        with:
+          version: v1.32.0
+      - name: Install Helm
+        uses: azure/setup-helm@v4
+      - name: Install Kind
+        run: |
+          curl -sL https://github.com/kubernetes-sigs/kind/releases/download/v0.27.0/kind-linux-amd64 -o kind
+          chmod +x kind
+      - name: Install ArgoCD Helm Repository
+        run: |
+          helm repo add argo https://argoproj.github.io/argo-helm
+          helm repo update
+      - name: Install Bats
+        uses: bats-core/bats-action@3.0.0
+      - name: Provision Cluster
+        run: scripts/make-dev.sh --cluster-type hub --cluster-name e2e
+      - name: Update E2E Target
+        run: |
+          git tag e2e -f
+          git push origin e2e -f
+      - name: Running E2E
+        run: |
+          tests/check-suite.sh --cloud kind --cluster-type hub
+

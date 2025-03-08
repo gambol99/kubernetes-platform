@@ -10,6 +10,7 @@ CLUSTER_TYPE="standalone"
 CREDENTIALS=false
 ARGOCD_VERSION="7.8.5"
 GITHUB_USER="gambol99"
+GIT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
 
 usage() {
   cat << EOF
@@ -99,13 +100,11 @@ setup_bootstrap() {
   platform_repo=$(grep "platform_repository" "${cluster_definition}" | cut -d' ' -f2)
   platform_revision=$(grep "platform_revision" "${cluster_definition}" | cut -d' ' -f2)
 
+  echo "Using repository: \"${platform_repo}\""
+  echo "Using revision: \"${platform_revision}\""
+
   ## Check we have a repository
   if [[ -z ${platform_repo}   ]]; then
-    usage "Invalid cluster definition for \"${CLUSTER_NAME}\""
-  fi
-
-  ## Check we have a revision
-  if [[ -z ${platform_revision}   ]]; then
     usage "Invalid cluster definition for \"${CLUSTER_NAME}\""
   fi
 
@@ -129,7 +128,7 @@ spec:
   ## The source is patched in the overlay
   source:
     repoURL: ${platform_repo}
-    targetRevision: ${platform_revision}
+    targetRevision: ${platform_revision} # We overrde this for local development purposes
     path: kustomize/overlays/${CLUSTER_TYPE}
     kustomize:
       patches:

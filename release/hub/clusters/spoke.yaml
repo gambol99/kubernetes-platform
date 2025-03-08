@@ -21,7 +21,7 @@ platform_revision: main
 ## The path to the kustomize overlay to use for the tenant cluster
 platform_path: overlays/release/hub
 ## The name of the tenant
-tenant: development
+tenant: test
 ## The type of cluster we are (standalone, spoke or hub)
 cluster_type: spoke
 ## We use labels to enable/disable features in the tenant cluster

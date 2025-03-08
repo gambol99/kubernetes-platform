@@ -95,7 +95,7 @@ spec:
                 patch: |
                   - op: replace
                     path: /metadata/name
-                    value: "{{ index .path.segments 2 }}"
+                    value: "{{ index (splitList "/" (trimPrefix .metadata.annotations.tenant_path .path.path)) 3 }}"
 
         ## We either use the tenant repository of the kustomize.repository
         - repoURL: "{{ default .metadata.annotations.tenant_repository .kustomize.repository }}"
@@ -109,8 +109,10 @@ spec:
       ## Destination is the cluster to deploy to
       destination:
         server: "{{ .server }}"
-        ## /applications/TYPE/[2]/FILE.yaml
-        namespace: "{{ index .path.segments 2 }}"
+        ## workloads/system/NAMESPACE/FILE.yaml
+        ## releases/standalone/workloads/system/NAMESPACE/FILE.yaml
+        ## releases/standalone/workloads/system/NAMESPACE/app/FILE.yaml
+        namespace: '{{ index (splitList "/" (trimPrefix .metadata.annotations.tenant_path .path.path)) 3 }}'
 
       ## Sync policy for the application
       syncPolicy:

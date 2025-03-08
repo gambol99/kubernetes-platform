@@ -5,13 +5,16 @@
 
 BATS_OPTIONS=${BATS_OPTIONS:-""}
 CLOUD="kind"
+CLUSTER_TYPE="standalone"
 UNITS="tests/e2e/integration"
+GIT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
 
 usage() {
   cat << EOF
 Usage: $0 [options]
 
 --cloud <NAME>         Cloud provider name to run against (defaults: ${CLOUD})
+--cluster-type <TYPE>  Cluster type to run against (defaults: ${CLUSTER_TYPE})
 --help                 Display this help message
 
 EOF
@@ -25,18 +28,20 @@ EOF
 
 run_bats() {
   echo -e "Running units: ${*}\n"
-  CLOUD=${CLOUD} bats ${BATS_OPTIONS} ${@} || exit 1
+  CLOUD=${CLOUD} GIT_BRANCH=${GIT_BRANCH} bats ${BATS_OPTIONS} ${@} || exit 1
 }
 
 # run-checks runs a collection checks
 run_checks() {
   local CLOUD_FILES=(
-    "${UNITS}/bootstrap.sh"
-    "${UNITS}/platform.sh"
-    "${UNITS}/registration.sh"
-    "${UNITS}/applicationsets.sh"
-    "${UNITS}/kyverno.sh"
-    "${UNITS}/tenant-helm.sh"
+    "${UNITS}/common/bootstrap.sh"
+    "${UNITS}/common/platform.sh"
+    "${UNITS}/${CLUSTER_TYPE}/registration.sh"
+    "${UNITS}/common/applicationsets.sh"
+    "${UNITS}/common/priorityclasses.sh"
+    "${UNITS}/${CLUSTER_TYPE}/kyverno.sh"
+    "${UNITS}/${CLUSTER_TYPE}/tenant-namespace.sh"
+    "${UNITS}/${CLUSTER_TYPE}/tenant-helm-apps.sh"
   )
 
   # Run in the installation
@@ -57,6 +62,10 @@ while [[ $# -gt 0 ]]; do
       CLOUD="${2}"
       shift 2
       ;;
+    --cluster-type)
+      CLUSTER_TYPE="${2}"
+      shift 2
+      ;;
     --help)
       usage
       ;;
@@ -66,6 +75,16 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
-[[ ${CLOUD} == "aws" ]] || [[ ${CLOUD} == "kind" ]] || usage "Unknown cloud: ${CLOUD}"
+if [[ ${CLOUD} == "aws" ]] || [[ ${CLOUD} == "kind" ]]; then
+  echo "Running checks for: ${CLOUD} ${CLUSTER_TYPE}"
+else
+  usage "Unknown cloud: ${CLOUD}"
+fi
+
+if [[ ${CLUSTER_TYPE} == "standalone" ]] || [[ ${CLUSTER_TYPE} == "hub" ]]; then
+  echo "Running checks for: ${CLOUD} ${CLUSTER_TYPE}"
+else
+  usage "Unknown cluster type: ${CLUSTER_TYPE}"
+fi
 
 run_checks
