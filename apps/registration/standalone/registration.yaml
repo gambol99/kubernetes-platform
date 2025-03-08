@@ -23,6 +23,10 @@ spec:
       path: charts/cluster-registration
       helm:
         releaseName: cluster-registration
+        values: |
+          revision_overrides::
+            platform: "ignore"
+            tenant: "ignore"
         valueFiles:
           - "$values/clusters/{{ .cluster_name }}.yaml"
     - repoURL: TENANT_REPO

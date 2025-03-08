@@ -36,3 +36,7 @@ platform_path: unknown
 cluster_authentication: {}
 ## The cluster type (standalone, spoke or hub)
 cluster_type: standalone
+## Revision overrides for the platform and tenant repositories
+revision_overrides:
+  platform: ignore
+  tenant: ignore

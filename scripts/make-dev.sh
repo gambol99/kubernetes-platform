@@ -9,7 +9,8 @@ CLUSTER_NAME="dev"
 CLUSTER_TYPE="standalone"
 CREDENTIALS=false
 ARGOCD_VERSION="7.8.5"
-GITHUB_USER="gambol99"
+GITHUB_USER=""
+GIT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
 
 usage() {
   cat << EOF
@@ -97,10 +98,9 @@ setup_bootstrap() {
 
   ## Check we have a repository to use
   platform_repo=$(grep "platform_repository" "${cluster_definition}" | cut -d' ' -f2)
-  platform_revision=$(grep "platform_revision" "${cluster_definition}" | cut -d' ' -f2)
 
   echo "Using repository: \"${platform_repo}\""
-  echo "Using revision: \"${platform_revision}\""
+  echo "Using revision: \"${GIT_BRANCH}\""
 
   ## Check we have a repository
   if [[ -z ${platform_repo}   ]]; then
@@ -127,7 +127,7 @@ spec:
   ## The source is patched in the overlay
   source:
     repoURL: ${platform_repo}
-    targetRevision: ${platform_revision} # We overrde this for local development purposes
+    targetRevision: ${GIT_BRANCH}
     path: kustomize/overlays/${CLUSTER_TYPE}
     kustomize:
       patches:
@@ -140,10 +140,16 @@ spec:
               value: ${platform_repo}
             - op: replace
               path: /spec/generators/0/git/revision
-              value: ${platform_revision}
+              value: ${GIT_BRANCH}
             - op: replace
               path: /spec/generators/0/git/files/0/path
               value: ${cluster_definition}
+            - op: replace
+              path: /spec/generators/0/git/values/override_platform
+              value: ${GIT_BRANCH}
+            - op: replace
+              path: /spec/generators/0/git/values/override_tenant
+              value: ${GIT_BRANCH}
 
   ## The destination to deploy the resources
   destination:

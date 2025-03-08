@@ -15,6 +15,9 @@ spec:
         revision: HEAD
         files:
           - path: clusters/*.yaml
+        values:
+          override_platform: ignore
+          override_tenant: ignore
 
   ## Sync Policy for the ApplicationSet
   syncPolicy:
@@ -40,7 +43,7 @@ spec:
       sources:
         ## Source in the registration application set
         - repoURL: "{{ .platform_repository }}"
-          targetRevision: "{{ .platform_revision }}"
+          targetRevision: '{{ (eq "ignore" .values.override_platform) | ternary .platform_revision .values.override_platform }}'
           path: "apps/registration/hub"
           kustomize:
             patches:
@@ -53,19 +56,25 @@ spec:
                     value: "{{ .tenant_repository }}"
                   - op: replace
                     path: /spec/generators/0/git/revision
-                    value: "{{ .tenant_revision }}"
+                    value: '{{ (eq "ignore" .values.override_tenant) | ternary .tenant_revision .values.override_tenant }}'
                   - op: replace
                     path: /spec/generators/0/git/files/0/path
                     value: "{{ .tenant_path }}/clusters/*.yaml"
+                  - op: replace
+                    path: /spec/generators/0/git/values/override_platform
+                    value: "{{ .values.override_platform }}"
+                  - op: replace
+                    path: /spec/generators/0/git/values/override_tenant
+                    value: "{{ .values.override_tenant }}"
 
         ## Source in the tenant application sets
         - repoURL: "{{ .platform_repository }}"
-          targetRevision: "{{ .platform_revision }}"
+          targetRevision: '{{ (eq "ignore" .values.override_platform) | ternary .platform_revision .values.override_platform }}'
           path: "apps/tenant"
 
         ## Source in in the system application sets
         - repoURL: "{{ .platform_repository }}"
-          targetRevision: "{{ .platform_revision }}"
+          targetRevision: '{{ (eq "ignore" .values.override_platform) | ternary .platform_revision .values.override_platform }}'
           path: "apps/system"
           kustomize:
             patches:
@@ -81,7 +90,7 @@ spec:
                     value: "{{ .platform_repository }}"
                   - op: replace
                     path: /spec/generators/0/matrix/generators/0/git/revision
-                    value: "{{ .platform_revision }}"
+                    value: '{{ (eq "ignore" .values.override_platform) | ternary .platform_revision .values.override_platform }}'
 
               - target:
                   kind: ApplicationSet
@@ -95,7 +104,7 @@ spec:
                     value: "{{ .platform_repository }}"
                   - op: replace
                     path: /spec/generators/0/matrix/generators/0/git/revision
-                    value: "{{ .platform_revision }}"
+                    value: '{{ (eq "ignore" .values.override_platform) | ternary .platform_revision .values.override_platform }}'
 
       ## The destination to deploy the resources
       destination:

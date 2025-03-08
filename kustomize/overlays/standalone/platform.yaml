@@ -15,6 +15,13 @@ spec:
         revision: TENANT_REPO_REVISION
         files:
           - path: clusters/NEED_TO_PATCH.yaml
+        ## Why? - by design the revisions are sourced git i.e the cluster definitions, meaning
+        ## to validate a change you need to, branch, commit, validate and then revert the change
+        ## the branch. Locally this is "OK" but it complicates the CI process i.e during e2e,
+        ## where we need to validate a branch.
+        values:
+          override_platform: ignore
+          override_tenant: ignore
 
   ## Sync Policy for the ApplicationSet
   syncPolicy:
@@ -40,7 +47,7 @@ spec:
       sources:
         ## Source in the registration application set
         - repoURL: "{{ .platform_repository }}"
-          targetRevision: "{{ .platform_revision }}"
+          targetRevision: '{{ (eq "ignore" .values.override_platform) | ternary .platform_revision .values.override_platform }}'
           path: "apps/registration/standalone"
           kustomize:
             patches:
@@ -53,7 +60,7 @@ spec:
                     value: "{{ .platform_repository }}"
                   - op: replace
                     path: /spec/sources/0/targetRevision
-                    value: "{{ .platform_revision }}"
+                    value: '{{ (eq "ignore" .values.override_platform) | ternary .platform_revision .values.override_platform }}'
                   - op: replace
                     path: /spec/sources/0/helm/valueFiles/0
                     value: "$values/{{ .tenant_path }}/clusters/{{ .cluster_name }}.yaml"
@@ -62,16 +69,22 @@ spec:
                     value: "{{ .tenant_repository }}"
                   - op: replace
                     path: /spec/sources/1/targetRevision
-                    value: "{{ .tenant_revision }}"
+                    value: '{{ (eq "ignore" .values.override_tenant) | ternary .tenant_revision .values.override_tenant }}'
+                  - op: replace
+                    path: /spec/sources/0/helm/values
+                    value: |
+                      revision_overrides:
+                        platform: "{{ .values.override_platform }}"
+                        tenant: "{{ .values.override_tenant }}"
 
         ## Source in the tenant application sets
         - repoURL: "{{ .platform_repository }}"
-          targetRevision: "{{ .platform_revision }}"
+          targetRevision: '{{ (eq "ignore" .values.override_platform) | ternary .platform_revision .values.override_platform }}'
           path: "apps/tenant"
 
         ## Source in in the system application sets
         - repoURL: "{{ .platform_repository }}"
-          targetRevision: "{{ .platform_revision }}"
+          targetRevision: '{{ (eq "ignore" .values.override_platform) | ternary .platform_revision .values.override_platform }}'
           path: "apps/system"
           kustomize:
             patches:
@@ -84,7 +97,7 @@ spec:
                     value: "{{ .platform_repository }}"
                   - op: replace
                     path: /spec/generators/0/matrix/generators/0/git/revision
-                    value: "{{ .platform_revision }}"
+                    value: '{{ (eq "ignore" .values.override_platform) | ternary .platform_revision .values.override_platform }}'
                   - op: replace
                     path: /spec/generators/0/matrix/generators/0/git/files/0/path
                     value: "addons/helm/{{ .cloud_vendor }}/**/helm.yaml"
@@ -98,7 +111,7 @@ spec:
                     value: "{{ .platform_repository }}"
                   - op: replace
                     path: /spec/generators/0/matrix/generators/0/git/revision
-                    value: "{{ .platform_revision }}"
+                    value: '{{ (eq "ignore" .values.override_platform) | ternary .platform_revision .values.override_platform }}'
                   - op: replace
                     path: /spec/generators/0/matrix/generators/0/git/files/0/path
                     value: "addons/kustomize/{{ .cloud_vendor }}/**/kustomize.yaml"

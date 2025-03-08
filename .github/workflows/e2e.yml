@@ -3,7 +3,8 @@ name: E2E
 
 # yamllint disable-line rule:truthy
 on:
-  workflow_dispatch: {}
+  workflow_call:
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -31,11 +32,7 @@ jobs:
       - name: Install Bats
         uses: bats-core/bats-action@3.0.0
       - name: Provision Cluster
-        run: scripts/make-dev.sh --cluster-type standalone --cluster e2e
-      - name: Update E2E Target
-        run: |
-          git tag e2e -f
-          git push origin e2e -f
+        run: scripts/make-dev.sh --cluster-type standalone --cluster dev
       - name: Running E2E
         run: |
           tests/check-suite.sh --cloud kind --cluster-type standalone
@@ -62,12 +59,7 @@ jobs:
       - name: Install Bats
         uses: bats-core/bats-action@3.0.0
       - name: Provision Cluster
-        run: scripts/make-dev.sh --cluster-type hub --cluster e2e
-      - name: Update E2E Target
-        run: |
-          git tag e2e -f
-          git push origin e2e -f
+        run: scripts/make-dev.sh --cluster-type hub --cluster hub
       - name: Running E2E
         run: |
           tests/check-suite.sh --cloud kind --cluster-type hub
-

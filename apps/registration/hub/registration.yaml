@@ -19,7 +19,9 @@ spec:
         revision: TENANT_REPO_REVISION
         files:
           - path: TENANT_PATH/clusters/*.yaml
-
+        values:
+          override_platform: "ignore"
+          override_tenant: "ignore"
       selector:
         matchExpressions:
           - key: enabled
@@ -51,17 +53,22 @@ spec:
       sources:
         ## Provision the cluster registration application for each cluster
         - repoURL: "{{ .platform_repository }}"
-          targetRevision: "{{ .platform_revision }}"
+          targetRevision: '{{ (eq "ignore" .values.override_platform) | ternary .platform_revision .values.override_platform }}'
           path: "charts/cluster-registration"
           helm:
             releaseName: "registration-{{ .cluster_name }}"
             ignoreMissingValueFiles: true
+            values: |
+              revision_overrides:
+                platform: '{{ (eq "ignore" .values.override_platform) | ternary .platform_revision .values.override_platform }}'
+                tenant: '{{ (eq "ignore" .values.override_tenant) | ternary .tenant_revision .values.override_tenant }}'
+
             valueFiles:
               - "$values/{{ .tenant_path }}/clusters/{{ .cluster_name }}.yaml"
 
         ## We use the cluster definition from the tenant repository to
         - repoURL: "{{ .tenant_repository }}"
-          targetRevision: "{{ .tenant_revision }}"
+          targetRevision: '{{ (eq "ignore" .values.override_tenant) | ternary .tenant_revision .values.override_tenant }}'
           ref: values
 
       ## The destination to deploy the resources

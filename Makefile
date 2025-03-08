@@ -40,7 +40,7 @@ trigger-e2e:
 
 validate:
 	@echo "--> Validating the configuration..."
-	@$(MAKE) validation-actions
+	@$(MAKE) validate-actions
 	@$(MAKE) validate-helm-addons
 	@$(MAKE) validate-kustomize
 	@$(MAKE) validate-helm-charts

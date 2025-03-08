@@ -13,7 +13,7 @@ permissions:
 
 jobs:
   e2e:
-    uses: ./.github/workflows/e2e.yaml
+    uses: ./.github/workflows/e2e.yml
     secrets: inherit
 
   build:
@@ -34,7 +34,7 @@ jobs:
           LATEST_TAG=$(git tag --sort=-version:refname | head -n 1)
           ## Generate the changelog
           github_changelog_generator \
-            --since-tag $LATEST_TAG \
+            --since-tag "$LATEST_TAG" \
             --user ${{ github.repository_owner }} \
             --project kubernetes-platform > ${{ github.workspace }}-CHANGELOG.txt
       - name: Create Release
