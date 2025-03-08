@@ -13,7 +13,7 @@ permissions:
 
 jobs:
   e2e:
-    uses: ./.github/workflows/e2e.yaml
+    uses: ./.github/workflows/e2e.yml
     secrets: inherit
 
   build:

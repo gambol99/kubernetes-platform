@@ -4,6 +4,7 @@ name: E2E
 # yamllint disable-line rule:truthy
 on:
   workflow_dispatch: {}
+  workflow_call: {}
 
 permissions:
   contents: write
