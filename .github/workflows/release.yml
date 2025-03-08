@@ -31,7 +31,7 @@ jobs:
           github_changelog_generator \
             --since-tag $LATEST_TAG \
             --user ${{ github.repository_owner }} \
-            --project ${{ github.repository }} > ${{ github.workspace }}-CHANGELOG.txt
+            --project kubernetes-platform > ${{ github.workspace }}-CHANGELOG.txt
       - name: Create Release
         id: create_release
         uses: softprops/action-gh-release@v2
