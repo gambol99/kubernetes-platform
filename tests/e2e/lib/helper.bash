@@ -52,3 +52,11 @@ retry() {
 runit() {
   retry 5 "$@"
 }
+
+kubectl_argocd() {
+  runit "kubectl -n argocd $@"
+}
+
+kubectl() {
+  runit "kubectl $@"
+}

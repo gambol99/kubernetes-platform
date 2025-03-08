@@ -1,5 +1,3 @@
-## Indicate the cluster is enabled
-enabled: true
 ## The name of the tenant cluster
 cluster_name: dev
 ## The cloud vendor to use for the tenant cluster
@@ -23,7 +21,7 @@ platform_path: overlays/release
 ## The type of cluster we are (standalone, spoke or hub)
 cluster_type: standalone
 ## The name of the tenant
-tenant: development
+tenant: test
 ## We use labels to enable/disable features in the tenant cluster
 labels:
   enable_cert_manager: "true"

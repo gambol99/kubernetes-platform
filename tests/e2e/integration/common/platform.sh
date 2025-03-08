@@ -1,4 +1,4 @@
-load ../lib/helper
+load ../../lib/helper
 
 setup() {
   [[ ! -f ${BATS_PARENT_TMPNAME}.skip ]] || skip "skip remaining tests"
@@ -9,13 +9,13 @@ teardown() {
 }
 
 @test "Ensure the platform application has been provision" {
-  run kubectl -n argocd get application platform
+  kubectl_argocd "get application platform"
 }
 
 @test "Ensure the platform is healthy" {
-  runit "kubectl -n argocd get application platform -o yaml | yq .status.health.status | grep -i healthy"
+  kubectl_argocd "get application platform -o yaml | yq .status.health.status | grep -i healthy"
 }
 
 @test "Ensure the platform is in sync" {
-  runit "kubectl -n argocd get application platform -o yaml | yq .status.sync.status | grep -i synced"
+  kubectl_argocd "get application platform -o yaml | yq .status.sync.status | grep -i synced"
 }

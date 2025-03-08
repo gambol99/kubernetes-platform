@@ -67,34 +67,6 @@ jobs:
         with:
           github_token: ${{ secrets.github_token }}
 
-  validate-e2e:
-    if: github.event_name == 'pull_request'
-    name: Validate E2E
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Install Kubectl
-        uses: azure/setup-kubectl@v4
-        with:
-          version: v1.32.0
-      - name: Install Helm
-        uses: azure/setup-helm@v4
-      - name: Install Kind
-        run: |
-          curl -sL https://github.com/kubernetes-sigs/kind/releases/download/v0.27.0/kind-linux-amd64 -o kind
-          chmod +x kind
-      - name: Install ArgoCD Helm Repository
-        run: |
-          helm repo add argo https://argoproj.github.io/argo-helm
-          helm repo update
-      - name: Install Bats
-        uses: bats-core/bats-action@3.0.0
-      - name: Provision Cluster
-        run: make standalone
-      - name: Running E2E
-        run: |
-          tests/check-suite.sh --cloud kind
-
   publish-docs:
     if: github.ref == 'refs/heads/main'
     name: Publish Docs
@@ -108,7 +80,6 @@ jobs:
       - validate-kustomize
       - validate-scripts
       - validate-yaml
-      - validate-e2e
     defaults:
       run:
         working-directory: ./docs

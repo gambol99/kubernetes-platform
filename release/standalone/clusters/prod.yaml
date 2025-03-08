@@ -20,6 +20,8 @@ platform_revision: main
 platform_path: overlays/release
 ## The type of cluster we are (standalone, spoke or hub)
 cluster_type: standalone
+## The name of the tenant
+tenant: test
 ## We use labels to enable/disable features in the tenant cluster
 labels:
   enable_cert_manager: "true"

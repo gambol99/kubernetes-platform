@@ -1,7 +1,7 @@
 ## Indicate the cluster is enabled
 enabled: true
 ## The name of the tenant cluster
-cluster_name: hub
+cluster_name: e2e
 ## The cloud vendor to use for the tenant cluster
 cloud_vendor: kind
 ## The environment to use for the tenant cluster
@@ -9,7 +9,7 @@ environment: release
 ## The repository containing the tenant configuration
 tenant_repository: https://github.com/gambol99/kubernetes-platform.git
 ## The revision to use for the tenant repository
-tenant_revision: main
+tenant_revision: e2e
 ## The path inside the tenant repository to use for the tenant cluster
 tenant_path: release/hub
 ## The cost center to use for the tenant cluster
@@ -17,7 +17,7 @@ tenant_cost_center: "123456"
 ## The repository containing the platform configuration
 platform_repository: https://github.com/gambol99/kubernetes-platform.git
 ## The revision to use for the platform repository
-platform_revision: main
+platform_revision: e2e
 ## The path to the kustomize overlay to use for the tenant cluster
 platform_path: overlays/release/hub
 ## The type of cluster we are (standalone, spoke or hub)
