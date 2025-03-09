@@ -82,46 +82,13 @@ spec:
       project: tenant-system
 
       ## The sources to use for the application
-      sources:
-        ## The kustomize folder includes the default settings and manifests
-        ## for all namespace creations for the tenant applications - i.e.
-        ## service accounts, network policies, etc.
-        - repoURL: "{{ .metadata.annotations.platform_repository }}"
-          targetRevision: "{{ .metadata.annotations.platform_revision }}"
-          path: "apps/tenant/namespace"
-          kustomize:
-            patches:
-              - target:
-                  kind: Namespace
-                  labelSelector: "platform.local/namespace=tenant"
-                patch: |
-                  - op: replace
-                    path: /metadata/name
-                    value: "{{ index (splitList "/" (trimPrefix .metadata.annotations.tenant_path .path.path)) 3 }}"
-
-        - repoURL: "{{ .helm.repository }}"
-          targetRevision: "{{ .helm.version }}"
-          chart: "{{ .helm.chart }}"
-          path: "{{ .helm.path }}"
-          helm:
-            releaseName: "{{ default .path.basenameNormalized .helm.release_name }}"
-            ignoreMissingValueFiles: true
-            valueFiles:
-              - "$values/{{ .path.path }}/values/{{ .metadata.labels.cluster_name }}.yaml"
-              - "$values/{{ .path.path }}/values/{{ .metadata.labels.environment }}.yaml"
-              - "$values/{{ .path.path }}/values/{{ .metadata.labels.tenant }}.yaml"
-              - "$values/{{ .path.path }}/values/all.yaml"
-
-        # Source the platform values
-        - repoURL: "{{ .metadata.annotations.tenant_repository }}"
-          targetRevision: "{{ .metadata.annotations.tenant_revision }}"
-          ref: values
+      sources: []
 
       ## Destination is the cluster to deploy to
       destination:
         server: "{{ .server }}"
         ## /workloads/applications/NAMESPACE/FILE.yaml
-        namespace: '{{ index (splitList "/" (trimPrefix .metadata.annotations.tenant_path .path.path)) 3 }}'
+        namespace: "{{ index .path.path 3 }}"
 
       ## Sync policy for the application
       syncPolicy:
@@ -140,3 +107,53 @@ spec:
         syncOptions:
           - CreateNamespace=false
           - ServerSideApply=true
+
+  ## Template patch
+  templatePatch: |
+    {{- $index := 0 }}
+    {{- range $i, $k := .path.segments }}
+    {{- if (eq "applications" $k) }}
+    {{- $index = $i }}
+    {{- break }}
+    {{- end }}
+    {{- end }}
+    {{ $namespace := index .path.segments (add1 $index) }}
+    spec:
+      destination:
+        namespace: {{ $namespace }}
+        server: "{{ .server }}"
+
+      sources:
+        ## The kustomize folder includes the default settings and manifests
+        ## for all namespace creations for the tenant applications - i.e.
+        ## service accounts, network policies, etc.
+        - repoURL: "{{ .metadata.annotations.platform_repository }}"
+          targetRevision: "{{ .metadata.annotations.platform_revision }}"
+          path: "apps/tenant/namespace"
+          kustomize:
+            patches:
+              - target:
+                  kind: Namespace
+                  labelSelector: "platform.local/namespace=tenant"
+                patch: |
+                  - op: replace
+                    path: /metadata/name
+                    value: "{{ $namespace }}"
+
+        - repoURL: "{{ .helm.repository }}"
+          targetRevision: "{{ .helm.version }}"
+          chart: "{{ .helm.chart }}"
+          path: "{{ .helm.path }}"
+          helm:
+            releaseName: "{{ default .path.basenameNormalized .helm.release_name }}"
+            ignoreMissingValueFiles: true
+            valueFiles:
+              - "$values/{{ .path.path }}/values/{{ .metadata.labels.cluster_name }}.yaml"
+              - "$values/{{ .path.path }}/values/{{ .metadata.labels.environment }}.yaml"
+              - "$values/{{ .path.path }}/values/{{ .metadata.labels.tenant }}.yaml"
+              - "$values/{{ .path.path }}/values/all.yaml"
+
+        # Source the platform values
+        - repoURL: "{{ .metadata.annotations.tenant_repository }}"
+          targetRevision: "{{ .metadata.annotations.tenant_revision }}"
+          ref: values

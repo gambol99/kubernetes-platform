@@ -80,6 +80,49 @@ spec:
       project: tenant-apps
 
       ## The sources to use for the application
+      sources: []
+
+      ## Destination is the cluster to deploy to
+      destination:
+        server: "{{ .server }}"
+        ## workloads/applications/NAMESPACE/FILE.yaml
+        ## releases/standalone/workloads/applications/NAMESPACE/FILE.yaml
+        ## releases/standalone/workloads/applications/NAMESPACE/app/FILE.yaml
+        namespace: "{{ index .path.path 3 }}"
+
+      ## Sync policy for the application
+      syncPolicy:
+        automated:
+          selfHeal: true
+          prune: true
+        retry:
+          backoff:
+            duration: '{{ default "30s" .sync.duration }}'
+            maxDuration: '{{ default "5m" .sync.max_duration }}'
+          limit: 10
+        # Use server-side apply for better efficiency and interop
+        # between controllers making partial changes to manifests.
+        # Also enable apply out of sync only rather than trying to
+        # apply all resources in the application.
+        syncOptions:
+          - CreateNamespace=false
+          - ServerSideApply=true
+
+  ## Template patch
+  templatePatch: |
+    {{- $index := 0 }}
+    {{- range $i, $k := .path.segments }}
+    {{- if (eq "applications" $k) }}
+    {{- $index = $i }}
+    {{- break }}
+    {{- end }}
+    {{- end }}
+    {{ $namespace := index .path.segments (add1 $index) }}
+    spec:
+      destination:
+        namespace: {{ $namespace }}
+        server: "{{ .server }}"
+
       sources:
         ## The kustomize folder includes the default settings and manifests
         ## for all namespace creations for the tenant applications - i.e.
@@ -95,7 +138,7 @@ spec:
                 patch: |
                   - op: replace
                     path: /metadata/name
-                    value: "{{ index (splitList "/" (trimPrefix .metadata.annotations.tenant_path .path.path)) 3 }}"
+                    value: "{{ $namespace }}"
 
         - repoURL: "{{ .helm.repository }}"
           targetRevision: "{{ .helm.version }}"
@@ -114,29 +157,3 @@ spec:
         - repoURL: "{{ .metadata.annotations.tenant_repository }}"
           targetRevision: "{{ .metadata.annotations.tenant_revision }}"
           ref: values
-
-      ## Destination is the cluster to deploy to
-      destination:
-        server: "{{ .server }}"
-        ## workloads/applications/NAMESPACE/FILE.yaml
-        ## releases/standalone/workloads/applications/NAMESPACE/FILE.yaml
-        ## releases/standalone/workloads/applications/NAMESPACE/app/FILE.yaml
-        namespace: '{{ index (splitList "/" (trimPrefix .metadata.annotations.tenant_path .path.path)) 3 }}'
-
-      ## Sync policy for the application
-      syncPolicy:
-        automated:
-          selfHeal: true
-          prune: true
-        retry:
-          backoff:
-            duration: '{{ default "30s" .sync.duration }}'
-            maxDuration: '{{ default "5m" .sync.max_duration }}'
-          limit: 10
-        # Use server-side apply for better efficiency and interop
-        # between controllers making partial changes to manifests.
-        # Also enable apply out of sync only rather than trying to
-        # apply all resources in the application.
-        syncOptions:
-          - CreateNamespace=true
-          - ServerSideApply=true
