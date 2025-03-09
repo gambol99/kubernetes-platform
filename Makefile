@@ -8,6 +8,11 @@ standalone:
 		--cluster-type standalone \
 	  --cluster dev
 
+standalone-aws:
+	@echo "Provisioning Standalone Cluster (dev) in AWS"
+	@cd terraform && make init
+	@cd terraform && make dev
+
 hub:
 	@echo "Provisioning Hub Cluster (hub)"
 	@scripts/make-dev.sh \

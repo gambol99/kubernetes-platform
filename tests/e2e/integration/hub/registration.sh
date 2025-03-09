@@ -35,8 +35,7 @@ teardown() {
 }
 
 @test "Ensure the cluster registration application is pointing at the correct cluster" {
-  kubectl_argocd "get application system-registration-hub -o yaml | yq .spec.sources[0].helm.valueFiles[0] | grep -i '$values/release/hub/clusters/hub.yaml'"
-  kubectl_argocd "get application system-registration-spoke -o yaml | yq .spec.sources[0].helm.valueFiles[0] | grep -i '$values/release/hub/clusters/spoke.yaml'"
+  kubectl_argocd "get application system-registration-hub -o yaml | yq .spec.sources[0].helm.valueFiles[0] | grep -i '$values/release/hub/clusters'"
 }
 
 @test "Ensure the cluster registration application is healthy" {

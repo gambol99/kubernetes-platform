@@ -8,7 +8,6 @@ build/
 .env
 .env.local
 .env.*.local
-*.tfvars
 .terraform/
 .terraform.lock.hcl
 
