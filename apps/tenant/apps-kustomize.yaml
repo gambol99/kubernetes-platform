@@ -79,30 +79,8 @@ spec:
       ## The project to use for the application
       project: tenant-apps
 
-      ## The sources to use for the application
-      sources:
-        ## The kustomize folder includes the default settings and manifests
-        ## for all namespace creations for the tenant applications - i.e.
-        ## service accounts, network policies, etc.
-        - repoURL: "{{ .metadata.annotations.platform_repository }}"
-          targetRevision: "{{ .metadata.annotations.platform_revision }}"
-          path: "apps/tenant/namespace"
-          kustomize:
-            patches:
-              - target:
-                  kind: Namespace
-                  labelSelector: "platform.local/namespace=tenant"
-                patch: |
-                  - op: replace
-                    path: /metadata/name
-                    value: "{{ index (splitList "/" (trimPrefix .metadata.annotations.tenant_path .path.path)) 3 }}"
-
-        ## We either use the tenant repository of the kustomize.repository
-        - repoURL: "{{ default .metadata.annotations.tenant_repository .kustomize.repository }}"
-          ## We either use the tenant revision of the kustomize.revision (external revision)
-          targetRevision: "{{ default .metadata.annotations.tenant_revision .kustomize.revision }}"
-          path: '{{ printf "%s/%s" .path.path .kustomize.path }}'
-          kustomize: {}
+      ## The sources to use for the application - this is patched by the template below
+      sources: []
 
       ## Destination is the cluster to deploy to
       destination:
@@ -110,7 +88,7 @@ spec:
         ## workloads/applications/NAMESPACE/FILE.yaml
         ## releases/standalone/workloads/applications/NAMESPACE/FILE.yaml
         ## releases/standalone/workloads/applications/NAMESPACE/app/FILE.yaml
-        namespace: '{{ index (splitList "/" (trimPrefix .metadata.annotations.tenant_path .path.path)) 3 }}'
+        namespace: "{{ index .path.path 3 }}"
 
       ## Sync policy for the application
       syncPolicy:
@@ -133,13 +111,36 @@ spec:
   ## If a kustomize.repository is defines we use the environment as the targetRevision. Its
   ## the responsibility of the repository to control the floating revisions.
   templatePatch: |
-    {{- if and .kustomize.patches (gt (len .kustomize.patches) 0) }}
-    ## Save the context for the dig function
+    {{- $index := 0 }}
+    {{- range $i, $k := .path.segments }}
+    {{- if (eq "applications" $k) }}
+    {{- $index = $i }}
+    {{- break }}
+    {{- end }}
+    {{- end }}
+    {{- $namespace := index .path.segments (add1 $index) }}
     {{- $context := toJson . | fromJson }}
     spec:
-      source:
-        kustomize:
-          patches:
+      destination:
+        namespace: {{ $namespace }}
+        server: "{{ .server }}"
+
+      sources:
+        - repoURL: "{{ .metadata.annotations.platform_repository }}"
+          targetRevision: "{{ .metadata.annotations.platform_revision }}"
+          path: "apps/tenant/namespace"
+          kustomize:
+            patches:
+              - target:
+                  kind: Namespace
+                  labelSelector: "platform.local/namespace=tenant"
+                patch: |
+                  - op: replace
+                    path: /metadata/name
+                    value: "{{ $namespace }}"
+
+            {{- if and .kustomize.patches (gt (len .kustomize.patches) 0) }}
+            ## Save the context for the dig function
             {{- range $change := .kustomize.patches }}
             - target:
                 kind: {{ $change.target.kind }}
@@ -162,4 +163,11 @@ spec:
                   value: {{ default $patch.default $value }}
               {{- end }}
             {{- end }}
-    {{- end }}
+            {{- end }}
+
+        ## We either use the tenant repository of the kustomize.repository
+        - repoURL: "{{ default .metadata.annotations.tenant_repository .kustomize.repository }}"
+          ## We either use the tenant revision of the kustomize.revision (external revision)
+          targetRevision: "{{ default .metadata.annotations.tenant_revision .kustomize.revision }}"
+          path: '{{ printf "%s/%s" .path.path .kustomize.path }}'
+          kustomize: {}
