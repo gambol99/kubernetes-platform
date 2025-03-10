@@ -7,7 +7,7 @@ setup() {
 }
 
 teardown() {
-  [[ -n $BATS_TEST_COMPLETED   ]] || touch ${BATS_PARENT_TMPNAME}.skip
+  [[ -n $BATS_TEST_COMPLETED   ]] || touch "${BATS_PARENT_TMPNAME}.skip"
 }
 
 @test "Ensure the Kyverno application is installed" {
@@ -35,7 +35,6 @@ teardown() {
 
 @test "Ensure the Kyverno validating webhook is installed" {
   NAMES=(
-    ingress-system-ingress-nginx-admission
     kyverno-cleanup-validating-webhook-cfg
     kyverno-exception-validating-webhook-cfg
     kyverno-global-context-validating-webhook-cfg
