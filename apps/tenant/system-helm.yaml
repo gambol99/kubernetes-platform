@@ -112,7 +112,7 @@ spec:
   templatePatch: |
     {{- $index := 0 }}
     {{- range $i, $k := .path.segments }}
-    {{- if (eq "applications" $k) }}
+    {{- if (eq "system" $k) }}
     {{- $index = $i }}
     {{- break }}
     {{- end }}
