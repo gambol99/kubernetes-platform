@@ -15,5 +15,5 @@ teardown() {
 }
 
 @test "We should have a private issuer created" {
-  kubectl "get clusterissuer selfsigned-issuer -n cert-manager"
+  retry 10 "kubectl get clusterissuer selfsigned-issuer -n cert-manager"
 }
