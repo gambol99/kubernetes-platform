@@ -38,5 +38,4 @@ labels:
 annotations:
   platform.local/tenant: tenant
 ## The authentication details for the cluster
-cluster_authentication: ""
-#
+cluster_authentication: {}
