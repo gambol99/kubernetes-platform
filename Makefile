@@ -50,10 +50,15 @@ trigger-e2e:
 validate:
 	@echo "--> Validating the configuration..."
 	@$(MAKE) validate-actions
+	@$(MAKE) validate-cluster-definitions
 	@$(MAKE) validate-helm-addons
 	@$(MAKE) validate-kustomize
 	@$(MAKE) validate-helm-charts
 	@$(MAKE) validate-kyverno
+
+validate-cluster-definitions:
+	@echo "--> Validating the cluster definitions..."
+	@scripts/validate-cluster-definitions.sh
 
 validate-actions:
 	@echo "--> Validating Github Actions..."
