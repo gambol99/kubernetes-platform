@@ -68,7 +68,7 @@ spec:
       name: "tenant-kust-{{ .path.basenameNormalized }}-{{ .metadata.labels.cluster_name }}"
       namespace: argocd
       labels:
-        app.kubernetes.io/instance: "{{ .metadata.annotations.cluster_name }}"
+        app.kubernetes.io/instance: "{{ .metadata.labels.cluster_name }}"
         app.kubernetes.io/managed-by: argocd
         app.kubernetes.io/name: "{{ default .path.basenameNormalized .kustomize.release_name }}"
         app.kubernetes.io/part-of: tenant-kustomize
