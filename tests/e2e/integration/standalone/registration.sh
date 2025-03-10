@@ -10,47 +10,47 @@ teardown() {
   [[ -n $BATS_TEST_COMPLETED   ]] || touch ${BATS_PARENT_TMPNAME}.skip
 }
 
-@test "Ensure the cluster registration application has been provisioned" {
+@test "We should have a cluster registration application" {
   kubectl_argocd "get application system-registration"
 }
 
-@test "Ensure the cluster registration application pointing at the correct git repository" {
+@test "We should have a cluster registration application pointing at the correct git repository" {
   kubectl_argocd "get application system-registration -o yaml | yq .spec.sources[0].repoURL | grep -i https://github.com/gambol99/kubernetes-platform"
 }
 
-@test "Ensure the cluster registration application pointing at the correct git branch" {
+@test "We should have a cluster registration application pointing at the correct git branch" {
   kubectl_argocd "get application system-registration -o yaml | yq .spec.sources[0].targetRevision | grep -i ."
 }
 
-@test "Ensure the cluster registration application is pointing at the correct cluster" {
+@test "We should have a cluster registration application pointing at the correct cluster" {
   kubectl_argocd "get application system-registration -o yaml | yq .spec.sources[0].helm.valueFiles[0] | grep -i '$values/release/standalone/clusters'"
 }
 
-@test "Ensure the cluster registration application is healthy" {
+@test "We should have a healthy cluster registration application" {
   kubectl_argocd "get application system-registration -o yaml | yq .status.health.status | grep -i healthy"
 }
 
-@test "Ensure the cluster secret has been created" {
+@test "We should have a cluster secret" {
   kubectl_argocd "get secret cluster-dev"
 }
 
-@test "Ensure the cluster secret has a platform_repository annotation" {
+@test "We should have a cluster secret with a platform_repository annotation" {
   kubectl_argocd "get secret cluster-dev -o yaml | yq .metadata.annotations.platform_repository | grep -i https://github.com/gambol99/kubernetes-platform"
 }
 
-@test "Ensure the cluster secret has a platform_revision annotation" {
+@test "We should have a cluster secret with a platform_revision annotation" {
   kubectl_argocd "get secret cluster-dev -o yaml | yq .metadata.annotations.platform_revision | grep -i ."
 }
 
-@test "Ensure the cluster secret has a tenant repository annotation" {
+@test "We should have a cluster secret with a tenant repository annotation" {
   kubectl_argocd "get secret cluster-dev -o yaml | yq .metadata.annotations.tenant_repository | grep -i https://github.com/gambol99/kubernetes-platform"
 }
 
-@test "Ensure the cluster secret has a tenant revision annotation" {
+@test "We should have a cluster secret with a tenant revision annotation" {
   kubectl_argocd "get secret cluster-dev -o yaml | yq .metadata.annotations.tenant_revision | grep -i ."
 }
 
-@test "Ensure we have the expected labels on the cluster secret" {
+@test "We should have the expected labels on the cluster secret" {
   kubectl_argocd "get secret cluster-dev -o yaml | yq .metadata.labels | grep -i 'enable_core: \"true\"'"  
   kubectl_argocd "get secret cluster-dev -o yaml | yq .metadata.labels | grep -i 'enable_kyverno: \"true\"'"
   kubectl_argocd "get secret cluster-dev -o yaml | yq .metadata.labels | grep -i 'cluster_type: standalone'"
