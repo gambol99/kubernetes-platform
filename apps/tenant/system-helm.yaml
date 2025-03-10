@@ -70,7 +70,7 @@ spec:
       name: "tenant-helm-{{ .path.basenameNormalized }}-{{ .metadata.labels.cluster_name }}"
       namespace: argocd
       labels:
-        app.kubernetes.io/name: tenant-helm
+        app.kubernetes.io/name: "{{ default .path.basenameNormalized .helm.release_name }}"
         app.kubernetes.io/managed-by: argocd
         app.kubernetes.io/instance: tenant-helm
         app.kubernetes.io/part-of: tenant-helm
