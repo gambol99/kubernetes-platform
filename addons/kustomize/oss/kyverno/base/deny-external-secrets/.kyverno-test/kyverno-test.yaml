@@ -1,0 +1,21 @@
+apiVersion: cli.kyverno.io/v1alpha1
+kind: Test
+metadata:
+  name: deny-external-secrets
+policies:
+  - ../policy.yaml
+resources:
+  - resources.yaml
+results:
+  - kind: ExternalSecret
+    policy: deny-external-secrets
+    resources:
+      - bad
+    result: fail
+    rule: namespace-prefix
+  - kind: ExternalSecret
+    policy: deny-external-secrets
+    resources:
+      - good
+    result: fail
+    rule: namespace-prefix
