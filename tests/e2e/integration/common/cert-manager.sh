@@ -14,6 +14,12 @@ teardown() {
   kubectl "get namespace cert-manager"
 }
 
-@test "We should have a private issuer created" {
-  retry 10 "kubectl get clusterissuer selfsigned-issuer -n cert-manager"
+@test "We should have a cert-manager pods running" {
+  retry 20 "kubectl wait --for=condition=available --timeout=60s deployment/cert-manager -n cert-manager"
+  retry 20 "kubectl wait --for=condition=available --timeout=60s deployment/cert-manager-cainjector -n cert-manager"
+  retry 20 "kubectl wait --for=condition=available --timeout=60s deployment/cert-manager-webhook -n cert-manager"
+}
+
+@test "We should have a clusterissuer for self signed certificate" {
+  kubectl "get clusterissuer selfsigned-issuer"
 }
