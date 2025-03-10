@@ -139,6 +139,9 @@ spec:
                   - op: replace
                     path: /metadata/name
                     value: "{{ $namespace }}"
+                  - op: add
+                    path: /metadata/labels/'platform.local/namespace-type'
+                    value: "tenant-system"
 
         - repoURL: "{{ .helm.repository }}"
           targetRevision: "{{ .helm.version }}"

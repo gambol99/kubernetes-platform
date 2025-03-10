@@ -6,3 +6,4 @@ metadata:
   labels:
     app.kubernetes.io/managed-by: argocd
     platform.local/namespace: tenant
+    platform.local/namespace-type: tenant-application
