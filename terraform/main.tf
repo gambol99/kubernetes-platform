@@ -1,7 +1,7 @@
 
 ## Provision a EKS cluster for the hub
 module "eks" {
-  source = "github.com/gambol99/terraform-aws-eks?ref=v0.2.0"
+  source = "github.com/gambol99/terraform-aws-eks?ref=v0.2.1"
 
   access_entries                 = var.access_entries
   cluster_enabled_log_types      = null

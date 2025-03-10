@@ -19,7 +19,7 @@ variable "access_entries" {
       })
     })))
   }))
-  default = {}
+  default = null
 }
 
 variable "argocd_repositories" {
