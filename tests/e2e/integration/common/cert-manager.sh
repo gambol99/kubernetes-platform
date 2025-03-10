@@ -21,5 +21,5 @@ teardown() {
 }
 
 @test "We should have a clusterissuer for self signed certificate" {
-  retry 20 "get clusterissuer selfsigned-issuer"
+  retry 20 "kubectl get clusterissuer selfsigned-issuer"
 }
