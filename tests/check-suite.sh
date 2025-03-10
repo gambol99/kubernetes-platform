@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #
 ## This script is used to run the check suite for the kubernetes platform
-## 
+##
 
 BATS_OPTIONS=${BATS_OPTIONS:-""}
 CLOUD="kind"
@@ -28,7 +28,7 @@ EOF
 
 run_bats() {
   echo -e "Running units: ${*}\n"
-  CLOUD=${CLOUD} GIT_COMMIT=${GIT_COMMIT} bats ${BATS_OPTIONS} ${@} || exit 1
+  CLOUD=${CLOUD} GIT_COMMIT=${GIT_COMMIT} bats "${BATS_OPTIONS}" "${@}" || exit 1
 }
 
 # run-checks runs a collection checks
@@ -39,9 +39,10 @@ run_checks() {
     "${UNITS}/${CLUSTER_TYPE}/registration.sh"
     "${UNITS}/common/applicationsets.sh"
     "${UNITS}/common/priorityclasses.sh"
-    "${UNITS}/${CLUSTER_TYPE}/kyverno.sh"
     "${UNITS}/${CLUSTER_TYPE}/tenant-namespace.sh"
     "${UNITS}/${CLUSTER_TYPE}/tenant-helm-apps.sh"
+    "${UNITS}/${CLUSTER_TYPE}/kyverno.sh"
+    "${UNITS}/common/cert-manager.sh"
   )
 
   # Run in the installation
