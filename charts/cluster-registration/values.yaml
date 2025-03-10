@@ -33,7 +33,9 @@ platform_revision: unknown
 ## The path to the platform repository
 platform_path: unknown
 ## Configuration for the cluster authentication
-cluster_authentication: {}
+cluster_authentication:
+  ## The server to use for the cluster
+  server: ""
 ## The cluster type (standalone, spoke or hub)
 cluster_type: standalone
 ## Revision overrides for the platform and tenant repositories
