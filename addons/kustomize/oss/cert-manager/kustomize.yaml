@@ -1,7 +1,7 @@
 ---
 kustomize:
   ## The features to enable in the tenant cluster
-  feature: cert-manager
+  feature: cert_manager
   ## The path to the kustomize overlay
   path: base
 
