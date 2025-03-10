@@ -58,6 +58,15 @@ jobs:
       - uses: azure/setup-kubectl@v4
       - run: make validate-kustomize
 
+  validate-kyverno:
+    name: Validate Kyverno Policies
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Kyverno CLI
+        uses: kyverno/action-install-cli@v0.2.0
+      - run: make validate-kyverno
+
   validate-docs-spelling:
     name: Validate Docs Spelling
     runs-on: ubuntu-latest
