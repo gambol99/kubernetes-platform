@@ -76,11 +76,12 @@ spec:
     metadata:
       name: "system-{{ normalize .feature }}-{{ .metadata.labels.cluster_name }}"
       namespace: argocd
+      annotations:
+        argocd.argoproj.io/sync-wave: '{{ default "10" .sync.wave }}'
       labels:
         app.kubernetes.io/managed-by: argocd
         app.kubernetes.io/name: system-helm
         app.kubernetes.io/type: helm
-        argocd.argoproj.io/sync-wave: '{{ default "10" .sync.wave }}'
         phase: primary
         platform.local/type: platform
 
