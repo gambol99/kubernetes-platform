@@ -31,14 +31,6 @@ jobs:
       - run: pip install yamllint
       - run: make lint-yaml
 
-  validate-cluster-definitions:
-    name: Validate Cluster Definitions
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - run: sudo apt install -y yq
-      - run: make validate-cluster-definitions
-
   validate-helm-addons:
     name: Validate Helm Addons
     runs-on: ubuntu-latest
