@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #
-## This script validates a hub cluster definition file to ensure it is correct and complete 
-## It checks for required fields, cluster type, Git repositories, enabled features, 
+## This script validates a hub cluster definition file to ensure it is correct and complete
+## It checks for required fields, cluster type, Git repositories, enabled features,
 ## cloud vendor configuration, and paths and names.
 ##
 ## Usage:
@@ -12,6 +12,8 @@
 #
 
 set -e
+
+# shellcheck disable=SC2155
 
 # Colors for output
 RED='\033[0;31m'
@@ -50,7 +52,9 @@ echo "----------------------------------------"
 
 # Check if cluster is enabled
 function check_enabled() {
-  local enabled=$(yq e '.enabled' "$CLUSTER_FILE")
+  local enabled
+
+  enabled=$(yq e '.enabled' "$CLUSTER_FILE")
   if [ "$enabled" == "true" ]; then
     echo -e "${GREEN}✓ Cluster is enabled${NC}"
   else
@@ -60,10 +64,10 @@ function check_enabled() {
 
 # Check required fields
 function check_required_fields() {
-  local fields=("cluster_name" "cloud_vendor" "environment" "tenant_repository" 
-                "tenant_revision" "tenant_path" "platform_repository" 
-                "platform_revision" "platform_path" "cluster_type" "tenant")
-  
+  local fields=("cluster_name" "cloud_vendor" "environment" "tenant_repository"
+    "tenant_revision" "tenant_path" "platform_repository"
+    "platform_revision" "platform_path" "cluster_type" "tenant")
+
   for field in "${fields[@]}"; do
     if ! yq e ".$field" "$CLUSTER_FILE" > /dev/null 2>&1 || [ "$(yq e ".$field" "$CLUSTER_FILE")" == "null" ]; then
       echo -e "${RED}Error: Required field '$field' is missing or null${NC}"
@@ -75,8 +79,10 @@ function check_required_fields() {
 
 # Check cluster type
 function check_cluster_type() {
-  local cluster_type=$(yq e '.cluster_type' "$CLUSTER_FILE")
-  
+  local cluster_type
+
+  cluster_type=$(yq e '.cluster_type' "$CLUSTER_FILE")
+
   if [ "$cluster_type" == "hub" ] || [ "$cluster_type" == "spoke" ] || [ "$cluster_type" == "standalone" ]; then
     echo -e "${GREEN}✓ Valid cluster type: $cluster_type${NC}"
   else
@@ -87,16 +93,16 @@ function check_cluster_type() {
 # Check Git repositories accessibility
 function check_repositories() {
   echo -e "\n${GREEN}Checking repositories:${NC}"
-  
+
   local tenant_repo=$(yq e '.tenant_repository' "$CLUSTER_FILE")
   local platform_repo=$(yq e '.platform_repository' "$CLUSTER_FILE")
-  
+
   # Basic format validation
-  if [[ ! "$tenant_repo" =~ ^https://.*\.git$ ]]; then
+  if [[ ! $tenant_repo =~ ^https://.*\.git$  ]]; then
     echo -e "${YELLOW}Warning: Tenant repository URL doesn't match expected format (https://*.git)${NC}"
   fi
-  
-  if [[ ! "$platform_repo" =~ ^https://.*\.git$ ]]; then
+
+  if [[ ! $platform_repo =~ ^https://.*\.git$  ]]; then
     echo -e "${YELLOW}Warning: Platform repository URL doesn't match expected format (https://*.git)${NC}"
   fi
 }
@@ -104,30 +110,30 @@ function check_repositories() {
 # Check enabled features
 function check_features() {
   echo -e "\n${GREEN}Checking enabled features:${NC}"
-  
+
   # Get all keys from the labels section
   local all_labels=$(yq e '.labels | keys | .[]' "$CLUSTER_FILE" || echo "")
-  
+
   if [ -z "$all_labels" ]; then
     echo -e "${YELLOW}Warning: No labels defined in the cluster definition${NC}"
     return
   fi
-  
+
   # Filter to find only feature flags (those starting with enable_)
   local feature_flags=()
   local non_feature_labels=()
   local invalid_value_labels=()
   local enabled_count=0
-  
+
   for label in $all_labels; do
     # Check if label starts with enable_
-    if [[ "$label" =~ ^enable_ ]]; then
+    if [[ $label =~ ^enable_ ]]; then
       local value=$(yq e ".labels.$label" "$CLUSTER_FILE")
-      
+
       # Validate value is true or false
       if [ "$value" == "true" ] || [ "$value" == "false" ]; then
         feature_flags+=("$label")
-        
+
         # Count enabled features
         if [ "$value" == "true" ]; then
           local feature_name=${label#enable_}
@@ -141,10 +147,10 @@ function check_features() {
       non_feature_labels+=("$label")
     fi
   done
-  
+
   # Summary information
   echo -e "${GREEN}Found ${#feature_flags[@]} feature flags, $enabled_count enabled${NC}"
-  
+
   # Report non-feature labels
   if [ ${#non_feature_labels[@]} -gt 0 ]; then
     echo -e "${YELLOW}Non-feature labels found (doesn't start with 'enable_'):${NC}"
@@ -152,7 +158,7 @@ function check_features() {
       echo -e "${YELLOW}  - $label${NC}"
     done
   fi
-  
+
   # Report invalid feature values
   if [ ${#invalid_value_labels[@]} -gt 0 ]; then
     echo -e "${RED}Error: Feature flags with invalid values (must be 'true' or 'false'):${NC}"
@@ -160,19 +166,19 @@ function check_features() {
       echo -e "${RED}  - $label${NC}"
     done
   fi
-  
+
   # Keep dependency checks
-  if [ "$(yq e '.labels.enable_kube_prometheus_stack // "false"' "$CLUSTER_FILE")" == "true" ] && 
-     [ "$(yq e '.labels.enable_prometheus // "false"' "$CLUSTER_FILE")" == "true" ]; then
+  if [ "$(yq e '.labels.enable_kube_prometheus_stack // "false"' "$CLUSTER_FILE")" == "true" ] \
+                                                                                              && [ "$(yq e '.labels.enable_prometheus // "false"' "$CLUSTER_FILE")" == "true" ]; then
     echo -e "${YELLOW}Warning: Both kube_prometheus_stack and prometheus are enabled. This might cause conflicts${NC}"
   fi
-  
+
   # Validate specifically for hub clusters
   if [ "$(yq e '.cluster_type' "$CLUSTER_FILE")" == "hub" ]; then
     if [ "$(yq e '.labels.enable_argocd // "false"' "$CLUSTER_FILE")" != "true" ]; then
       echo -e "${YELLOW}Warning: Hub cluster should have ArgoCD enabled${NC}"
     fi
-    
+
     if [ "$(yq e '.labels.enable_cert_manager // "false"' "$CLUSTER_FILE")" != "true" ]; then
       echo -e "${YELLOW}Warning: Hub cluster should have cert-manager enabled${NC}"
     fi
@@ -183,7 +189,7 @@ function check_features() {
 function check_cloud_vendor() {
   local vendor=$(yq e '.cloud_vendor' "$CLUSTER_FILE")
   echo -e "\n${GREEN}Checking cloud vendor configuration for: $vendor${NC}"
-  
+
   case $vendor in
     aws)
       # Check for AWS specific fields
@@ -194,8 +200,8 @@ function check_cloud_vendor() {
         echo -e "${GREEN}✓ AWS Region: $region${NC}"
       fi
       ;;
-    
-    azure|azurerm)
+
+    azure | azurerm)
       # Check for Azure specific fields
       local resource_group=$(yq e '.resource_group // ""' "$CLUSTER_FILE")
       if [ -z "$resource_group" ]; then
@@ -204,8 +210,8 @@ function check_cloud_vendor() {
         echo -e "${GREEN}✓ Azure Resource Group: $resource_group${NC}"
       fi
       ;;
-    
-    google|gcp)
+
+    google | gcp)
       # Check for GCP specific fields
       local project=$(yq e '.project_id // ""' "$CLUSTER_FILE")
       if [ -z "$project" ]; then
@@ -214,11 +220,11 @@ function check_cloud_vendor() {
         echo -e "${GREEN}✓ GCP Project ID: $project${NC}"
       fi
       ;;
-    
+
     kind)
       echo -e "${GREEN}✓ Using kind for local development${NC}"
       ;;
-    
+
     *)
       echo -e "${YELLOW}Warning: Unknown cloud vendor: $vendor${NC}"
       ;;
