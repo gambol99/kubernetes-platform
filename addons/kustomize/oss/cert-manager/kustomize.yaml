@@ -1,0 +1,15 @@
+---
+kustomize:
+  ## The features to enable in the tenant cluster
+  feature: cert-manager
+  ## The path to the kustomize overlay
+  path: base
+
+namespace:
+  ## Name of the namespace to deploy the application
+  name: cert-manager
+
+## Synchronization options
+sync:
+  ## We want to deploy cert-manager after the platform
+  phase: secondary
