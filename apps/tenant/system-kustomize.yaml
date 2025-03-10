@@ -134,6 +134,9 @@ spec:
                   - op: replace
                     path: /metadata/name
                     value: "{{ $namespace }}"
+                  - op: add
+                    path: /metadata/labels/'platform.local/namespace-type'
+                    value: "tenant-system"
 
             {{- if and .kustomize.patches (gt (len .kustomize.patches) 0) }}
             ## Save the context for the dig function
