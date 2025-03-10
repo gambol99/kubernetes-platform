@@ -20,6 +20,10 @@ dev:
 	@echo "--> Running development environment"
 	@terraform apply -var-file=variables/dev.tfvars
 
+destroy-dev:
+	@echo "--> Destroying development environment"
+	@terraform destroy -var-file=variables/dev.tfvars
+
 all:
 	$(MAKE) init
 	$(MAKE) validate

@@ -13,6 +13,10 @@ standalone-aws:
 	@cd terraform && make init
 	@cd terraform && make dev
 
+destroy-standalone-aws:
+	@echo "Destroying Standalone Cluster (dev) in AWS"
+	@cd terraform && make destroy-dev
+
 hub:
 	@echo "Provisioning Hub Cluster (hub)"
 	@scripts/make-dev.sh \
