@@ -1,0 +1,39 @@
+---
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: deny-external-secrets
+  annotations:
+    policies.kyverno.io/title: External Secret Namespace Prefix
+    policies.kyverno.io/category: Security
+    policies.kyverno.io/severity: medium
+    policies.kyverno.io/description: >-
+      When provisioning ExternalSecrete, the key must be prefixed with
+      the namespace name to ensure proper isolation and prevent unauthorized
+      access.
+spec:
+  validationFailureAction: enforce
+  background: true
+  rules:
+    - name: namespace-prefix
+      match:
+        resources:
+          kinds:
+            - ExternalSecret
+      validate:
+        message: "When provisioning an ExternalSecret, the key must be prefixed with the source namespace (e.g. 'namespace/key-name')"
+        foreach:
+          - list: request.object.spec.dataFrom || []
+            pattern:
+              - secretStoreRef:
+                  name: "?*"
+                  namespace: "?*"
+                extract:
+                  key: "{{ element.secretStoreRef.namespace }}/*"
+          - list: request.object.spec.data || []
+            pattern:
+              - secretStoreRef:
+                  name: "?*"
+                  namespace: "?*"
+                remoteRef:
+                  key: "{{ element.secretStoreRef.namespace }}/*"

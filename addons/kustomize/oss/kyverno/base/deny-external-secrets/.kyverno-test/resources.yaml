@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: ExternalSecret
+metadata:
+  name: good
+  namespace: my-namespace
+spec:
+  dataFrom:
+    - secretStoreRef:
+        name: secrets-store
+        namespace: my-namespace
+      key: good
+---
+apiVersion: v1
+kind: ExternalSecret
+metadata:
+  name: bad
+  namespace: my-different-namespace
+spec:
+  dataFrom:
+    - secretStoreRef:
+        name: secrets-store
+        namespace: my-namespace
+      key: bad
