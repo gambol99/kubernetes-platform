@@ -21,7 +21,7 @@ spec:
   validationFailureAction: Enforce
   background: true
   rules:
-    - name: validate-probes
+    - name: deny-no-pod-probes
       match:
         any:
           - resources:
@@ -33,7 +33,7 @@ spec:
             - kube-system
       preconditions:
         all:
-          - key: "{{ request.operation || 'BACKGROUND }}"
+          - key: "{{ request.operation || 'BACKGROUND' }}"
             operator: AnyIn
             value:
               - CREATE
