@@ -135,7 +135,7 @@ spec:
                     path: /metadata/name
                     value: "{{ $namespace }}"
                   - op: replace
-                    path: /metadata/labels/platform.local\/namespace-type
+                    path: /metadata/labels/platform.local~1namespace-type
                     value: "tenant-system"
 
             {{- if and .kustomize.patches (gt (len .kustomize.patches) 0) }}
