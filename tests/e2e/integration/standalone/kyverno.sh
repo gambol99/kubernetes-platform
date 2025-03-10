@@ -10,11 +10,11 @@ teardown() {
   [[ -n $BATS_TEST_COMPLETED   ]] || touch "${BATS_PARENT_TMPNAME}.skip"
 }
 
-@test "Ensure the Kyverno application is installed" {
+@test "We should have a Kyverno application" {
   runit "kubectl get application system-kyverno-dev -n argocd"
 }
 
-@test "Ensure the Kyverno application is healthy" {
+@test "We should have a healthy Kyverno application" {
   retry 20 "kubectl get application system-kyverno-dev -n argocd -o yaml | yq .status.health.status | grep -i healthy" || {
     echo "Application is not healthy, checking pod logs"
     kubectl -n argocd get application system-kyverno-dev -o yaml
@@ -22,18 +22,18 @@ teardown() {
   }
 }
 
-@test "Ensure the Kyverno system is installed" {
+@test "We should have a kyverno-system namespace" {
   kubectl "get namespace kyverno-system"
 }
 
-@test "Ensure the Kyverno deployment is installed" {
+@test "We should have a kyverno-system deployment" {
   kubectl "get deployment kyverno-admission-controller -n kyverno-system"
   kubectl "get deployment kyverno-background-controller -n kyverno-system"
   kubectl "get deployment kyverno-cleanup-controller -n kyverno-system"
   kubectl "get deployment kyverno-reports-controller -n kyverno-system"
 }
 
-@test "Ensure the Kyverno validating webhook is installed" {
+@test "We should have a kyverno-system validating webhook" {
   NAMES=(
     kyverno-cleanup-validating-webhook-cfg
     kyverno-exception-validating-webhook-cfg
@@ -47,6 +47,6 @@ teardown() {
   done
 }
 
-@test "Ensure the Kyverno kustomize application is installed" {
+@test "We should have a Kyverno kustomize application" {
   kubectl "get application system-kust-kyverno-dev -n argocd"
 }

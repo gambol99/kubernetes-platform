@@ -10,24 +10,23 @@ teardown() {
   [[ -n $BATS_TEST_COMPLETED   ]] || touch ${BATS_PARENT_TMPNAME}.skip
 }
 
-@test "Ensure the tenant namespace is provisioned" {
+@test "We should have a hello-world-helm namespace" {
   kubectl "get namespace hello-world-helm"
 }
 
-@test "Ensure the default service account is provisioned" {
+@test "We should have a hello-world-helm service account" {
   kubectl "get serviceaccount namespace-admin -n hello-world-helm"
+}
+
+@test "We should have a hello-world-helm role binding" {
   kubectl "get rolebinding namespace-admin -n hello-world-helm"
 }
 
-@test "Ensure the default role is provisioned" {
+@test "We should have a hello-world-helm role" {
   kubectl "get role namespace-admin -n hello-world-helm"
 }
 
-@test "Ensure the default role binding is provisioned" {
-  kubectl "get rolebinding namespace-admin -n hello-world-helm"
-}
-
-@test "Ensure the network policies is provisioned" {
+@test "We should have a hello-world-helm network policies" {
   POLICIES=(
     allow-cert-manager
     allow-prometheus

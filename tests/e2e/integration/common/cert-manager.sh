@@ -10,7 +10,7 @@ teardown() {
   [[ -n $BATS_TEST_COMPLETED   ]] || touch "${BATS_PARENT_TMPNAME}.skip"
 }
 
-@test "Ensure the cert-manager application is installed" {
+@test "We should have a cert-manager application" {
   kubectl "get namespace cert-manager"
 }
 

@@ -10,6 +10,6 @@ teardown() {
   [[ -n $BATS_TEST_COMPLETED   ]] || touch ${BATS_PARENT_TMPNAME}.skip
 }
 
-@test "Ensure the priority classes are created" {
+@test "We should have a priority classes" {
   kubectl "get priorityclasses.scheduling.k8s.io platform-critical"
 }

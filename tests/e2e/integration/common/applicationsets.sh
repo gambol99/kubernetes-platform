@@ -10,22 +10,22 @@ teardown() {
   [[ -n $BATS_TEST_COMPLETED   ]] || touch ${BATS_PARENT_TMPNAME}.skip
 }
 
-@test "Ensure the system helm application set is provisioned" {
+@test "We should have a system helm application set" {
   kubectl_argocd "get appset system-helm"
 }
 
-@test "Ensure the system kustomize application set is provisioned" {
+@test "We should have a system kustomize application set" {
   kubectl_argocd "get appset system-kustomize"
 }
 
-@test "Ensure the tenant apps helm application set is provisioned" {
+@test "We should have a tenant apps helm application set" {
   kubectl_argocd "get appset tenant-apps-helm"
 }
 
-@test "Ensure the tenant system helm application set is provisioned" {
+@test "We should have a tenant system helm application set" {
   kubectl_argocd "get appset tenant-apps-helm"
 }
 
-@test "Ensure the tenant system kustomize application set is provisioned" {
+@test "We should have a tenant system kustomize application set" {
   kubectl_argocd "get appset tenant-apps-kustomize"
 }
