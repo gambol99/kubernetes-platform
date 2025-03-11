@@ -22,3 +22,11 @@ We can use the `terraform` code to provision a EKS cluster for us, and onboard t
 3. Provision a cluster using terraform; note if you are reusing the `dev.tfvars` you can simply run `make standalone-aws`.
     1. If using another `variables` file, you must run terraform manually via `terraform apply -var-file=variables/FILE.tfvars`
 4. Similar to the local development proccess using kind the branch the cluster is provisioned with is overrided, and uses the current branch, as oppposed one defined within the cluster definition.
+5. At the point we should have a EKS cluster, which we can access using `kubectl`.
+
+```shell
+$ aws eks update-kubeconfig --name dev
+Updated context arn:aws:eks:eu-west-2:390403866xxx:cluster/dev in /Users/jest/.kube/config
+```
+
+6. Check the applications have been provisioned correctly via

@@ -26,7 +26,7 @@ tenant: test
 labels:
   enable_cert_manager: "true"
   enable_external_secrets: "true"
-  enable_karpenter_node_pools: "true"
+  enable_karpenter_nodepools: "true"
   enable_kyverno: "true"
 ## Annotations are using for additional metadata about the tenant cluster
 annotations:
