@@ -3,7 +3,7 @@ kustomize:
   ## Human friendly description
   description: "Deploy Karpenter to the cluster"
   ## The feature flag used to enable the feature
-  feature: karpenter_node_pools
+  feature: karpenter_nodepools
   ## The path to the kustomize overlay
   path: kustomize
   ## The patches to apply to the kustomize overlay
