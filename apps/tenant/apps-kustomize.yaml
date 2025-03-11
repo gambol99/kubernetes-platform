@@ -169,5 +169,6 @@ spec:
         - repoURL: "{{ default .metadata.annotations.tenant_repository .kustomize.repository }}"
           ## We either use the tenant revision of the kustomize.revision (external revision)
           targetRevision: "{{ default .metadata.annotations.tenant_revision .kustomize.revision }}"
+          ## We either use the tenant path of the kustomize.path (external path)
           path: '{{ printf "%s/%s" .path.path .kustomize.path }}'
           kustomize: {}
