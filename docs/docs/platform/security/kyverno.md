@@ -1,11 +1,11 @@
 # Kyverno Policies
 
-## Overview
+## :octicons-stack-24: Overview
 
 Kyverno is a policy engine designed for Kubernetes that validates, mutates, and generates configurations using policies as Kubernetes resources. It provides key features like:
 
 - Policy validation and enforcement
-- Resource mutation and generation 
+- Resource mutation and generation
 - Image verification and security controls
 - Audit logging and reporting
 - Admission control webhooks
@@ -15,6 +15,7 @@ The following policies are shipped by default in this platform to enforce securi
 For detailed information about Kyverno's capabilities, refer to the [official documentation](https://kyverno.io/docs/) or [policy library](https://kyverno.io/policies/).
 
 ---
+
 ## :material-shield-lock: Rule: deny-empty-ingress-host
 
 **Category:** Best Practices | **Severity:** medium | **Scope:** Cluster-wide

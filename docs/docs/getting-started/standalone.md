@@ -1,25 +1,31 @@
-# Standalone Deployment (Documentation Work in Progress)
+# Standalone Deployment
+
+!!! note "Note"
+
+    This documentation is a work in progress and is subject to change. Please check back regularly for updates.
 
 The following tries to depict a typical standalone deployment. You can find the example code base for this walk-through at [https://github.com/gambol99/platform-tenant](https://github.com/gambol99/platform-tenant)
 
-## Example Scenerio
+## :octicons-cross-reference-24: Example Scenerio
 
 Using the following scenario, we have
 
-- Two Kubernetes clusters (`dev` and `prod`) representing different environments in the application life cycle
-- Each cluster runs its own version of the platform, allowing independent platform upgrades and testing
-- Application teams can deploy and manage their applications using GitOps workflows
-- Changes to both platform and applications can be promoted between environments in a controlled manner
-- Platform versions are defined in code, enabling clear tracking of what's running where
-- Application teams have autonomy to to deploy, test, promote.
+| Feature | Description |
+|---------|-------------|
+| Multiple Environments | Two Kubernetes clusters (`dev` and `prod`) representing different environments in the application life cycle |
+| Independent Platform Upgrades | Each cluster runs its own version of the platform, allowing independent platform upgrades and testing |
+| GitOps Workflows | Application teams can deploy and manage their applications using GitOps workflows |
+| Controlled Promotion | Changes to both platform and applications can be promoted between environments in a controlled manner |
+| Version Tracking | Platform versions are defined in code, enabling clear tracking of what's running where |
+| Team Autonomy | Application teams have autonomy to deploy, test, and promote |
 
-## Required Binaries
+## :octicons-cpu-24: Required Binaries
 
 - Kind (<https://kind.sigs.k8s.io/docs/user/quick-start/#installation>)
 - kubectl (<https://kubernetes.io/docs/tasks/tools/#kubectl>)
 - Terraform (<https://developer.hashicorp.com/terraform/downloads>)
 
-## Setup the Environments
+## :octicons-project-roadmap-24: Setup the Environments
 
 We need to provision a repository to house the tenant application stack, we can use the template [EKS Tenant](https://github.com/gambol99/eks-tenant). Clone repository via
 
@@ -81,3 +87,12 @@ Under this arrangement
 
 - ArgoCD is installed on the cluster itself, with all deployments installing on the same cluster.
 - The tenany repository points at the version of the platform, and contains the applications stack.
+
+| Feature | Description |
+|---------|-------------|
+| Multiple Environments | Two Kubernetes clusters (`dev` and `prod`) representing different environments in the application life cycle |
+| Independent Platform Upgrades | Each cluster runs its own version of the platform, allowing independent platform upgrades and testing |
+| GitOps Workflows | Application teams can deploy and manage their applications using GitOps workflows |
+| Controlled Promotion | Changes to both platform and applications can be promoted between environments in a controlled manner |
+| Version Tracking | Platform versions are defined in code, enabling clear tracking of what's running where |
+| Team Autonomy | Application teams have autonomy to deploy, test, and promote |
