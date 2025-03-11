@@ -1,7 +1,7 @@
 # Makefile for the development clusters
 
 GIT_BRANCH := $(shell git rev-parse --abbrev-ref HEAD)
-LAST_TAG=$(shell git tag --sort=-version:refname | head -n 2 | tail -n 1)
+LAST_TAG ?= $(shell git tag --sort=-version:refname | head -n 2 | tail -n 1)
 
 standalone:
 	@echo "Provisioning Standalone Cluster (dev)"
