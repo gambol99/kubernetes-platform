@@ -10,12 +10,12 @@ nav:
       - Tenant Application Sets: architecture/tenant-appsets.md
       - Tenant Namespaces: architecture/tenant-namespace.md
   - Development:
-      - Local Development: development/local.md
-      - Remote Development:
+      - Local: development/local.md
+      - Remote:
+          - Overview: development/overview.md
           - Standalone: development/standalone.md
-          - Hub & Spoke: development/remote.md
+          # - Hub: development/hub.md
   - Getting Started:
-      - Local Development: getting-started/local-development.md
       - Standalone: getting-started/standalone.md
       - Hub & Spoke: getting-started/central.md
   - Platform:

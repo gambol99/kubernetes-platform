@@ -1,6 +1,6 @@
-# Remote Development
+# :material-developer-board: Remote Development
 
-## Overview
+## :octicons-grabber-24: Overview
 
 While iterating using Kind can cover a large portion of the development cycle, there are certain aspects that need to be tested in a live cluster environment. These include:
 

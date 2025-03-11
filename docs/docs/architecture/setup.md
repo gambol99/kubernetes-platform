@@ -1,6 +1,6 @@
 # :material-reload: Platform Setup
 
-## Overview
+## :octicons-stack-24: Overview
 
 The platform bootstrapping process follows a structured approach to set up a complete Kubernetes environment with all necessary components. This document outlines the key steps and components involved in bootstrapping the platform.
 

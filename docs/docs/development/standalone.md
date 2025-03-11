@@ -1,10 +1,10 @@
 # Provision a Standalone Cluster
 
-## Overview
+## :octicons-stack-24: Overview
 
 The following walks through the steps required to provision a standalone cluster/s within AWS. Here we will be using the internal terraform code found in `terraform` directory to provision the infrastructure.
 
-## Validating Change
+## :octicons-beaker-24: Validating Change
 
 **Requirement**: As a platform engineer, you need to provision a development cluster in AWS to validate and test platform changes before merging to the release branch, and potentially incorporated with a release. This involves:
 
@@ -13,7 +13,7 @@ The following walks through the steps required to provision a standalone cluster
 - Validating the changes in an isolated environment  
 - Submitting pull requests once testing is complete
 
-## Provision the cluster
+## :octicons-rocket-24: Provision the cluster
 
 We can use the `terraform` code to provision a EKS cluster for us, and onboard the platform.
 
@@ -26,7 +26,13 @@ We can use the `terraform` code to provision a EKS cluster for us, and onboard t
 
 ```shell
 $ aws eks update-kubeconfig --name dev
-Updated context arn:aws:eks:eu-west-2:390403866xxx:cluster/dev in /Users/jest/.kube/config
+Updated context arn:aws:eks:eu-west-2:xxx:cluster/dev in /Users/jest/.kube/config
 ```
 
-6. Check the applications have been provisioned correctly via
+## :octicons-beaker-24: Validate the Cluster
+
+1. Check the applications have been provisioned correctly via `kubectl -n argocd get applications`
+
+## :octicons-verified-24: Applying Changes
+
+From here on in, any changes to the branch will automatically be replicated as the source of truth to the cluster, we can validate the changes are working and once happy, raise the pull request.
