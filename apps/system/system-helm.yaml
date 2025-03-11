@@ -47,7 +47,7 @@ spec:
               repoURL: PLATFORM_REPO
               revision: PLATFORM_REVISION
               files:
-                - path: "addons/helm/cloud/{{ .cloud_vendor }}/*.yaml"
+                - path: "addons/helm/cloud/**/*.yaml"
                 - path: "addons/helm/*.yaml"
             selector:
               matchExpressions:
@@ -100,7 +100,9 @@ spec:
             releaseName: "{{ normalize (default .feature .release_name) }}"
             ignoreMissingValueFiles: true
             valueFiles:
+              - "$tenant/{{ .metadata.annotations.tenant_path }}/config/{{ .chart }}/{{ .metadata.labels.cloud_vendor }}.yaml"
               - "$tenant/{{ .metadata.annotations.tenant_path }}/config/{{ .chart }}/all.yaml"
+              - "$values/config/{{ .feature }}/{{ .metadata.labels.cloud_vendor }}.yaml"
               - "$values/config/{{ .feature }}/all.yaml"
 
         - repoURL: "{{ .metadata.annotations.platform_repository }}"
