@@ -1,6 +1,7 @@
 # Makefile for the development clusters
 
 GIT_BRANCH := $(shell git rev-parse --abbrev-ref HEAD)
+LAST_TAG=$(shell git tag --sort=-version:refname | head -n 2 | tail -n 1)
 
 standalone:
 	@echo "Provisioning Standalone Cluster (dev)"
@@ -32,6 +33,10 @@ clean:
 	@kind delete cluster --name dev 2>/dev/null || true
 	@kind delete cluster --name hub 2>/dev/null || true
 	@kind delete cluster --name spoke 2>/dev/null || true
+
+changelog:
+	@echo "--> Generating the changelog..."
+	@git-cliff --config .cliff/cliff.toml $(LAST_TAG)..HEAD
 
 test:
 	@echo "--> Testing the configuration..."
