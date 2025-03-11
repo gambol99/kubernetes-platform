@@ -3,7 +3,7 @@ kustomize:
   ## Human friendly description
   description: "Deploy Karpenter to the cluster"
   ## The feature flag used to enable the feature
-  feature: karpenter
+  feature: karpenter_node_pools
   ## The path to the kustomize overlay
   path: kustomize
   ## The patches to apply to the kustomize overlay
@@ -11,12 +11,12 @@ kustomize:
     - target:
         kind: EC2NodeClass
         name: default
-      path: /spec/securityGroupSelectorTerms/0/tags/karpenter.sh\/discovery
+      path: /spec/securityGroupSelectorTerms/0/tags/karpenter.sh~1discovery
       value: cluster_name
     - target:
         kind: EC2NodeClass
         name: default
-      path: /spec/subnetSelectorTerms/0/tags/karpenter.sh\/discovery
+      path: /spec/subnetSelectorTerms/0/tags/karpenter.sh~1discovery
       value: cluster_name
     - target:
         kind: EC2NodeClass
