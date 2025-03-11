@@ -2,7 +2,7 @@ site_name: Kubernetes Platform
 repo_url: https://github.com/gambol99/kubernetes-platform
 
 nav:
-  - Platform: index.md
+  - Overview: index.md
   - Architecture:
       - Overview: architecture/overview.md
       - Platform Setup: architecture/setup.md
@@ -13,9 +13,13 @@ nav:
       - Local Development: getting-started/local-development.md
       - Standalone: getting-started/standalone.md
       - Hub & Spoke: getting-started/central.md
-  - Tenant Services:
-      - Tenant Applications: tenant/applications.md
-      - Tenant System: tenant/system.md
+  - Platform:
+      - Overview: platform/overview.md
+      - Workloads:
+          - Applications: platform/tenant/applications.md
+          - System: platform/tenant/system.md
+      - Security:
+          - Kyverno Policies: platform/security/kyverno.md
 
 theme:
   name: material
