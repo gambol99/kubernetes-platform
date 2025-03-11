@@ -34,9 +34,9 @@ jobs:
       - name: Generate a changelog
         uses: orhun/git-cliff-action@v3
         with:
-          config: cliff.toml
-          github-token: "${{ secrets.GITHUB_TOKEN }}"
           args: "--verbose ${{ env.LAST_TAG }}..HEAD"
+          config: .cliff/cliff.toml
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
         env:
           OUTPUT: CHANGELOG.md
           GITHUB_REPO: ${{ github.repository }}
