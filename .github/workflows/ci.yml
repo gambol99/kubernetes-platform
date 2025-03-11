@@ -89,6 +89,7 @@ jobs:
       - validate-docs-spelling
       - validate-helm-addons
       - validate-kustomize
+      - validate-kyverno
       - validate-scripts
       - validate-yaml
     defaults:
