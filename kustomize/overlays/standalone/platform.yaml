@@ -28,26 +28,18 @@ spec:
     # Prevents ApplicationSet controller from modifying Applications.
     applicationsSync: create-update
 
-  ## Render a platform application set from the cluster definition
-  template:
-    metadata:
-      name: "platform"
-      namespace: argocd
-      labels:
-        platform.local/tenant: "{{ .cluster_name }}"
-        platform.local/environment: "{{ .environment }}"
-      annotations:
-        app.kubernetes.io/managed-by: argocd
-        app.kubernetes.io/environment: "{{ .environment }}"
-        app.kubernetes.io/type: platform
+  templatePatch: |
+    ## This allows use to override the revisions if required
+    ## ternary "USE THIS" "ELSE_THIS" "IF TRUE"
+    {{- $platform_revision := ternary .platform_revision .values.override_platform (eq "ignore" .values.override_platform) -}}
+    {{- $tenant_revision := ternary .tenant_revision .values.override_tenant (eq "ignore" .values.override_tenant) -}}
 
-    ## The source to read the platform resources from
     spec:
-      project: default
       sources:
-        ## Source in the registration application set
+        ## Source in the registration application and patch with the relavant
+        ## information.
         - repoURL: "{{ .platform_repository }}"
-          targetRevision: '{{ (eq "ignore" .values.override_platform) | ternary .platform_revision .values.override_platform }}'
+          targetRevision: {{ $platform_revision }}
           path: "apps/registration/standalone"
           kustomize:
             patches:
@@ -60,7 +52,7 @@ spec:
                     value: "{{ .platform_repository }}"
                   - op: replace
                     path: /spec/sources/0/targetRevision
-                    value: '{{ (eq "ignore" .values.override_platform) | ternary .platform_revision .values.override_platform }}'
+                    value: "{{ $platform_revision }}"
                   - op: replace
                     path: /spec/sources/0/helm/valueFiles/0
                     value: "$values/{{ .tenant_path }}/clusters/{{ .cluster_name }}.yaml"
@@ -69,7 +61,7 @@ spec:
                     value: "{{ .tenant_repository }}"
                   - op: replace
                     path: /spec/sources/1/targetRevision
-                    value: '{{ (eq "ignore" .values.override_tenant) | ternary .tenant_revision .values.override_tenant }}'
+                    value: "{{ $tenant_revision }}"
                   - op: replace
                     path: /spec/sources/0/helm/values
                     value: |
@@ -77,14 +69,15 @@ spec:
                         platform: "{{ .values.override_platform }}"
                         tenant: "{{ .values.override_tenant }}"
 
-        ## Source in the tenant application sets
+        ## Source in application sets from the platform repository to handle tenant services
         - repoURL: "{{ .platform_repository }}"
-          targetRevision: '{{ (eq "ignore" .values.override_platform) | ternary .platform_revision .values.override_platform }}'
+          targetRevision: "{{ $platform_revision }}"
           path: "apps/tenant"
 
-        ## Source in in the system application sets
+        ## Source in the application sets from the platform repository to handle the
+        ## system applications
         - repoURL: "{{ .platform_repository }}"
-          targetRevision: '{{ (eq "ignore" .values.override_platform) | ternary .platform_revision .values.override_platform }}'
+          targetRevision: "{{ $platform_revision }}"
           path: "apps/system"
           kustomize:
             patches:
@@ -97,7 +90,7 @@ spec:
                     value: "{{ .platform_repository }}"
                   - op: replace
                     path: /spec/generators/0/matrix/generators/0/git/revision
-                    value: '{{ (eq "ignore" .values.override_platform) | ternary .platform_revision .values.override_platform }}'
+                    value: "{{ $platform_revision }}"
 
               - target:
                   kind: ApplicationSet
@@ -107,12 +100,28 @@ spec:
                     path: /spec/generators/0/matrix/generators/0/git/repoURL
                     value: "{{ .platform_repository }}"
                   - op: replace
+                    path: /spec/generators/0/matrix/generators/0/git/revision
+                    value: "{{ $platform_revision }}"
+                  - op: replace
                     path: /spec/generators/0/matrix/generators/0/git/files/0/path
                     value: "addons/kustomize/{{ .cloud_vendor }}/**/kustomize.yaml"
-                  - op: replace
-                    path: /spec/generators/0/matrix/generators/0/git/revision
-                    value: '{{ (eq "ignore" .values.override_platform) | ternary .platform_revision .values.override_platform }}'
 
+  ## Render a platform application set from the cluster definition
+  template:
+    metadata:
+      name: "platform"
+      namespace: argocd
+      labels:
+        app.kubernetes.io/environment: "{{ .environment }}"
+        app.kubernetes.io/instance: "{{ .cluster_name }}"
+        app.kubernetes.io/managed-by: argocd
+        app.kubernetes.io/type: platform
+
+    ## The source to read the platform resources from
+    spec:
+      project: default
+      ## The source is patched by the above
+      sources: []
       ## The destination to deploy the resources
       destination:
         server: https://kubernetes.default.svc
