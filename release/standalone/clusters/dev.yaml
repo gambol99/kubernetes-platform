@@ -1,7 +1,7 @@
 ## The name of the tenant cluster
 cluster_name: dev
 ## The cloud vendor to use for the tenant cluster
-cloud_vendor: kind
+cloud_vendor: aws
 ## The environment to use for the tenant cluster
 environment: release
 ## The repository containing the tenant configuration
