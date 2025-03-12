@@ -154,6 +154,6 @@
   repository: public.ecr.aws
   version: "1.0.13"
   namespace: ack-system
-  values: |
+  helm_values: |
     aws:
       region: {{ .metadata.annotations.region }}

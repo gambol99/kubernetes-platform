@@ -128,13 +128,13 @@ spec:
             releaseName: "{{ normalize (default .feature .release_name) }}"
             ignoreMissingValueFiles: true
             valueFiles:
-              - "$tenant/{{ .metadata.annotations.tenant_path }}/config/{{ .chart }}/{{ .metadata.labels.cloud_vendor }}.yaml"
-              - "$tenant/{{ .metadata.annotations.tenant_path }}/config/{{ .chart }}/all.yaml"
+              - "$tenant/{{ .metadata.annotations.tenant_path }}/config/{{ .feature }}/{{ .metadata.labels.cloud_vendor }}.yaml"
+              - "$tenant/{{ .metadata.annotations.tenant_path }}/config/{{ .feature }}/all.yaml"
               - "$values/config/{{ .feature }}/{{ .metadata.labels.cloud_vendor }}.yaml"
               - "$values/config/{{ .feature }}/all.yaml"
-            {{- if .helm.values }}
+            {{- if .helm_values }}
             values: |
-              {{ .helm.values | nindent 14 }}
+              {{ .helm_values | nindent 14 }}
             {{- end }}
 
         - repoURL: "{{ .metadata.annotations.platform_repository }}"
