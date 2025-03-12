@@ -21,7 +21,7 @@ module "eks" {
 ## Provision and bootstrap the platform using an tenant repository
 module "platform" {
   count  = var.enable_platform ? 1 : 0
-  source = "github.com/gambol99/terraform-kube-platform?ref=v0.1.1"
+  source = "github.com/gambol99/terraform-kube-platform?ref=v0.1.2"
 
   ## Name of the cluster
   cluster_name = local.cluster_name
