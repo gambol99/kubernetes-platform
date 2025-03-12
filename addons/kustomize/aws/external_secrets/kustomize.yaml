@@ -1,13 +1,21 @@
 ---
 kustomize:
+  ## The feature label
   feature: external_secrets
+  ## The entrypoint for the kustomize
   path: kustomize
+  ## The patches to apply to the kustomize
   patches:
     - target:
         kind: SecretStore
         name: secrets-store
       path: /spec/provider/aws/region
       value: metadata.annotations.region
+
+## The namespace options
+namespace:
+  ## The namespace to deploy the resources
+  name: external-secrets
 
 sync:
   phase: secondary

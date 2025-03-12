@@ -7,36 +7,41 @@ kustomize:
   ## The path to the kustomize overlay
   path: kustomize
   ## The patches to apply to the kustomize overlay
-  patches:
-    - target:
-        kind: EC2NodeClass
-        name: default
-      path: /spec/securityGroupSelectorTerms/0/tags/karpenter.sh~1discovery
-      value: cluster_name
-    - target:
-        kind: EC2NodeClass
-        name: default
-      path: /spec/subnetSelectorTerms/0/tags/karpenter.sh~1discovery
-      value: cluster_name
-    - target:
-        kind: EC2NodeClass
-        name: default
-      path: /spec/tags/Environment
-      value: environment
-    - target:
-        kind: EC2NodeClass
-        name: default
-      path: /spec/tags/Product
-      value: tenant
-    - target:
-        kind: NodePool
-        name: default-amd64
-      path: /spec/weight
-      value: metadata.annotations.karpenter_amd64_weight
-      default: 100
-    - target:
-        kind: NodePool
-        name: default-graviton
-      path: /spec/weight
-      value: metadata.annotations.karpenter_graviton_weight
-      default: 50
+#  patches:
+#    - target:
+#        kind: EC2NodeClass
+#        name: default
+#      path: /spec/securityGroupSelectorTerms/0/tags/karpenter.sh~1discovery
+#      value: cluster_name
+#    - target:
+#        kind: EC2NodeClass
+#        name: default
+#      path: /spec/subnetSelectorTerms/0/tags/karpenter.sh~1discovery
+#      value: cluster_name
+#    - target:
+#        kind: EC2NodeClass
+#        name: default
+#      path: /spec/tags/Environment
+#      value: environment
+#    - target:
+#        kind: EC2NodeClass
+#        name: default
+#      path: /spec/tags/Product
+#      value: tenant
+#    - target:
+#        kind: NodePool
+#        name: default-amd64
+#      path: /spec/weight
+#      value: metadata.annotations.karpenter_amd64_weight
+#      default: 100
+#    - target:
+#        kind: NodePool
+#        name: default-graviton
+#      path: /spec/weight
+#      value: metadata.annotations.karpenter_graviton_weight
+#      default: 50
+
+## The namespace options
+namespace:
+  ## The namespace to deploy the resources
+  name: kube-system
