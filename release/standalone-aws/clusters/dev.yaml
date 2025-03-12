@@ -31,6 +31,7 @@ labels:
   enable_kro: "true"
   enable_kyverno: "true"
   enable_metrics_server: "true"
+  enable_aws_ack_iam: "true"
 ## Annotations are using for additional metadata about the tenant cluster
 annotations:
   platform.local/tenant: tenant
