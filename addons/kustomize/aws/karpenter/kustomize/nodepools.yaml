@@ -36,7 +36,7 @@ spec:
   weight: 100
   ## The disruption settings for the node pool
   disruption:
-    consolidationPolicy: WhenEmpty
+    consolidationPolicy: WhenEmptyOrUnderutilized
     consolidateAfter: 30s
 ---
 apiVersion: karpenter.sh/v1
@@ -76,5 +76,5 @@ spec:
   weight: 50
   ## The disruption settings for the node pool
   disruption:
-    consolidationPolicy: WhenEmpty
+    consolidationPolicy: WhenEmptyOrUnderutilized
     consolidateAfter: 30s
