@@ -30,6 +30,7 @@ labels:
   enable_kerpenter: "false"
   enable_kro: "true"
   enable_kyverno: "true"
+  enable_metrics_server: "true"
 ## Annotations are using for additional metadata about the tenant cluster
 annotations:
   platform.local/tenant: tenant
