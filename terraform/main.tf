@@ -1,14 +1,12 @@
 
 ## Provision a EKS cluster for the hub
 module "eks" {
-  source = "github.com/gambol99/terraform-aws-eks?ref=v0.2.1"
+  source = "github.com/gambol99/terraform-aws-eks?ref=v0.2.3"
 
   access_entries                 = var.access_entries
   cluster_enabled_log_types      = null
   cluster_endpoint_public_access = var.cluster_endpoint_public_access
   cluster_name                   = local.cluster_name
-  eks_managed_node_groups        = {}
-  enable_auto_mode               = true
   enable_argocd_pod_identity     = (local.cluster_type == "hub" ? true : false)
   enable_nat_gateway             = var.enable_nat_gateway
   hub_account_id                 = var.hub_account_id
@@ -23,7 +21,7 @@ module "eks" {
 ## Provision and bootstrap the platform using an tenant repository
 module "platform" {
   count  = var.enable_platform ? 1 : 0
-  source = "github.com/gambol99/terraform-kube-platform?ref=v0.0.6"
+  source = "github.com/gambol99/terraform-kube-platform?ref=v0.1.1"
 
   ## Name of the cluster
   cluster_name = local.cluster_name
