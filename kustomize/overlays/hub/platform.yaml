@@ -27,9 +27,8 @@ spec:
   templatePatch: |
     ## This allows use to override the revisions if required
     ## ternary "USE THIS" "ELSE_THIS" "IF TRUE"
-    {{- $platform_revision := ternary .platform_revision .values.override_platform (eq "ignore" .values.override_platform) -}}
-    {{- $tenant_revision := ternary .tenant_revision .values.override_tenant (eq "ignore" .values.override_tenant) -}}
-
+    {{- $platform_revision := ternary .platform_revision .values.override_platform (eq "ignore" .values.override_platform) }}
+    {{- $tenant_revision := ternary .tenant_revision .values.override_tenant (eq "ignore" .values.override_tenant) }}
     spec:
       sources:
         ## Source in the registration application and patch with the relavant

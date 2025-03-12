@@ -28,12 +28,46 @@ spec:
     # Prevents ApplicationSet controller from modifying Applications.
     applicationsSync: create-update
 
+  ## Render a platform application set from the cluster definition
+  template:
+    metadata:
+      name: "platform"
+      namespace: argocd
+      labels:
+        app.kubernetes.io/environment: "{{ .environment }}"
+        app.kubernetes.io/instance: "{{ .cluster_name }}"
+        app.kubernetes.io/managed-by: argocd
+        app.kubernetes.io/type: platform
+
+    ## The source to read the platform resources from
+    spec:
+      project: default
+      ## The source is patched by the above
+      sources: []
+      ## The destination to deploy the resources
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: argocd
+
+      ## Sync policy for the application
+      syncPolicy:
+        automated:
+          selfHeal: true
+          prune: true
+        retry:
+          limit: 20
+          backoff:
+            duration: 5s
+            maxDuration: 1m
+        syncOptions:
+          - CreateNamespace=false
+          - ServerSideApply=true
+
   templatePatch: |
     ## This allows use to override the revisions if required
     ## ternary "USE THIS" "ELSE_THIS" "IF TRUE"
-    {{- $platform_revision := ternary .platform_revision .values.override_platform (eq "ignore" .values.override_platform) -}}
-    {{- $tenant_revision := ternary .tenant_revision .values.override_tenant (eq "ignore" .values.override_tenant) -}}
-
+    {{- $platform_revision := ternary .platform_revision .values.override_platform (eq "ignore" .values.override_platform) }}
+    {{- $tenant_revision := ternary .tenant_revision .values.override_tenant (eq "ignore" .values.override_tenant) }}
     spec:
       sources:
         ## Source in the registration application and patch with the relavant
@@ -105,38 +139,3 @@ spec:
                   - op: replace
                     path: /spec/generators/0/matrix/generators/0/git/files/0/path
                     value: "addons/kustomize/{{ .cloud_vendor }}/**/kustomize.yaml"
-
-  ## Render a platform application set from the cluster definition
-  template:
-    metadata:
-      name: "platform"
-      namespace: argocd
-      labels:
-        app.kubernetes.io/environment: "{{ .environment }}"
-        app.kubernetes.io/instance: "{{ .cluster_name }}"
-        app.kubernetes.io/managed-by: argocd
-        app.kubernetes.io/type: platform
-
-    ## The source to read the platform resources from
-    spec:
-      project: default
-      ## The source is patched by the above
-      sources: []
-      ## The destination to deploy the resources
-      destination:
-        server: https://kubernetes.default.svc
-        namespace: argocd
-
-      ## Sync policy for the application
-      syncPolicy:
-        automated:
-          selfHeal: true
-          prune: true
-        retry:
-          limit: 20
-          backoff:
-            duration: 5s
-            maxDuration: 1m
-        syncOptions:
-          - CreateNamespace=false
-          - ServerSideApply=true
