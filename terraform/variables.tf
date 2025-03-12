@@ -22,6 +22,17 @@ variable "access_entries" {
   default = null
 }
 
+variable "revision_overrides" {
+  description = "Revision overrides permit the user to override the revision contained in cluster definition"
+  type = object({
+    ## The platform revision or branch to use
+    platform_revision = optional(string, null)
+    ## The tenant revision or branch to use
+    tenant_revision = optional(string, null)
+  })
+  default = null
+}
+
 variable "argocd_repositories" {
   description = "A collection of repository secrets to add to the argocd namespace"
   type = map(object({

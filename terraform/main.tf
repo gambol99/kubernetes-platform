@@ -23,7 +23,7 @@ module "eks" {
 ## Provision and bootstrap the platform using an tenant repository
 module "platform" {
   count  = var.enable_platform ? 1 : 0
-  source = "github.com/gambol99/terraform-kube-platform?ref=v0.0.3"
+  source = "github.com/gambol99/terraform-kube-platform?ref=v0.0.6"
 
   ## Name of the cluster
   cluster_name = local.cluster_name
@@ -31,6 +31,8 @@ module "platform" {
   cluster_type = local.cluster_type
   # Any rrepositories to be provisioned
   repositories = var.argocd_repositories
+  ## Revision overrides
+  revision_overrides = var.revision_overrides
   ## The platform repository
   platform_repository = local.platform_repository
   # The location of the platform repository
