@@ -9,8 +9,11 @@ kustomize:
     - target:
         kind: SecretStore
         name: secrets-store
-      path: /spec/provider/aws/region
-      value: metadata.annotations.region
+      patch:
+        - op: replace
+          path: /spec/provider/aws/region
+          key: metadata.annotations.region
+          default: unknown
 
 ## The namespace options
 namespace:
