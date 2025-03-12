@@ -7,7 +7,7 @@ kustomize:
   ## The patches to apply to the kustomize
   patches:
     - target:
-        kind: SecretStore
+        kind: ClusterSecretStore
         name: secrets-store
       patch:
         - op: replace
