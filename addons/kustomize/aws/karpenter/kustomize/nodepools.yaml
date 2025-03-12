@@ -2,9 +2,9 @@
 apiVersion: karpenter.sh/v1
 kind: NodePool
 metadata:
-  name: default-amd64
+  name: amd64
   labels:
-    karpenter.sh/nodepool: default-amd64
+    karpenter.sh/nodepool: amd64
     karpenter.sh/nodepool-class: default
   annotations:
     karpenter.sh/nodepool-version: "1.2.1"
@@ -37,9 +37,6 @@ spec:
           values: ["amd64"]
   ## The weight for the node pool
   weight: 100
-  ## Limits for the node pool
-  limits:
-    cpu: 1000
   ## The disruption settings for the node pool
   disruption:
     consolidationPolicy: WhenEmpty
@@ -48,9 +45,9 @@ spec:
 apiVersion: karpenter.sh/v1
 kind: NodePool
 metadata:
-  name: default-graviton
+  name: arm64
   labels:
-    karpenter.sh/nodepool: default-graviton
+    karpenter.sh/nodepool: graviton
     karpenter.sh/nodepool-class: default
   annotations:
     karpenter.sh/nodepool-version: "1.2.1"
@@ -83,9 +80,6 @@ spec:
           values: ["arm64"]
   ## The weight for the node pool
   weight: 50
-  ## Limits for the node pool
-  limits:
-    cpu: 1000
   ## The disruption settings for the node pool
   disruption:
     consolidationPolicy: WhenEmpty
