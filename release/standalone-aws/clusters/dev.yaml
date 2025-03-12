@@ -24,6 +24,7 @@ cluster_type: standalone
 tenant: test
 ## We use labels to enable/disable features in the tenant cluster
 labels:
+  enable_aws_ack_iam: "true"
   enable_cert_manager: "true"
   enable_external_secrets: "true"
   enable_karpenter_nodepools: "true"
@@ -31,7 +32,7 @@ labels:
   enable_kro: "true"
   enable_kyverno: "true"
   enable_metrics_server: "true"
-  enable_aws_ack_iam: "true"
 ## Annotations are using for additional metadata about the tenant cluster
 annotations:
   platform.local/tenant: tenant
+  region: eu-west-2
