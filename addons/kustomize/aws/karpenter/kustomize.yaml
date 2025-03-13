@@ -5,7 +5,7 @@ kustomize:
   ## The feature flag used to enable the feature
   feature: karpenter_nodepools
   ## The path to the kustomize overlay
-  path: kustomize
+  path: base
   ## The patches to apply to the kustomize overlay
 #  patches:
 #    - target:

@@ -3,7 +3,7 @@ kustomize:
   ## The feature label
   feature: external_secrets
   ## The entrypoint for the kustomize
-  path: kustomize
+  path: base
   ## The patches to apply to the kustomize
   patches:
     - target:
