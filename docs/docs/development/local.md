@@ -42,7 +42,7 @@ release
 As a platform engineer you need to validate a new feature on a standalone deployment model.
 
 1. Create a branch for the feature `git checkout -b feat/my-feature`
-2. Note, you dont need to change the branch in the `release/standalone/clusters/dev.yaml`, as for local development, this revision is bypassed and uses your current git branch.
+2. Note, you don't need to change the branch in the `release/standalone/clusters/dev.yaml`, as when using local development this revision is overridden, and uses your current git branch.
 3. Commit the changes and run `make standalone`
 4. The makefile will build a Kubernetes cluster in kind, using the `release/standalone` and the base tenant repository.
 5. Any changes made to the branch will be reflected within the cluster, and changes are polled from the branch.
