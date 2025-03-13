@@ -43,13 +43,8 @@ cluster_authentication:
   server: https://43606D23905088CA04CCE5365DE904B3.gr7.eu-west-2.eks.amazonaws.com
   ## The configuration to assume the role using the cross account role
   config:
-    ipv4:
-      server: https://43606D23905088CA04CCE5365DE904B3.gr7.eu-west-2.eks.amazonaws.com
-      labels:
-        cluster-name: ipv4
-      config:
-        awsAuthConfig:
-          clusterName: ipv4
-          roleARN: arn:aws:iam::390403866963:role/spoke-argocd-cross-account
-        nfig:
-          insecure: true
+    awsAuthConfig:
+      clusterName: spoke
+      roleARN: arn:aws:iam::390403866963:role/spoke-argocd-cross-account
+    tlsClientConfig:
+      insecure: true
