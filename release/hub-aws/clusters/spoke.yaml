@@ -40,7 +40,7 @@ annotations:
 ## The authentication details for the cluster
 cluster_authentication:
   ## The server to use for the cluster
-  server: https://43606D23905088CA04CCE5365DE904B3.gr7.eu-west-2.eks.amazonaws.com
+  # server: https://43606D23905088CA04CCE5365DE904B3.gr7.eu-west-2.eks.amazonaws.com
   ## The configuration to assume the role using the cross account role
   config:
     awsAuthConfig:
