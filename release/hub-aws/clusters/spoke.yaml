@@ -1,5 +1,5 @@
 ## The name of the tenant cluster
-cluster_name: dev
+cluster_name: spoke
 ## The cloud vendor to use for the tenant cluster
 cloud_vendor: aws
 ## The environment to use for the tenant cluster
@@ -9,7 +9,7 @@ tenant_repository: https://github.com/gambol99/kubernetes-platform.git
 ## The revision to use for the tenant repository
 tenant_revision: main
 ## The path inside the tenant repository to use for the tenant cluster
-tenant_path: release/standalone-aws
+tenant_path: release/hub-aws
 ## The cost center to use for the tenant cluster
 tenant_cost_center: "123456"
 ## The repository containing the platform configuration
@@ -19,7 +19,7 @@ platform_revision: main
 ## The path to the kustomize overlay to use for the tenant cluster
 platform_path: overlays/release
 ## The type of cluster we are (standalone, spoke or hub)
-cluster_type: standalone
+cluster_type: spoke
 ## The name of the tenant
 tenant: test
 ## We use labels to enable/disable features in the tenant cluster
@@ -28,11 +28,8 @@ labels:
   enable_cert_manager: "true"
   enable_external_secrets: "true"
   enable_karpenter_nodepools: "true"
-  enable_kerpenter: "false"
   enable_kro: "true"
   enable_kyverno: "true"
-  enable_metrics_server: "true"
-  enable_terranetes: "true"
 ## Annotations are using for additional metadata about the tenant cluster
 annotations:
   platform.local/tenant: tenant

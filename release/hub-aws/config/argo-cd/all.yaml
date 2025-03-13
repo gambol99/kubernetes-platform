@@ -1,0 +1,4 @@
+---
+configs:
+  ## Set the timeout for the reconciliation to 10s
+  timeout.reconciliation: 10s

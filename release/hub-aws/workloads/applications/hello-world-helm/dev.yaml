@@ -1,0 +1,9 @@
+---
+## The Helm application being deployed
+helm:
+  ## The repository containing the helm repository
+  repository: https://helm.github.io/examples
+  ## The chart to install
+  chart: hello-world
+  ## The chart version to install
+  version: "0.1.0"
