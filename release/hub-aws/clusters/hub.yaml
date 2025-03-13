@@ -1,5 +1,5 @@
 ## The name of the tenant cluster
-cluster_name: dev
+cluster_name: hub
 ## The cloud vendor to use for the tenant cluster
 cloud_vendor: aws
 ## The environment to use for the tenant cluster
@@ -27,6 +27,7 @@ labels:
   enable_external_secrets: "true"
   enable_karpenter_nodepools: "true"
   enable_kyverno: "true"
+  enable_argocd: "true"
 ## Annotations are using for additional metadata about the tenant cluster
 annotations:
   platform.local/tenant: tenant
