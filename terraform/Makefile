@@ -16,13 +16,29 @@
 
 default: all
 
+destroy-dev:
+	@echo "--> Destroying development environment"
+	@terraform destroy -var-file=variables/dev.tfvars
+
+destroy-hub:
+	@echo "--> Destroying hub environment"
+	@terraform destroy -var-file=variables/hub.tfvars
+
+destroy-spoke:
+	@echo "--> Destroying spoke environment"
+	@terraform destroy -var-file=variables/spoke.tfvars
+
 dev:
 	@echo "--> Running development environment"
 	@terraform apply -var-file=variables/dev.tfvars
 
-destroy-dev:
-	@echo "--> Destroying development environment"
-	@terraform destroy -var-file=variables/dev.tfvars
+hub:
+	@echo "--> Running hub environment"
+	@terraform apply -var-file=variables/hub.tfvars
+
+spoke:
+	@echo "--> Running spoke environment"
+	@terraform apply -var-file=variables/spoke.tfvars
 
 all:
 	$(MAKE) init

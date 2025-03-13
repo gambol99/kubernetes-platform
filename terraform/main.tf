@@ -7,7 +7,7 @@ module "eks" {
   cluster_enabled_log_types      = null
   cluster_endpoint_public_access = var.cluster_endpoint_public_access
   cluster_name                   = local.cluster_name
-  enable_argocd_pod_identity     = (local.cluster_type == "hub" ? true : false)
+  enable_argocd_pod_identity     = local.enable_argocd_pod_identity
   enable_nat_gateway             = var.enable_nat_gateway
   hub_account_id                 = var.hub_account_id
   nat_gateway_mode               = var.nat_gateway_mode

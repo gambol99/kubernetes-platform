@@ -4,29 +4,47 @@ GIT_BRANCH := $(shell git rev-parse --abbrev-ref HEAD)
 LAST_TAG ?= $(shell git tag --sort=-version:refname | head -n 2 | tail -n 1)
 
 standalone:
-	@echo "Provisioning Standalone Cluster (dev)"
+	@echo "--> Provisioning Standalone Cluster (dev)"
 	@scripts/make-dev.sh \
 		--cluster-type standalone \
 	  --cluster dev
 
 standalone-aws:
-	@echo "Provisioning Standalone Cluster (dev) in AWS"
+	@echo "--> Provisioning Standalone Cluster (dev) in AWS"
 	@cd terraform && make init
 	@cd terraform && make dev
 
 destroy-standalone-aws:
-	@echo "Destroying Standalone Cluster (dev) in AWS"
+	@echo "--> Destroying Standalone Cluster (dev) in AWS"
 	@cd terraform && make destroy-dev
 
 hub:
-	@echo "Provisioning Hub Cluster (hub)"
+	@echo "--> Provisioning Hub Cluster (hub)"
 	@scripts/make-dev.sh \
 		--cluster-type hub \
 		--cluster hub
 
+hub-aws:
+	@echo "--> Provisioning Hub Cluster (hub) in AWS"
+	@cd terraform && make init
+	@cd terraform && make hub
+
+destroy-hub-aws:
+	@echo "--> Destroying Hub Cluster (hub) in AWS"
+	@cd terraform && make destroy-hub
+
 spoke:
 	@echo "Provisioning Spoke Cluster (spoke)"
 	@scripts/make-spoke.sh --cluster spoke
+
+spoke-aws:
+	@echo "--> Provisioning Spoke Cluster (spoke) in AWS"
+	@cd terraform && make init
+	@cd terraform && make spoke
+
+destroy-spoke-aws:
+	@echo "--> Destroying Spoke Cluster (spoke) in AWS"
+	@cd terraform && make destroy-spoke
 
 clean:
 	@echo "Deleting development clusters..."
