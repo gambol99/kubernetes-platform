@@ -1,5 +1,5 @@
 ## Path to the cluster definition
-cluster_path = "../clusters/hub-aws/hub.yaml"
+cluster_path = "../release/hub-aws/clusters/hub.yaml"
 ## Override revision or branch for the platform and tenant repositories
 revision_overrides = {
   platform_revision = "develop"
