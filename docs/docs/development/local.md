@@ -8,11 +8,11 @@ For the purposes of local development, provisioning Kubernetes clusters in the c
 
 The following tools need to be installed on your local machine:
 
-| Tool | Description | Installation Link |
-|------|-------------|-------------------|
-| kubectl | The Kubernetes command-line tool | [Install Guide](https://kubernetes.io/docs/tasks/tools/#kubectl) |
-| helm | The package manager for Kubernetes | [Install Guide](https://helm.sh/docs/intro/install/) |
-| kind | Tool for running local Kubernetes clusters using Docker containers | [Install Guide](https://kind.sigs.k8s.io/docs/user/quick-start/#installation) |
+| Tool    | Description                                                        | Installation Link                                                             |
+| ------- | ------------------------------------------------------------------ | ----------------------------------------------------------------------------- |
+| kubectl | The Kubernetes command-line tool                                   | [Install Guide](https://kubernetes.io/docs/tasks/tools/#kubectl)              |
+| helm    | The package manager for Kubernetes                                 | [Install Guide](https://helm.sh/docs/intro/install/)                          |
+| kind    | Tool for running local Kubernetes clusters using Docker containers | [Install Guide](https://kind.sigs.k8s.io/docs/user/quick-start/#installation) |
 
 We also require the ArgoCD Helm repository setup via
 
@@ -23,7 +23,7 @@ helm repo update
 
 ## :octicons-rocket-24: Provisioning a Local Cluster (Standalone)
 
-Within the [platform repository](https://github.com/gambol99/kubernetes-platform) we have a `release` folder, which can be used to stimulate a tenant repository, keeping all the development within the same repository.
+Within the [platform repository](https://github.com/gambol99/kubernetes-platform) we have a `release` folder, which can be used to simulate a tenant repository, keeping all the development within the same repository.
 
 ```shell
 $ tree release -L2
