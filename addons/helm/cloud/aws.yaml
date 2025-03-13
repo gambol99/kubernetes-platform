@@ -157,3 +157,9 @@
   helm_values: |
     aws:
       region: {{ .metadata.annotations.region }}
+
+- feature: aws_ack_eks
+  chart: aws-controllers-k8s/eks-chart
+  repository: public.ecr.aws
+  version: "1.6.3"
+  namespace: ack-system

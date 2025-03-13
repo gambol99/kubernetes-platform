@@ -101,6 +101,12 @@
   version: "1.4.4"
   namespace: kube-system
 
+- feature: terranetes
+  chart: terranetes-controller
+  repository: https://terranetes-controller.appvia.io
+  version: "0.5.4"
+  namespace: terranetes-system
+
 - feature: vpa
   chart: vpa
   repository: https://charts.fairwinds.com/stable
