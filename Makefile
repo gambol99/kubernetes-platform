@@ -46,6 +46,10 @@ destroy-spoke-aws:
 	@echo "--> Destroying Spoke Cluster (spoke) in AWS"
 	@cd terraform && make destroy-spoke
 
+serve-docs:
+	@echo "--> Serving the documentation..."
+	@cd docs && mkdocs serve
+
 clean:
 	@echo "Deleting development clusters..."
 	@kind delete cluster --name dev 2>/dev/null || true
