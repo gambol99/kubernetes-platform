@@ -11,3 +11,8 @@ tags = {
   Product     = "EKS"
   Owner       = "Engineering"
 }
+
+# Hub Account ID is the account containing the hub
+#hub_account_id = "123456789012"
+
+vpc_cidr = "10.91.0.0/16"
