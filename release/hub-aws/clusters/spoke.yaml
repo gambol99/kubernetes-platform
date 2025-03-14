@@ -45,6 +45,6 @@ cluster_authentication:
   config:
     awsAuthConfig:
       clusterName: spoke
-      roleARN: arn:aws:iam::390403866963:role/spoke-argocd-cross-account
+      roleARN: arn:aws:iam::390403866963:role/argocd-cross-account-spoke
     tlsClientConfig:
       insecure: true
