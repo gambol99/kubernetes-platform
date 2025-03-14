@@ -1,13 +1,12 @@
 
 ## Provision a EKS cluster for the hub
 module "eks" {
-  source = "github.com/gambol99/terraform-aws-eks?ref=v0.2.6"
+  source = "github.com/gambol99/terraform-aws-eks?ref=v0.3.0"
 
   access_entries                 = var.access_entries
   cluster_enabled_log_types      = null
   cluster_endpoint_public_access = var.cluster_endpoint_public_access
   cluster_name                   = local.cluster_name
-  enable_argocd_pod_identity     = local.enable_argocd_pod_identity
   enable_nat_gateway             = var.enable_nat_gateway
   hub_account_id                 = var.hub_account_id
   hub_account_role               = "argocd-pod-identity-hub"
@@ -17,6 +16,17 @@ module "eks" {
   tags                           = local.tags
   vpc_cidr                       = var.vpc_cidr
   vpc_id                         = var.vpc_id
+
+  ## Enable the pod identity for services
+  argocd = {
+    enabled = local.enable_argocd_pod_identity
+  }
+  external_secrets = {
+    enabled = var.enable_external_secrets
+  }
+  terranetes = {
+    enabled = var.enable_terranetes
+  }
 }
 
 ## Provision and bootstrap the platform using an tenant repository

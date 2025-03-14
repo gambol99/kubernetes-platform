@@ -65,6 +65,12 @@ variable "cluster_path" {
   type        = string
 }
 
+variable "enable_external_secrets" {
+  description = "Indicates we should enable the external secrets platform"
+  type        = bool
+  default     = true
+}
+
 variable "enable_nat_gateway" {
   description = "Enable the NAT gateway"
   type        = bool
@@ -73,6 +79,12 @@ variable "enable_nat_gateway" {
 
 variable "enable_platform" {
   description = "Indicates we should install the platform"
+  type        = bool
+  default     = true
+}
+
+variable "enable_terranetes" {
+  description = "Indicates we should enable the terranetes platform"
   type        = bool
   default     = true
 }
