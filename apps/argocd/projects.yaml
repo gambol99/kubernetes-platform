@@ -91,27 +91,12 @@ spec:
       server: "*"
     - namespace: "*"
       server: "*"
+  ## Deny all cluster-scoped resources from being created,
+  ## except for Namespace
+  clusterResourceWhitelist:
+    - group: ""
+      kind: Namespace
   ## List of resources we are not permitted to create
-  clusterResourceBlacklist:
-    - group: rbac.authorization.k8s.io
-      kind: ClusterRole
-    - group: rbac.authorization.k8s.io
-      kind: ClusterRoleBinding
+  namespaceResourceBlacklist:
     - group: apps
       kind: Daemonsets
-    - group: kyverno
-      kind: ClusterPolicy
-    - group: apiextensions.k8s.io
-      kind: CustomResourceDefinition
-    - kind: RuntimeClass
-      group: node.k8s.io
-    - kind: ValidatingWebhookConfiguration
-      group: admissionregistration.k8s.io
-    - kind: MutatingWebhookConfiguration
-      group: admissionregistration.k8s.io
-    - kind: ArgoprojProject
-      group: argoproj.io
-  ## List of resources we are permitted to create
-  clusterResourceWhitelist:
-    - group: "*"
-      kind: "*"
