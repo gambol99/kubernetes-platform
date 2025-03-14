@@ -4,7 +4,6 @@ kind: Kustomization
 namespace: kyverno-system
 
 resources:
-  - deny-cap-net-raw/policy.yaml
   - deny-default-namespace/policy.yaml
   - deny-empty-ingress/policy.yaml
   - deny-external-secrets/policy.yaml
