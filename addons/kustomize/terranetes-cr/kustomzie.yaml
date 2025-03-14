@@ -10,3 +10,13 @@ kustomize:
   repository: https://github.com/gambol99/terranetes-cloudresources.git
   ## The revision of the external repository (optional)
   revision: main
+
+## The namespace options
+namespace:
+  ## The name of the namespace to deploy the application
+  name: terraform-system
+
+## Synchronization options
+sync:
+  ## How to order the deployment of the resources
+  phase: secondary
