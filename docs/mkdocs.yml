@@ -14,7 +14,7 @@ nav:
       - Remote:
           - Overview: development/overview.md
           - Standalone: development/standalone.md
-          # - Hub: development/hub.md
+          - Hub: development/hub.md
   - Getting Started:
       - Standalone: getting-started/standalone.md
       - Hub & Spoke: getting-started/central.md
