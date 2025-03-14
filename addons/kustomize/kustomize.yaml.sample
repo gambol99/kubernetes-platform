@@ -1,12 +1,16 @@
 ---
 kustomize:
-  ## Human friendly description
+  ## Human friendly description (optional)
   description: ""
-  ## The feature flag used to enable the feature
+  ## The feature flag used to enable the feature (required)
   feature: enable_<FEATURE>
-  ## The path to the kustomize overlay
+  ## The location of an external kustomize repository (optional)
+  repository = URL
+  ## The revision of the external repository (optional)
+  revision: BRANCH|TAG
+  ## The path to the kustomize overlay (required)
   path: base
-  ## Optional patches to apply to the kustomize overlay
+  ## Optional patches to apply to the kustomize overlay (optional)
   patches:
     - target:
         kind: <KIND>
@@ -15,12 +19,12 @@ kustomize:
       key: <KEY>
       default: <DEFAULT>
 
-## The namespace options
+## The namespace options (required)
 namespace:
-  ## The name of the namespace to deploy the application
+  ## The name of the namespace to deploy the application (required)
   name: kube-system
 
-## Synchronization options
+## Synchronization options (optional)
 sync:
-  ## How to order the deployment of the resources
-  phase: primary
+  ## How to order the deployment of the resources (optional)
+  phase: primary 

@@ -8,8 +8,14 @@ The kustomize entry format is as follows:
 
 ```yaml
 kustomize:
+  ## The flag to toggle the feature
   feature: kyverno
+  ## The path inside the repository 
   path: kustomize
+  ## The location of an external kustomize repository (optional)
+  repository = URL
+  ## The revision of the external repository (optional)
+  revision: BRANCH|TAG
   ## Apply a patch
   patches:
     - target:
