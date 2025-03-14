@@ -90,10 +90,11 @@ spec:
       ## The project to use for the application
       project: system
 
-      ## The sources to use for the application
+      ## The sources to use for the application. By default we use the platform repository
+      ## and revision, but if an external repository is defined we use that instead.
       source:
-        repoURL: "{{ .metadata.annotations.platform_repository }}"
-        targetRevision: "{{ .metadata.annotations.platform_revision }}"
+        repoURL: "{{ default .metadata.annotations.platform_repository .kustomize.repository }}"
+        targetRevision: "{{ default .metadata.annotations.platform_revision .kustomize.revision }}"
         path: '{{ printf "%s/%s" .path.path .kustomize.path }}'
         kustomize: {}
 

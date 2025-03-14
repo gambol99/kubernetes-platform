@@ -149,3 +149,19 @@ patches:
 ```
 
 In the above example, the `metadata.annotations.environment` value from the cluster definition will be used as the value for the patch.
+
+### External Kustomize Repository
+
+System applications using Kustomize also support the option to source in an external repository. This can be used by definiting the following
+
+```yaml
+kustomize:
+  ## The feature used to toggle the addon 
+  feature: kyverno
+  ## The path inside the repositor 
+  path: kustomize
+  ## External repository, else by default we use the platform repository and revision 
+  repository: https://github.com/gambol99/exteranl-repository.git 
+  ## The revision for the above repository 
+  revision: HEAD
+```
