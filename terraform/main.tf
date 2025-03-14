@@ -1,7 +1,7 @@
 
 ## Provision a EKS cluster for the hub
 module "eks" {
-  source = "github.com/gambol99/terraform-aws-eks?ref=v0.2.5"
+  source = "github.com/gambol99/terraform-aws-eks?ref=v0.2.6"
 
   access_entries                 = var.access_entries
   cluster_enabled_log_types      = null
@@ -10,6 +10,7 @@ module "eks" {
   enable_argocd_pod_identity     = local.enable_argocd_pod_identity
   enable_nat_gateway             = var.enable_nat_gateway
   hub_account_id                 = var.hub_account_id
+  hub_account_role               = "argocd-pod-identity-hub"
   nat_gateway_mode               = var.nat_gateway_mode
   private_subnet_netmask         = var.private_subnet_netmask
   public_subnet_netmask          = var.public_subnet_netmask
