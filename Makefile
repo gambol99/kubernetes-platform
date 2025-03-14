@@ -16,6 +16,7 @@ standalone-aws:
 
 destroy-standalone-aws:
 	@echo "--> Destroying Standalone Cluster (dev) in AWS"
+	@cd terraform && make init
 	@cd terraform && make destroy-dev
 
 hub:
@@ -31,6 +32,7 @@ hub-aws:
 
 destroy-hub-aws:
 	@echo "--> Destroying Hub Cluster (hub) in AWS"
+	@cd terraform && make init
 	@cd terraform && make destroy-hub
 
 spoke:
@@ -44,6 +46,7 @@ spoke-aws:
 
 destroy-spoke-aws:
 	@echo "--> Destroying Spoke Cluster (spoke) in AWS"
+	@cd terraform && make init
 	@cd terraform && make destroy-spoke
 
 serve-docs:
