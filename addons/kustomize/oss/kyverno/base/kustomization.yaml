@@ -8,3 +8,4 @@ resources:
   - deny-empty-ingress/policy.yaml
   - deny-external-secrets/policy.yaml
   - deny-latest-image/policy.yaml
+  - mutate-psa-labels/policy.yaml
