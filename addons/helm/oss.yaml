@@ -29,6 +29,12 @@
   version: "v1.15.2"
   namespace: cert-manager
 
+- feature: cilium
+  chart: cilium
+  repository: https://helm.cilium.io/
+  version: "1.17.2"
+  namespace: cilium-system
+
 - feature: cluster_autoscaler
   chart: cluster-autoscaler
   repository: https://kubernetes.github.io/autoscaler
