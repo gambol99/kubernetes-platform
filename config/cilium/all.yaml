@@ -7,6 +7,20 @@ hubble:
   ## Indicates if the Hubble is enabled
   relay:
     enabled: true
+  ## TLS Configuration
+  tls:
+    ## Indicates if the TLS is enabled
+    auto:
+      enabled: true
+      method: helm
   ## Hubble UI configuration
   ui:
     enabled: true
+
+## Mutual TLS configuration (spire)
+authentication:
+  mutual:
+    spire:
+      enabled: true
+      install:
+        enabled: true
