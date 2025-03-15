@@ -50,3 +50,11 @@ teardown() {
 @test "We should have a Kyverno kustomize application" {
   kubectl "get application system-kust-kyverno-dev -n argocd"
 }
+
+@test "We should not be permitted to run anything in the default namespace" {
+  kubectl "-n default run console --image=busybox:1.28.3 2>&1 | grep deny-default-namespace"
+}
+
+@test "We should not be permitted to use an image latest" {
+  kubectl "-n default run console --image=busybox:latest 2>&1 | grep deny-latest-image"
+}
