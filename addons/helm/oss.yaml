@@ -32,7 +32,7 @@
 - feature: cilium
   chart: cilium
   repository: https://helm.cilium.io/
-  version: "1.17.2"
+  version: "1.17.1"
   namespace: cilium-system
 
 - feature: cluster_autoscaler
