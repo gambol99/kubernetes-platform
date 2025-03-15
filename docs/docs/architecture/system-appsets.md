@@ -111,6 +111,23 @@ By default the helm values will be sourced in the following order:
 
 You can find the application set [here](https://github.com/gambol99/kubernetes-platform/blob/main/apps/system/system-helm.yaml)
 
+Another way to pass values to the Helm applications is via `parameters` i.e
+
+```
+- feature: volcano
+  chart: volcano
+  repository: https://volcano-sh.github.io/helm-charts
+  version: "1.9.0"
+  namespace: volcano-system
+  parameters:
+    - name: serviceAccount.annotations.test
+      value: default_value
+
+    # Reference metadata from the cluster definition
+    - name: serviceAccount.annotations.test2
+      value: metadata.labels.cloud_vendor
+```
+
 #### Helm Values Key Points
 
 - The order of precedence is tenant overrides, cloud specific (i.e. `kind`, `aws`), followed by the default values in `all.yaml`.

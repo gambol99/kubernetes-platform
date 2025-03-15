@@ -117,7 +117,8 @@ spec:
     {{- break }}
     {{- end }}
     {{- end }}
-    {{ $namespace := index .path.segments (add1 $index) }}
+    {{- $namespace := index .path.segments (add1 $index) }}
+    {{- $context := toJson . | fromJson }}
     spec:
       destination:
         namespace: {{ $namespace }}
@@ -155,6 +156,22 @@ spec:
               - "$values/{{ .path.path }}/values/{{ .metadata.labels.environment }}.yaml"
               - "$values/{{ .path.path }}/values/{{ .metadata.labels.tenant }}.yaml"
               - "$values/{{ .path.path }}/values/all.yaml"
+            {{- if and (.helm.parameters) (gt (len .helm.parameters) 0) }}
+            parameters:
+            {{- range $param := .helm.parameters }}
+            {{- $params := splitList "." $param.value }}
+              - name: {{ $param.name }}
+                {{- if eq (len $params) 1 }}
+                value: "{{ dig (index $params 0) $param.value $context }}"
+                {{- else if eq (len $params) 2 }}
+                value: "{{ dig (index $params 0) (index $params 1) "" $context }}"
+                {{- else if eq (len $params) 3 }}
+                value: "{{ dig (index $params 0) (index $params 1) (index $params 2) "" $context }}"
+                {{- else if eq (len $params) 4 }}
+                value: "{{ dig (index $params 0) (index $params 1) (index $params 2) (index $params 3) "" $context }}"
+                {{- end }}
+            {{- end }}
+            {{- end }}
 
         # Source the platform values
         - repoURL: "{{ .metadata.annotations.tenant_repository }}"

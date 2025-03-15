@@ -30,6 +30,14 @@ helm:
   release_name: platform
   ## (Required) The version of the chart to use for the deployment.
   version: 0.1.0
+  ## (Optional) A collection of additional parameters - note these can reference metadata
+  ## from the selected cluster definition.
+  parameters:
+    - name: serviceAccount.annotations.test
+      value: default_value
+    # Reference metadata from the cluster definition
+    - name: serviceAccount.annotations.test2
+      value: metadata.labels.cloud_vendor
 
 ## Sync Options
 sync:
@@ -70,7 +78,7 @@ kustomize:
   path: kustomize
   # (Optional) Override the namespace to use for the deployment.
   namespace: override-namespace
-  # (Required) Details the revision to point; this is a revision within those repository and 
+  # (Required) Details the revision to point; this is a revision within those repository and
   # is used to control a point in time of the manifests.
   revision: <GIT+SHA>
   # (Optional) Patches to apply to the deployment.
@@ -120,7 +128,7 @@ For teams that prefer to maintain their Kustomize manifests in a separate reposi
 kustomize:
   # (Required) The URL to the kustomize repository
   repository: GIT_URL
-  # (Required) The path inside the repository 
+  # (Required) The path inside the repository
   path: overlays/dev
   # (Required) Use a floating tag 'dev' for the development cluster and similar for the prod
   revision: dev
@@ -149,6 +157,6 @@ kustomize:
   path: kustomize
   # (Optional) Override the namespace to use for the deployment.
   namespace: override-namespace
-  # (Required) Git revision 
+  # (Required) Git revision
   revision: git+sha
 ```

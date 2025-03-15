@@ -118,6 +118,7 @@ spec:
   ## If the helm chart permits the values to be overridden, we apply a patch
   ## allowing for the tenant values to be used.
   templatePatch: |
+    {{- $context := toJson . | fromJson }}
     spec:
       sources:
         - repoURL: "{{ .repository }}"
@@ -132,9 +133,21 @@ spec:
               - "$tenant/{{ .metadata.annotations.tenant_path }}/config/{{ .feature }}/all.yaml"
               - "$values/config/{{ .feature }}/{{ .metadata.labels.cloud_vendor }}.yaml"
               - "$values/config/{{ .feature }}/all.yaml"
-            {{- if .helm_values }}
-            values: |
-              {{ .helm_values | nindent 14 }}
+            {{- if and (.helm.parameters) (gt (len .helm.parameters) 0) }}
+            parameters:
+            {{- range $param := .helm.parameters }}
+            {{- $params := splitList "." $param.value }}
+              - name: {{ $param.name }}
+                {{- if eq (len $params) 1 }}
+                value: "{{ dig (index $params 0) $param.value $context }}"
+                {{- else if eq (len $params) 2 }}
+                value: "{{ dig (index $params 0) (index $params 1) "" $context }}"
+                {{- else if eq (len $params) 3 }}
+                value: "{{ dig (index $params 0) (index $params 1) (index $params 2) "" $context }}"
+                {{- else if eq (len $params) 4 }}
+                value: "{{ dig (index $params 0) (index $params 1) (index $params 2) (index $params 3) "" $context }}"
+                {{- end }}
+            {{- end }}
             {{- end }}
 
         - repoURL: "{{ .metadata.annotations.platform_repository }}"
