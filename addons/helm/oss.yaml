@@ -1,15 +1,27 @@
 ---
-- feature: metrics_server
-  chart: metrics-server
-  repository: https://kubernetes-sigs.github.io/metrics-server
-  version: "3.12.2"
-  namespace: kube-system
+- feature: argocd
+  chart: argo-cd
+  repository: https://argoproj.github.io/argo-helm
+  version: "7.8.5"
+  namespace: argocd
 
-- feature: volcano
-  chart: volcano
-  repository: https://volcano-sh.github.io/helm-charts
-  version: "1.9.0"
-  namespace: volcano-system
+- feature: argo_events
+  chart: argo-events
+  repository: https://argoproj.github.io/argo-helm
+  version: "2.4.13"
+  namespace: argocd
+
+- feature: argo_rollouts
+  chart: argo-rollouts
+  repository: https://argoproj.github.io/argo-helm
+  version: "2.39.0"
+  namespace: argocd-rollouts
+
+- feature: argo_workflows
+  chart: argo-workflows
+  repository: https://argoproj.github.io/argo-helm
+  version: "0.45.8"
+  namespace: argo-workflows
 
 - feature: cert_manager
   chart: cert-manager
@@ -34,30 +46,6 @@
   repository: https://charts.external-secrets.io
   version: "0.10.0"
   namespace: external-secrets
-
-- feature: argocd
-  chart: argo-cd
-  repository: https://argoproj.github.io/argo-helm
-  version: "7.8.5"
-  namespace: argocd
-
-- feature: argo_events
-  chart: argo-events
-  repository: https://argoproj.github.io/argo-helm
-  version: "2.4.13"
-  namespace: argocd
-
-- feature: argo_rollouts
-  chart: argo-rollouts
-  repository: https://argoproj.github.io/argo-helm
-  version: "2.39.0"
-  namespace: argocd-rollouts
-
-- feature: argo_workflows
-  chart: argo-workflows
-  repository: https://argoproj.github.io/argo-helm
-  version: "0.45.8"
-  namespace: argo-workflows
 
 - feature: ingress_nginx
   chart: ingress-nginx
@@ -89,6 +77,12 @@
   version: "3.2.6"
   namespace: kyverno-system
 
+- feature: metrics_server
+  chart: metrics-server
+  repository: https://kubernetes-sigs.github.io/metrics-server
+  version: "3.12.2"
+  namespace: kube-system
+
 - feature: prometheus_adapter
   chart: prometheus-adapter
   repository: https://prometheus-community.github.io/helm-charts
@@ -106,6 +100,12 @@
   repository: https://terranetes-controller.appvia.io
   version: "0.5.4"
   namespace: terranetes-system
+
+- feature: volcano
+  chart: volcano
+  repository: https://volcano-sh.github.io/helm-charts
+  version: "1.9.0"
+  namespace: volcano-system
 
 - feature: vpa
   chart: vpa
