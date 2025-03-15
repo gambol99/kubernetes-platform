@@ -27,8 +27,13 @@ EOF
 }
 
 run_bats() {
+  local start_time 
   echo -e "Running units: ${*}\n"
+  start_time=$(date +%s.%N)
   CLOUD=${CLOUD} GIT_COMMIT=${GIT_COMMIT} bats "${BATS_OPTIONS}" "${@}" || exit 1
+  local end_time=$(date +%s.%N)
+  local duration=$(echo "${end_time} - ${start_time}" | bc)
+  echo -e "Time taken: ${duration} secs\n"
 }
 
 # run-checks runs a collection checks
