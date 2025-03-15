@@ -20,11 +20,16 @@ nav:
       - Hub & Spoke: getting-started/central.md
   - Platform:
       - Overview: platform/overview.md
-      - Workloads:
-          - Applications: platform/tenant/applications.md
-          - System: platform/tenant/system.md
       - Security:
-          - Kyverno Policies: platform/security/kyverno.md
+          - Network Security:
+              - Cilium: platform/security/cilium.md
+              - Examples: platform/security/cilium-examples.md
+          - Admission Policy:
+              - Kyverno: platform/security/kyverno.md
+      - Workloads:
+          - Cloud Resources: platform/cloudresources/terranetes.md
+          - Tenant Applications: platform/tenant/applications.md
+          - Tenant System: platform/tenant/system.md
 
 theme:
   name: material

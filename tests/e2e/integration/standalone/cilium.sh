@@ -11,7 +11,7 @@ teardown() {
 }
 
 @test "We should have an cilium application in argocd namespace" {
-  kubectl "get application -n argocd -l app.kubernetes.io/name=cilium | grep -q 'system-cilium'"
+  retry 20 "kubectl get application -n argocd -l app.kubernetes.io/name=cilium | grep -q 'system-cilium'"
 }
 
 @test "We should have a cilium namespace" {
