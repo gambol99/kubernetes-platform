@@ -1,0 +1,16 @@
+---
+#
+## Configuration for the Cilium service mesh helm chart addons (AWS)
+#
+## The ENI configuration
+eni:
+  ## Indicates if the ENI is enabled
+  enabled: true
+## The IPAM mode to use for the Cilium service mesh
+ipam:
+  ## The mode to use for the IPAM (eni, host-local)
+  mode: eni
+## The egress masquerade interfaces
+egressMasqueradeInterfaces: eth0
+## The mode to use for the routing (native, tunnel)
+routingMode: native

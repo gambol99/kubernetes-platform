@@ -100,6 +100,23 @@ sources:
 
 The configuration and helm values for the helm add-on's can be found in the [config](https://github.com/gambol99/kubernetes-platform/tree/main/config) directory. Simply create a folder named after the chart name i.e `config/metrics-server` and drop an `all.yaml` file in the folder.
 
+By default the helm values will be sourced in the following order:
+
+```yaml
+- "$tenant/{{ .metadata.annotations.tenant_path }}/config/{{ .feature }}/{{ .metadata.labels.cloud_vendor }}.yaml"
+- "$tenant/{{ .metadata.annotations.tenant_path }}/config/{{ .feature }}/all.yaml"
+- "$values/config/{{ .feature }}/{{ .metadata.labels.cloud_vendor }}.yaml"
+- "$values/config/{{ .feature }}/all.yaml"
+```
+
+You can find the application set [here](https://github.com/gambol99/kubernetes-platform/blob/main/apps/system/system-helm.yaml)
+
+#### Helm Values Key Points
+
+- The order of precedence is tenant overrides, cloud specific (i.e. `kind`, `aws`), followed by the default values in `all.yaml`.
+- Next comes platform default values, again following cloud vendor, then defaults; these are located in the `config/<FEATURE>` directory.
+- Tenant currently have the option to override the platform default, though we're considering dropping this feature in future releases, or at the very least making an optional in the cluster definition.
+
 ## :material-application-array-outline: System Kustomize Application Set
 
 The [system-kustomize](https://github.com/gambol99/kubernetes-platform/blob/main/apps/system/system-kustomize.yaml) is responsible for provisioning any kustomize related functionality from the system. The application set use's a [git generator](https://argo-cd.readthedocs.io/en/stable/operator-manual/applicationset/Generators-Git/) to source all the `kustomize.yml` from the [addons/kustomize](https://github.com/gambol99/kubernetes-platform/tree/main/addons/kustomize) directory.
@@ -156,12 +173,12 @@ System applications using Kustomize also support the option to source in an exte
 
 ```yaml
 kustomize:
-  ## The feature used to toggle the addon 
+  ## The feature used to toggle the addon
   feature: kyverno
-  ## The path inside the repositor 
+  ## The path inside the repositor
   path: kustomize
-  ## External repository, else by default we use the platform repository and revision 
-  repository: https://github.com/gambol99/exteranl-repository.git 
-  ## The revision for the above repository 
+  ## External repository, else by default we use the platform repository and revision
+  repository: https://github.com/gambol99/exteranl-repository.git
+  ## The revision for the above repository
   revision: HEAD
 ```
