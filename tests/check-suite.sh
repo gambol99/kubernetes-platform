@@ -41,7 +41,9 @@ run_checks() {
     "${UNITS}/common/priorityclasses.sh"
     "${UNITS}/${CLUSTER_TYPE}/tenant-namespace.sh"
     "${UNITS}/${CLUSTER_TYPE}/tenant-helm-apps.sh"
+    "${UNITS}/${CLUSTER_TYPE}/tenant-helm-apps-values.sh"
     "${UNITS}/${CLUSTER_TYPE}/kyverno.sh"
+    "${UNITS}/${CLUSTER_TYPE}/cilium.sh"
     "${UNITS}/common/cert-manager.sh"
   )
 
