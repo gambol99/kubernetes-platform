@@ -2,3 +2,11 @@
 #
 ## Configuration for the Cilium service mesh helm chart addons
 #
+## The Hubbel configuration
+hubble:
+  ## Indicates if the Hubble is enabled
+  relay:
+    enabled: true
+  ## Hubble UI configuration
+  ui:
+    enabled: true
