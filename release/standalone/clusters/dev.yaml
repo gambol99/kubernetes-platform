@@ -25,6 +25,7 @@ tenant: test
 ## We use labels to enable/disable features in the tenant cluster
 labels:
   enable_cert_manager: "true"
+  enable_cilium: "true"
   enable_external_secrets: "true"
   enable_karpenter_nodepools: "true"
   enable_kro: "true"
