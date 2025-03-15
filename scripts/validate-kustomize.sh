@@ -18,7 +18,7 @@ KUSTOMIZE_DIRS=(
 
 ## Iterate the directories in the apps folder and check if we can render them
 for x in "${KUSTOMIZE_DIRS[@]}"; do
-  find "${x}" -maxdepth 2 -type d | sed '1d' | while read -r path; do
+  find "${x}" -maxdepth 3 -type d | sed '1d' | while read -r path; do
     if [[ -e "${path}/kustomization.yaml" ]]; then
       echo "--> Validating the application ${path}"
       if ! kustomize build "${path}" > /dev/null; then

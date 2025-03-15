@@ -12,7 +12,7 @@ teardown() {
   kubectl_argocd "get application platform"
 }
 
-@test "We should have a healthy platform" {
+@test "We should have a healthy platform application" {
   kubectl_argocd "get application platform -o yaml | yq .status.health.status | grep -i healthy"
 }
 

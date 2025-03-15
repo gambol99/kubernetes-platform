@@ -19,28 +19,28 @@ teardown() {
   kubectl_argocd "get applicationset tenant-apps-helm -o yaml | yq .status.conditions[0].status | grep -i False"
 }
 
-@test "We should have a tenant-helm-hello-world-helm-dev application" {
-  kubectl_argocd "get application tenant-helm-hello-world-helm-dev"
+@test "We should have a tenant-helm-helm-app-dev application" {
+  kubectl_argocd "get application -l app.kubernetes.io/name=helm-app"
 }
 
 @test "We should have a healthy tenant application" {
-  kubectl_argocd "get application tenant-helm-hello-world-helm-dev -o yaml | yq .status.health.status | grep -i healthy"
+  kubectl_argocd "get application -l app.kubernetes.io/name=helm-app -o yaml | yq .items[0].status.health.status | grep -i healthy"
 }
 
-@test "We should have a hello-world-helm application" {
-  kubectl_argocd "get application tenant-helm-hello-world-helm-dev -o yaml | yq .status.resources | grep -i 'hello-world-helm'"
+@test "We should have a helm-app application" {
+  kubectl_argocd "get application -l app.kubernetes.io/name=helm-app -o yaml | yq .items[0].status.resources | grep -i 'helm-app'"
 }
 
-@test "We should have a hello-world-helm namespace" {
-  kubectl "get namespace hello-world-helm"
-  kubectl "get namespace hello-world-helm -o yaml | yq .metadata.labels | grep -i 'platform.local/namespace: tenant'"
+@test "We should have a helm-app namespace" {
+  kubectl "get namespace helm-app"
+  kubectl "get namespace helm-app -o yaml | yq .metadata.labels | grep -i 'platform.local/namespace: tenant'"
 }
 
 @test "We should have a label indicating a tenant application type" {
-  kubectl "get namespace hello-world-helm -o yaml | yq .metadata.labels | grep -i 'platform.local/namespace-type: tenant-application'"
+  kubectl "get namespace helm-app -o yaml | yq .metadata.labels | grep -i 'platform.local/namespace-type: tenant-application'"
 }
 
-@test "We should have a hello-world-helm deployment" {
-  kubectl "get deployment hello-world-helm -n hello-world-helm"
-  kubectl "get pod -l app.kubernetes.io/name=hello-world --no-headers -n hello-world-helm | grep hello"
+@test "We should have a helm-app deployment" {
+  kubectl "get deployment helm-app-hello-world -n helm-app"
+  kubectl "get pod -l app.kubernetes.io/name=hello-world --no-headers -n helm-app | grep hello"
 }
