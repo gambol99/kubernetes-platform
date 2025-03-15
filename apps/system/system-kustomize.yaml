@@ -96,7 +96,7 @@ spec:
         repoURL: "{{ default .metadata.annotations.platform_repository .kustomize.repository }}"
         targetRevision: "{{ default .metadata.annotations.platform_revision .kustomize.revision }}"
         path: '{{ printf "%s/%s" .path.path .kustomize.path }}'
-        kustomize:
+        kustomize: {}
 
       ## Destination is the cluster to deploy to
       destination:
