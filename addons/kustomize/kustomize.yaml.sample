@@ -19,6 +19,13 @@ kustomize:
       key: <KEY>
       default: <DEFAULT>
 
+  ## A collection of common labels to apply (optional)
+  commomLabels:
+    test: one
+  ## A collection of common annotations (optional)
+  commonAnnotations:
+    test: one
+
 ## The namespace options (required)
 namespace:
   ## The name of the namespace to deploy the application (required)
@@ -27,4 +34,4 @@ namespace:
 ## Synchronization options (optional)
 sync:
   ## How to order the deployment of the resources (optional)
-  phase: primary 
+  phase: primary

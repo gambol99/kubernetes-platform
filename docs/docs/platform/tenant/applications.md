@@ -99,6 +99,14 @@ kustomize:
           value: metadata.annotations.version
           ## This is the default value to use if the value is not found.
           default: "1.21.3"
+
+  ## Optional labels applied to all resources
+  commonLabels:
+    app.kubernetes.io/managed-by: argocd
+
+  ## Optional annotations applied to all resources
+  commonAnnotations:
+    argocd.argoproj.io/sync-options: Prune=false
 ```
 
 Unlike Helm where versions are managed externally through chart repositories, Kustomize manifests are typically stored directly in your repository. While Kustomize overlays provide environment-specific customization, changes to shared base configurations could potentially affect all environments simultaneously.

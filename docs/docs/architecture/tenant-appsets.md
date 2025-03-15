@@ -88,6 +88,14 @@ kustomize:
           value: metadata.annotations.version
           ## This is the default value to use if the value is not found.
           default: "1.21.3"
+
+  # (Optional) Common labels to apply to the resources.
+  commonLabels:
+    app.kubernetes.io/managed-by: argocd
+
+  # (Optional) Common annotations to apply to the resources.
+  commonAnnotations:
+    argocd.argoproj.io/sync-options: Prune=false
 ```
 
 ## :material-application-array-outline: Tenant System Application Sets:

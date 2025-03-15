@@ -158,6 +158,14 @@ kustomize:
       key: <KEY>
       default: <DEFAULT>
 
+  ## Optional labels applied to all resources
+  commonLabels:
+    app.kubernetes.io/managed-by: argocd
+
+  ## Optional annotations applied to all resources
+  commonAnnotations:
+    argocd.argoproj.io/sync-options: Prune=false
+
 ## The namespace options
 namespace:
   ## The name of the namespace to deploy the application

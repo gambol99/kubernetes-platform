@@ -96,7 +96,7 @@ spec:
         repoURL: "{{ default .metadata.annotations.platform_repository .kustomize.repository }}"
         targetRevision: "{{ default .metadata.annotations.platform_revision .kustomize.revision }}"
         path: '{{ printf "%s/%s" .path.path .kustomize.path }}'
-        kustomize: {}
+        kustomize:
 
       ## Destination is the cluster to deploy to
       destination:
@@ -125,12 +125,20 @@ spec:
   ## If a kustomize.repository is defines we use the environment as the targetRevision. Its
   ## the responsibility of the repository to control the floating revisions.
   templatePatch: |
-    {{- if and .kustomize.patches (gt (len .kustomize.patches) 0) }}
-    ## Save the context for the dig function
-    {{- $context := toJson . | fromJson }}
     spec:
       source:
         kustomize:
+          commonLabels:
+            {{- range $k, $v := .kustomize.commonLabels }}
+            {{ $k }}: {{ $v }}
+            {{- end }}
+          commonAnnotations:
+            {{- range $k, $v := .kustomize.commonAnnotations }}
+            {{ $k }}: {{ $v }}
+            {{- end }}
+    {{- if and .kustomize.patches (gt (len .kustomize.patches) 0) }}
+    ## Save the context for the dig function
+    {{- $context := toJson . | fromJson }}
           patches:
             {{- range $change := .kustomize.patches }}
             - target:

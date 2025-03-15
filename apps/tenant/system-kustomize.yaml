@@ -126,6 +126,14 @@ spec:
           targetRevision: "{{ .metadata.annotations.platform_revision }}"
           path: "apps/tenant/namespace"
           kustomize:
+            commonLabels:
+              {{- range $k, $v := .kustomize.commonLabels }}
+              {{ $k }}: {{ $v }}
+              {{- end }}
+            commonAnnotations:
+              {{- range $k, $v := .kustomize.commonAnnotations }}
+              {{ $k }}: {{ $v }}
+              {{- end }}
             patches:
               - target:
                   kind: Namespace
