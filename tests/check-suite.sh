@@ -13,9 +13,9 @@ usage() {
   cat << EOF
 Usage: $0 [options]
 
---cloud <NAME>         Cloud provider name to run against (defaults: ${CLOUD})
---cluster-type <TYPE>  Cluster type to run against (defaults: ${CLUSTER_TYPE})
---help                 Display this help message
+-c|--cloud <NAME>         Cloud provider name to run against (defaults: ${CLOUD})
+-t|--cluster-type <TYPE>  Cluster type to run against (defaults: ${CLUSTER_TYPE})
+-h|--help                 Display this help message
 
 EOF
   if [[ -n ${*}   ]]; then
@@ -53,6 +53,7 @@ run_checks() {
     "${UNITS}/${CLUSTER_TYPE}/tenant-helm-apps-values.sh"
     "${UNITS}/${CLUSTER_TYPE}/tenant-helm-system.sh"
     "${UNITS}/${CLUSTER_TYPE}/kyverno.sh"
+    "${UNITS}/${CLUSTER_TYPE}/cilium.sh"
     "${UNITS}/common/cert-manager.sh"
   )
 
@@ -69,15 +70,15 @@ run_checks() {
 
 while [[ $# -gt 0 ]]; do
   case "${1}" in
-    --cloud)
+    --cloud | -c)
       CLOUD="${2}"
       shift 2
       ;;
-    --cluster-type)
+    --cluster-type | -t)
       CLUSTER_TYPE="${2}"
       shift 2
       ;;
-    --help)
+    --help | -h)
       usage
       ;;
     *)

@@ -21,6 +21,6 @@ teardown() {
 
 @test "We should have a service account with attributes from the parameters" {
   kubectl "get serviceaccount -n helm-app-values helm-app-values-hello-world"
-  kubectl "get serviceaccount -n helm-app-values helm-app-values-hello-world -o yaml | yq .metadata.annotations.by_metadata | grep -i kind"
+  kubectl "get serviceaccount -n helm-app-values helm-app-values-hello-world -o yaml | yq .metadata.annotations.by_metadata | grep -i ${CLOUD}"
   kubectl "get serviceaccount -n helm-app-values helm-app-values-hello-world -o yaml | yq .metadata.annotations.by_value | grep -i test_value"
 }
