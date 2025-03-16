@@ -28,6 +28,12 @@ labels:
   enable_cilium: true
 ```
 
+### End-to-End Encryption with WireGuard and Cilium
+
+End-to-end encryption is a critical feature for ensuring the security and privacy of data as it travels across the network. In our platform, this is achieved using WireGuard in conjunction with Cilium. WireGuard is a modern VPN that is simple, fast, and secure, while Cilium provides networking, security, and observability for cloud-native environments.
+
+By default, our platform enables end-to-end encryption using WireGuard and Cilium, ensuring that all data transmitted between nodes is encrypted and protected from unauthorized access. This setup provides robust security with minimal configuration, leveraging the strengths of both WireGuard and Cilium to deliver a seamless and secure networking experience.
+
 ## mTLS Implementation in Cilium
 
 Cilium implements mutual TLS (mTLS) to provide end-to-end encryption and authentication between workloads. mTLS ensures that both the client and server authenticate each other, providing a higher level of security compared to traditional TLS.
