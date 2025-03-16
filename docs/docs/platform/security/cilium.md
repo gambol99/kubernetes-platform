@@ -19,6 +19,15 @@ It leverages eBPF (extended Berkeley Packet Filter) technology to provide high-p
 - **Identity-Aware Security**: Uses identity-based security policies rather than relying on IP addresses.
 - **Integration with Kubernetes**: Seamlessly integrates with Kubernetes for network policy enforcement and service discovery.
 
+## Enabling Cilium
+
+Enabling Cilium on your Kubernetes requires adding the following feature label in the cluster definition:
+
+```yaml
+labels:
+  enable_cilium: true
+```
+
 ## mTLS Implementation in Cilium
 
 Cilium implements mutual TLS (mTLS) to provide end-to-end encryption and authentication between workloads. mTLS ensures that both the client and server authenticate each other, providing a higher level of security compared to traditional TLS.
