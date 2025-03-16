@@ -26,6 +26,7 @@ nav:
               - Examples: platform/security/cilium-examples.md
           - Admission Policy:
               - Kyverno: platform/security/kyverno.md
+              - Pod Security: platform/security/pod-security.md
       - Workloads:
           - Cloud Resources: platform/cloudresources/terranetes.md
           - Tenant Applications: platform/tenant/applications.md

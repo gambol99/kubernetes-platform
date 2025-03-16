@@ -1,6 +1,6 @@
-# Kustomize Addons  
+# Kustomize Addons
 
-This directory contains the kustomize manifests for the open source and cloud specific addons.
+This directory contains the kustomize manifests for the open source and cloud specific add-ons.
 
 ## Kustomize Entry Format
 
@@ -10,7 +10,7 @@ The kustomize entry format is as follows:
 kustomize:
   ## The flag to toggle the feature
   feature: kyverno
-  ## The path inside the repository 
+  ## The path inside the repository
   path: kustomize
   ## The location of an external kustomize repository (optional)
   repository = URL
@@ -30,8 +30,8 @@ kustomize:
 namespace:
   ## Name of the namespace to deploy the application
   name: kyverno-system
-  ## Name of the SKU to deploy the application
-  sku: small
+  ## The PSA level the pod should run under
+  pod_security: (restricted|baseline|privileged)
 
 ## Synchronization options
 sync:
@@ -70,5 +70,5 @@ The `patches` is a list of operations to apply to the resource. The following op
 
 The synchronization entry is used to configure the synchronization options for ArgoCD. The following fields are supported:
 
-- `phase`: The phase to deploy the application to.  
+- `phase`: The phase to deploy the application to.
 - `max_duration`: The maximum duration to wait for the application to synchronize.

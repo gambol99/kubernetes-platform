@@ -1,9 +1,0 @@
----
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: PATCH_ME
-  labels:
-    app.kubernetes.io/managed-by: argocd
-    platform.local/namespace: tenant
-    platform.local/namespace-type: tenant-application

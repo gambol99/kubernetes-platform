@@ -96,6 +96,15 @@ spec:
             duration: '{{ default "30s" .sync.duration }}'
             maxDuration: '{{ default "5m" .sync.max_duration }}'
           limit: 10
+
+        ## Namespace metadata configuration, for when CreateNamespace=true
+        managedNamespaceMetadata:
+          labels:
+            app.kubernetes.io/managed-by: argocd
+            platform.local/namespace-type: tenant-application
+            platform.local/namespace: tenant
+            pod-security.kubernetes.io/enforce: '{{ default "baseline" .namespace.pod_security }}'
+
         # Use server-side apply for better efficiency and interop
         # between controllers making partial changes to manifests.
         # Also enable apply out of sync only rather than trying to
