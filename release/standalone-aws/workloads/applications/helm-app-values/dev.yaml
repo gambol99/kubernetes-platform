@@ -1,0 +1,15 @@
+---
+## The Helm application being deployed
+helm:
+  ## The repository containing the helm repository
+  repository: https://helm.github.io/examples
+  ## The chart to install
+  chart: hello-world
+  ## The chart version to install
+  version: "0.1.0"
+  ## Custom values
+  parameters:
+    - name: serviceAccount.annotations.by_metadata
+      value: metadata.annotations.cloud_vendor
+    - name: serviceAccount.annotations.by_value
+      value: "test_value"
