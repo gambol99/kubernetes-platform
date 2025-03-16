@@ -1,11 +1,11 @@
 # Kyverno Policies
 
-## :octicons-stack-24: Overview
+## Overview
 
 Kyverno is a policy engine designed for Kubernetes that validates, mutates, and generates configurations using policies as Kubernetes resources. It provides key features like:
 
 - Policy validation and enforcement
-- Resource mutation and generation
+- Resource mutation and generation 
 - Image verification and security controls
 - Audit logging and reporting
 - Admission control webhooks
@@ -15,7 +15,6 @@ The following policies are shipped by default in this platform to enforce securi
 For detailed information about Kyverno's capabilities, refer to the [official documentation](https://kyverno.io/docs/) or [policy library](https://kyverno.io/policies/).
 
 ---
-
 ## :material-shield-lock: Rule: deny-empty-ingress-host
 
 **Category:** Best Practices | **Severity:** medium | **Scope:** Cluster-wide
@@ -79,6 +78,18 @@ A Kubernetes Service of type NodePort uses a host port to receive traffic from a
 
 ---
 
+## :material-shield-lock: Rule: mutate-psa-labels
+
+**Category:** Pod Security Admission, EKS Best Practices | **Severity:** medium | **Scope:** Cluster-wide
+
+Pod Security Admission (PSA) can be controlled via the assignment of labels at the Namespace level which define the Pod Security Standard (PSS) profile in use and the action to take. If not using a cluster-wide configuration via an AdmissionConfiguration file, Namespaces must be explicitly labeled. This policy assigns the labels `pod-security.kubernetes.io/enforce=baseline` and `pod-security.kubernetes.io/warn=restricted` to all new Namespaces if those labels are not included.
+
+**Rules**
+
+- **add-psa-labels** (Mutation)
+
+---
+
 ## :material-shield-lock: Rule: deny-default-namespace
 
 **Category:** Multi-Tenancy | **Severity:** medium | **Scope:** Cluster-wide
@@ -131,4 +142,4 @@ Capabilities permit privileged actions without giving full root access. The CAP_
 
 ---
 
-**Total Policies: 9**
+**Total Policies: 10**
