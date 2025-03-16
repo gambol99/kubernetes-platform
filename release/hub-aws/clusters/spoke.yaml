@@ -28,7 +28,6 @@ tenant: test
 labels:
   enable_aws_ack_iam: "true"
   enable_cert_manager: "true"
-  enable_cilium: "true"
   enable_external_secrets: "true"
   enable_karpenter_nodepools: "true"
   enable_kro: "true"

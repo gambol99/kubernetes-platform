@@ -27,12 +27,15 @@ EOF
 }
 
 run_bats() {
-  local start_time 
+  local start_time
+  local end_time
+  local duration
+
   echo -e "Running units: ${*}\n"
   start_time=$(date +%s.%N)
   CLOUD=${CLOUD} GIT_COMMIT=${GIT_COMMIT} bats "${BATS_OPTIONS}" "${@}" || exit 1
-  local end_time=$(date +%s.%N)
-  local duration=$(echo "${end_time} - ${start_time}" | bc)
+  end_time=$(date +%s.%N)
+  duration=$(echo "${end_time} - ${start_time}" | bc)
   echo -e "Time taken: ${duration} secs\n"
 }
 
@@ -48,7 +51,6 @@ run_checks() {
     "${UNITS}/${CLUSTER_TYPE}/tenant-helm-apps.sh"
     "${UNITS}/${CLUSTER_TYPE}/tenant-helm-apps-values.sh"
     "${UNITS}/${CLUSTER_TYPE}/kyverno.sh"
-    "${UNITS}/${CLUSTER_TYPE}/cilium.sh"
     "${UNITS}/common/cert-manager.sh"
   )
 
