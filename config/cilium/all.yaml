@@ -30,6 +30,13 @@ hubble:
   ui:
     enabled: true
 
+## Wireguard configuration
+encryption:
+  ## Indicates if the encryption is enabled
+  enabled: true
+  ## The encryption method to use (wireguard)
+  type: wireguard
+
 ## Mutual TLS configuration (spire)
 authentication:
   ## Indicates if the mutual TLS is enabled

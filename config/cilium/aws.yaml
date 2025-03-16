@@ -9,6 +9,9 @@ cni:
   chainingMode: aws-cni
   ## The exclusive mode to use for the CNI (true, false)
   exclusive: false
+  ##  The enable route MTU for CNI chaining
+  enableRouteMTUForCNIChaining: true
+
 ## IP masquerade configuration
 enableIPv4Masquerade: false
 ## The endpoint routes configuration
