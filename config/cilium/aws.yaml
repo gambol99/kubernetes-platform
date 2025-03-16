@@ -2,15 +2,18 @@
 #
 ## Configuration for the Cilium service mesh helm chart addons (AWS)
 #
-## The ENI configuration
-eni:
-  ## Indicates if the ENI is enabled
+
+## The CNI configuration
+cni:
+  ## The chaining mode to use for the CNI (aws-cni, cilium-cni)
+  chainingMode: aws-cni
+  ## The exclusive mode to use for the CNI (true, false)
+  exclusive: false
+## IP masquerade configuration
+enableIPv4Masquerade: false
+## The endpoint routes configuration
+endpointRoutes:
+  ## The enabled flag for the endpoint routes (true, false)
   enabled: true
-## The IPAM mode to use for the Cilium service mesh
-ipam:
-  ## The mode to use for the IPAM (eni, host-local)
-  mode: eni
-## The egress masquerade interfaces
-egressMasqueradeInterfaces: eth0
 ## The mode to use for the routing (native, tunnel)
 routingMode: native

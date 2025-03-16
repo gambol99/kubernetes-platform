@@ -2,6 +2,7 @@
 #
 ## Configuration for the Cilium service mesh helm chart addons
 #
+
 ## The Hubbel configuration
 hubble:
   ## Indicates if the Hubble is enabled
@@ -11,7 +12,9 @@ hubble:
   tls:
     ## Indicates if the TLS is enabled
     auto:
+      ## Indicates if the auto TLS is enabled
       enabled: true
+      ## The method to use for the TLS (helm, none)
       method: helm
   ## Hubble UI configuration
   ui:
@@ -19,8 +22,13 @@ hubble:
 
 ## Mutual TLS configuration (spire)
 authentication:
+  ## Indicates if the mutual TLS is enabled
   mutual:
+    ## Indicates if the spire is enabled
     spire:
+      ## Indicates if the spire is enabled
       enabled: true
+      ## The install configuration
       install:
+        ## Indicates if the install is enabled
         enabled: true
