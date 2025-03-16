@@ -6,6 +6,16 @@
 ## The Hubbel configuration
 hubble:
   ## Indicates if the Hubble is enabled
+  enabled: true
+  ## Metrics to recore
+  metrics:
+    enabled:
+      - dns
+      - drop
+      - flow
+      - http
+      - tcp
+  ## Indicates if the Hubble is enabled
   relay:
     enabled: true
   ## TLS Configuration

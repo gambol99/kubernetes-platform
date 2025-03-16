@@ -17,3 +17,17 @@ endpointRoutes:
   enabled: true
 ## The mode to use for the routing (native, tunnel)
 routingMode: native
+
+## Mutual TLS configuration (spire)
+authentication:
+  ## Indicates if the mutual TLS is enabled
+  mutual:
+    ## Indicates if the spire is enabled
+    spire:
+      ## Server configuration
+      server:
+        dataStorage:
+          enabled: true
+          size: 8Gi
+          accessMode: ReadWriteOnce
+          storageClass: gp3
