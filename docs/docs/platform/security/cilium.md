@@ -6,6 +6,10 @@ Cilium is an open-source software for providing and transparently securing netwo
 
 It leverages eBPF (extended Berkeley Packet Filter) technology to provide high-performance networking, security, and observability.
 
+!!! note "Note"
+
+    On EKS Cilium has been configured to use CNI chaining mode (https://docs.cilium.io/en/stable/installation/cni-chaining-aws-cni/)
+
 ## Feature Set
 
 - **Network Security**: Provides fine-grained security policies for network communication between workloads.
