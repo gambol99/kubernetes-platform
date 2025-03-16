@@ -3,7 +3,7 @@ kustomize:
   ## Human friendly description (optional)
   description: Used to provision a storage class for data volumes
   ## The feature flag used to enable the feature (required)
-  feature: enable_core
+  feature: core
   ## The path to the kustomize overlay (required)
   path: base
 
