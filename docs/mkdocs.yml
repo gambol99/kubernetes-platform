@@ -28,7 +28,6 @@ nav:
               - Kyverno: platform/security/kyverno.md
               - Pod Security: platform/security/pod-security.md
       - Workloads:
-          - Cloud Resources: platform/cloudresources/terranetes.md
           - Tenant Applications: platform/tenant/applications.md
           - Tenant System: platform/tenant/system.md
 
