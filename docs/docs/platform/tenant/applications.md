@@ -1,5 +1,9 @@
 # :material-application-cog: Tenant Applications
 
+!!! note "Note"
+
+    Please refer to the [architectural overview](../../architecture/overview.md) for an understanding on tenant and platform repositories
+
 Applications for tenants can be deployed using a GitOps approach directly from the tenant repository. The workloads folder contains two main directories:
 
 - **workloads/applications/** - Contains standard application definitions that run under the tenant's ArgoCD project with regular permissions

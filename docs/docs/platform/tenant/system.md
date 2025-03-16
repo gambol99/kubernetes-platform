@@ -1,5 +1,9 @@
 # :material-application-cog: Tenant System Applications
 
+!!! note "Note"
+
+    Please refer to the [architectural overview](../../architecture/overview.md) for an understanding on tenant and platform repositories
+
 System applications deployed under `workloads/system/` have elevated privileges compared to regular applications. These system-level applications:
 
 - Can deploy cluster-scoped resources (ClusterRoles, CustomResourceDefinitions, etc.)
