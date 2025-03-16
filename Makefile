@@ -61,7 +61,10 @@ clean:
 
 changelog:
 	@echo "--> Generating the changelog..."
-	@git-cliff --config .cliff/cliff.toml $(LAST_TAG)..HEAD
+	@git-cliff \
+		--config .cliff/cliff.toml \
+		--github-repo gambol99/kubernete-platform \
+		$(LAST_TAG)..HEAD
 
 test:
 	@echo "--> Testing the configuration..."
