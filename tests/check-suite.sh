@@ -48,8 +48,10 @@ run_checks() {
     "${UNITS}/common/applicationsets.sh"
     "${UNITS}/common/priorityclasses.sh"
     "${UNITS}/${CLUSTER_TYPE}/tenant-namespace.sh"
+    "${UNITS}/${CLUSTER_TYPE}/tenant-helm-apps-psa.sh"
     "${UNITS}/${CLUSTER_TYPE}/tenant-helm-apps.sh"
     "${UNITS}/${CLUSTER_TYPE}/tenant-helm-apps-values.sh"
+    "${UNITS}/${CLUSTER_TYPE}/tenant-helm-system.sh"
     "${UNITS}/${CLUSTER_TYPE}/kyverno.sh"
     "${UNITS}/common/cert-manager.sh"
   )

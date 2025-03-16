@@ -7,3 +7,10 @@ helm:
   chart: ingress-nginx
   ## The chart version to install
   version: "4.11.1"
+
+## Namespace configuration
+namespace:
+  ## The name of the namespace
+  name: ingress-system
+  ## Pod Security Policy
+  pod_security: privileged

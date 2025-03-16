@@ -50,7 +50,7 @@ retry() {
 }
 
 runit() {
-  retry 5 "$@"
+  retry 10 "$@"
 }
 
 kubectl_argocd() {
@@ -58,5 +58,5 @@ kubectl_argocd() {
 }
 
 kubectl() {
-  runit "kubectl $@"
+  runit "kubectl ${@}"
 }

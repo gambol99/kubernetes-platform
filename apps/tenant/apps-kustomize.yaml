@@ -115,7 +115,7 @@ spec:
         # Also enable apply out of sync only rather than trying to
         # apply all resources in the application.
         syncOptions:
-          - CreateNamespace=false
+          - CreateNamespace=true
           - ServerSideApply=true
 
   ## If a kustomize.repository is defines we use the environment as the targetRevision. Its
