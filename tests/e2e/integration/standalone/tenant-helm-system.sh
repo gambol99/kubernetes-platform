@@ -21,3 +21,7 @@ teardown() {
 @test "We should have a ingress-nginx-controller deployment" {
   kubectl "get deployment ingress-system-ingress-nginx-controller -n ingress-system"
 }
+
+@test "We should have a psa labels on the namespace" {
+  kubectl "get namespace ingress-system -o yaml | yq .metadata.labels | grep -q 'pod-security.kubernetes.io/enforce: privileged'"
+}
