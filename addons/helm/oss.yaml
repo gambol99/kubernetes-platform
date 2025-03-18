@@ -38,7 +38,7 @@
 - feature: crossplane
   chart: crossplane
   repository: https://charts.crossplane.io/stable
-  version: "1.9.2"
+  version: "1.19.0"
   namespace: crossplane-system
 
 - feature: cluster_autoscaler
