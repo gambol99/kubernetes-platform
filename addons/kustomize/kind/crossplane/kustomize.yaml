@@ -1,0 +1,14 @@
+---
+kustomize:
+  ## The feature label
+  feature: crossplane
+  ## The entrypoint for the kustomize
+  path: base
+
+## The namespace options
+namespace:
+  ## The namespace to deploy the resources
+  name: crossplane-system
+
+sync:
+  phase: primary
