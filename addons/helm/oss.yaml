@@ -35,6 +35,12 @@
   version: "1.17.1"
   namespace: cilium-system
 
+- feature: crossplane
+  chart: crossplane
+  repository: https://charts.crossplane.io/stable
+  version: "1.9.2"
+  namespace: crossplane-system
+
 - feature: cluster_autoscaler
   chart: cluster-autoscaler
   repository: https://kubernetes.github.io/autoscaler
