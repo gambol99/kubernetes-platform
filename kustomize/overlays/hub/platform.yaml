@@ -90,7 +90,7 @@ spec:
                 patch: |
                   - op: replace
                     path: /spec/generators/0/matrix/generators/0/git/files/0/path
-                    value: "addons/kustomize/{{ .cloud_vendor }}/**/kustomize.yaml"
+                    value: "addons/kustomize/cloud/{{ .cloud_vendor }}/**/kustomize.yaml"
                   - op: replace
                     path: /spec/generators/0/matrix/generators/0/git/repoURL
                     value: "{{ .platform_repository }}"
