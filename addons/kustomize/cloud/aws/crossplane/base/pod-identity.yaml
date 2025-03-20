@@ -1,0 +1,196 @@
+---
+apiVersion: apiextensions.crossplane.io/v1
+kind: Composition
+metadata:
+  name: eks-pod-identity
+  labels:
+    app.kubernetes.io/instance: eks-pod-identity
+    app.kubernetes.io/managed-by: crossplane
+    app.kubernetes.io/part-of: platform
+    argo-cd.argoproj.io/sync-wave: "5"
+spec:
+  compositeTypeRef:
+    apiVersion: platform.local/v1alpha1
+    kind: EKSPodIdentity
+  resources:
+    - name: iamrole
+      base:
+        apiVersion: iam.aws.crossplane.io/v1beta1
+        kind: Role
+        spec:
+          forProvider:
+            assumeRolePolicyDocument: |
+              {
+                "Version": "2012-10-17",
+                "Statement": [
+                  {
+                    "Effect": "Allow",
+                    "Principal": {
+                      "Service": "pods.eks.amazonaws.com"
+                    },
+                    "Action": "sts:AssumeRole"
+                  }
+                ]
+              }
+      patches:
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.roleName
+          toFieldPath: metadata.name
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.permissionsBoundary
+          toFieldPath: spec.forProvider.permissionsBoundary
+          policy:
+            fromFieldPath: Optional
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.serviceAccount
+          toFieldPath: spec.forProvider.assumeRolePolicyDocument
+          transforms:
+            - type: string
+              string:
+                fmt: |
+                  {
+                    "Version": "2012-10-17",
+                    "Statement": [
+                      {
+                        "Effect": "Allow",
+                        "Principal": {
+                          "Federated": "arn:aws:iam::${account}:oidc-provider/${oidcProvider}"
+                        },
+                        "Action": "sts:AssumeRoleWithWebIdentity",
+                        "Condition": {
+                          "StringEquals": {
+                            "${oidcProvider}:sub": "system:serviceaccount:%s"
+                          }
+                        }
+                      }
+                    ]
+                  }
+          policy:
+            fromFieldPath: Optional
+    - name: iampolicy
+      base:
+        apiVersion: iam.aws.crossplane.io/v1beta1
+        kind: Policy
+        spec:
+          forProvider:
+            description: "Policy for EKS Pod Identity"
+      patches:
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.roleName
+          toFieldPath: metadata.name
+          transforms:
+            - type: string
+              string:
+                fmt: "%s-policy"
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.policy
+          toFieldPath: spec.forProvider.document
+          policy:
+            fromFieldPath: Optional
+      conditions:
+        - type: FieldPath
+          fieldPath: spec.policy
+    - name: iamrolepolicyattachment-custom
+      base:
+        apiVersion: iam.aws.crossplane.io/v1beta1
+        kind: RolePolicyAttachment
+        spec:
+          forProvider:
+            policyArn: ""
+            roleNameRef:
+              name: ""
+      patches:
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.roleName
+          toFieldPath: spec.forProvider.roleNameRef.name
+        - type: CombineFromComposite
+          combine:
+            variables:
+              - fromFieldPath: spec.roleName
+            strategy: string
+            string:
+              fmt: "%s-policy"
+          toFieldPath: metadata.name
+        - type: FromResourceFieldPath
+          fromFieldPath: status.atProvider.arn
+          toFieldPath: spec.forProvider.policyArn
+          resourceRef:
+            name: iampolicy
+      conditions:
+        - type: FieldPath
+          fieldPath: spec.policy
+    - name: iamrolepolicyattachment-managed
+      base:
+        apiVersion: iam.aws.crossplane.io/v1beta1
+        kind: RolePolicyAttachment
+        spec:
+          forProvider:
+            policyArn: ""
+            roleNameRef:
+              name: ""
+      patches:
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.roleName
+          toFieldPath: spec.forProvider.roleNameRef.name
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.managedPolicyARNs[*]
+          toFieldPath: spec.forProvider.policyArn
+        - type: CombineFromComposite
+          combine:
+            variables:
+              - fromFieldPath: spec.roleName
+              - fromFieldPath: spec.managedPolicyARNs[*]
+            strategy: string
+            string:
+              fmt: "%s-managed-%s"
+          toFieldPath: metadata.name
+      conditions:
+        - type: FieldPath
+          fieldPath: spec.managedPolicyARNs
+---
+apiVersion: apiextensions.crossplane.io/v1
+kind: CompositeResourceDefinition
+metadata:
+  name: ekspodidentities.platform.local
+spec:
+  group: platform.local
+  names:
+    kind: EKSPodIdentity
+    plural: ekspodidentities
+  claimNames:
+    kind: EKSPodIdentityClaim
+    plural: ekspodidentityclaims
+  versions:
+    - name: v1alpha1
+      served: true
+      referenceable: true
+      schema:
+        openAPIV3Schema:
+          type: object
+          properties:
+            spec:
+              type: object
+              required:
+                - roleName
+                - serviceAccount
+              properties:
+                roleName:
+                  type: string
+                  description: "Name of the IAM role to create"
+                policy:
+                  type: string
+                  description: "IAM policy document to attach to the role"
+                managedPolicyARNs:
+                  type: array
+                  description: "List of managed policy ARNs to attach to the role"
+                  items:
+                    type: string
+                permissionsBoundary:
+                  type: string
+                  description: "Optional IAM permissions boundary to apply to the role"
+                serviceAccount:
+                  type: string
+                  description: "Service account in format name to bind the IAM role to"
+              oneOf:
+                - required: ["policy"]
+                - required: ["managedPolicyARNs"]
