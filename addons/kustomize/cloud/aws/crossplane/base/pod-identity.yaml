@@ -12,141 +12,145 @@ spec:
   compositeTypeRef:
     apiVersion: platform.local/v1alpha1
     kind: EKSPodIdentity
-  resources:
-    - name: iamrole
-      base:
-        apiVersion: iam.aws.crossplane.io/v1beta1
-        kind: Role
-        spec:
-          forProvider:
-            assumeRolePolicyDocument: |
-              {
-                "Version": "2012-10-17",
-                "Statement": [
-                  {
-                    "Effect": "Allow",
-                    "Principal": {
-                      "Service": "pods.eks.amazonaws.com"
-                    },
-                    "Action": "sts:AssumeRole"
-                  }
-                ]
-              }
-      patches:
-        - type: FromCompositeFieldPath
-          fromFieldPath: spec.roleName
-          toFieldPath: metadata.name
-        - type: FromCompositeFieldPath
-          fromFieldPath: spec.permissionsBoundary
-          toFieldPath: spec.forProvider.permissionsBoundary
-          policy:
-            fromFieldPath: Optional
-        - type: FromCompositeFieldPath
-          fromFieldPath: spec.serviceAccount
-          toFieldPath: spec.forProvider.assumeRolePolicyDocument
-          transforms:
-            - type: string
-              string:
-                fmt: |
-                  {
-                    "Version": "2012-10-17",
-                    "Statement": [
-                      {
-                        "Effect": "Allow",
-                        "Principal": {
-                          "Federated": "arn:aws:iam::${account}:oidc-provider/${oidcProvider}"
-                        },
-                        "Action": "sts:AssumeRoleWithWebIdentity",
-                        "Condition": {
-                          "StringEquals": {
-                            "${oidcProvider}:sub": "system:serviceaccount:%s"
-                          }
+  mode: Pipeline
+  pipeline:
+    # Step 1: Create IAM Role with appropriate trust policy
+    - step: patch-and-transform
+      functionRef:
+        name: function-patch-and-transform
+      input:
+        apiVersion: pt.fn.crossplane.io/v1beta1
+        kind: Resources
+        resources:
+          - name: iamrole
+            base:
+              apiVersion: iam.aws.upbound.io/v1beta1
+              kind: Role
+              spec:
+                forProvider:
+                  assumeRolePolicyDocument: |
+                    {
+                      "Version": "2012-10-17",
+                      "Statement": [
+                        {
+                          "Effect": "Allow",
+                          "Principal": {
+                            "Service": "pods.eks.amazonaws.com"
+                          },
+                          "Action": "sts:AssumeRole"
                         }
-                      }
-                    ]
-                  }
-          policy:
-            fromFieldPath: Optional
-    - name: iampolicy
-      base:
-        apiVersion: iam.aws.crossplane.io/v1beta1
-        kind: Policy
-        spec:
-          forProvider:
-            description: "Policy for EKS Pod Identity"
-      patches:
-        - type: FromCompositeFieldPath
-          fromFieldPath: spec.roleName
-          toFieldPath: metadata.name
-          transforms:
-            - type: string
-              string:
-                fmt: "%s-policy"
-        - type: FromCompositeFieldPath
-          fromFieldPath: spec.policy
-          toFieldPath: spec.forProvider.document
-          policy:
-            fromFieldPath: Optional
-      conditions:
-        - type: FieldPath
-          fieldPath: spec.policy
-    - name: iamrolepolicyattachment-custom
-      base:
-        apiVersion: iam.aws.crossplane.io/v1beta1
-        kind: RolePolicyAttachment
-        spec:
-          forProvider:
-            policyArn: ""
-            roleNameRef:
-              name: ""
-      patches:
-        - type: FromCompositeFieldPath
-          fromFieldPath: spec.roleName
-          toFieldPath: spec.forProvider.roleNameRef.name
-        - type: CombineFromComposite
-          combine:
-            variables:
-              - fromFieldPath: spec.roleName
-            strategy: string
-            string:
-              fmt: "%s-policy"
-          toFieldPath: metadata.name
-        - type: FromResourceFieldPath
-          fromFieldPath: status.atProvider.arn
-          toFieldPath: spec.forProvider.policyArn
-          resourceRef:
-            name: iampolicy
-      conditions:
-        - type: FieldPath
-          fieldPath: spec.policy
-    - name: iamrolepolicyattachment-managed
-      base:
-        apiVersion: iam.aws.crossplane.io/v1beta1
-        kind: RolePolicyAttachment
-        spec:
-          forProvider:
-            policyArn: ""
-            roleNameRef:
-              name: ""
-      patches:
-        - type: FromCompositeFieldPath
-          fromFieldPath: spec.roleName
-          toFieldPath: spec.forProvider.roleNameRef.name
-        - type: FromCompositeFieldPath
-          fromFieldPath: spec.managedPolicyARNs[*]
-          toFieldPath: spec.forProvider.policyArn
-        - type: CombineFromComposite
-          combine:
-            variables:
-              - fromFieldPath: spec.roleName
-              - fromFieldPath: spec.managedPolicyARNs[*]
-            strategy: string
-            string:
-              fmt: "%s-managed-%s"
-          toFieldPath: metadata.name
-      conditions:
-        - type: FieldPath
-          fieldPath: spec.managedPolicyARNs
+                      ]
+                    }
+            patches:
+              - type: FromCompositeFieldPath
+                fromFieldPath: spec.roleName
+                toFieldPath: metadata.name
+              - type: FromCompositeFieldPath
+                fromFieldPath: spec.permissionsBoundary
+                toFieldPath: spec.forProvider.permissionsBoundary
+                policy:
+                  fromFieldPath: Optional
+              - type: FromCompositeFieldPath
+                fromFieldPath: spec.serviceAccount
+                toFieldPath: spec.forProvider.assumeRolePolicyDocument
+                transforms:
+                  - type: string
+                    string:
+                      type: Format
+                      fmt: |
+                        {
+                          "Version": "2012-10-17",
+                          "Statement": [
+                            {
+                              "Effect": "Allow",
+                              "Principal": {
+                                "Federated": "arn:aws:iam::${account}:oidc-provider/${oidcProvider}"
+                              },
+                              "Action": "sts:AssumeRoleWithWebIdentity",
+                              "Condition": {
+                                "StringEquals": {
+                                  "${oidcProvider}:sub": "system:serviceaccount:%s"
+                                }
+                              }
+                            }
+                          ]
+                        }
+                policy:
+                  fromFieldPath: Optional
+
+          - name: iampolicy
+            base:
+              apiVersion: iam.aws.upbound.io/v1beta1
+              kind: Policy
+              spec:
+                forProvider:
+                  description: "Policy for EKS Pod Identity"
+            patches:
+              - type: FromCompositeFieldPath
+                fromFieldPath: spec.roleName
+                toFieldPath: metadata.name
+                transforms:
+                  - type: string
+                    string:
+                      type: Format
+                      fmt: "%s-policy"
+              - type: FromCompositeFieldPath
+                fromFieldPath: spec.policy
+                toFieldPath: spec.forProvider.document
+                policy:
+                  fromFieldPath: Optional
+
+          - name: iamrolepolicyattachment
+            base:
+              apiVersion: iam.aws.upbound.io/v1beta1
+              kind: RolePolicyAttachment
+              spec:
+                forProvider:
+                  policyArn: ""
+                  roleNameRef:
+                    name: ""
+            patches:
+              - type: FromCompositeFieldPath
+                fromFieldPath: spec.roleName
+                toFieldPath: spec.forProvider.roleNameRef.name
+              - type: CombineFromComposite
+                combine:
+                  variables:
+                    - fromFieldPath: spec.roleName
+                  strategy: string
+                  string:
+                    fmt: "%s-policy"
+                toFieldPath: metadata.name
+              - type: FromCompositeFieldPath
+                fromFieldPath: status.atProvider.arn
+                toFieldPath: spec.forProvider.policyArn
+
+          # Step 4: Attach managed policies to the role if provided
+          - name: iammanagedpolicyattachment
+            base:
+              apiVersion: iam.aws.upbound.io/v1beta1
+              kind: RolePolicyAttachment
+              spec:
+                forProvider:
+                  policyArn: ""
+                  roleNameRef:
+                    name: ""
+            patches:
+              - type: FromCompositeFieldPath
+                fromFieldPath: spec.roleName
+                toFieldPath: spec.forProvider.roleNameRef.name
+              - type: FromCompositeFieldPath
+                fromFieldPath: spec.managedPolicyARNs[*]
+                toFieldPath: spec.forProvider.policyArn
+              - type: CombineFromComposite
+                combine:
+                  variables:
+                    - fromFieldPath: spec.roleName
+                    - fromFieldPath: spec.managedPolicyARNs[*]
+                  strategy: string
+                  string:
+                    fmt: "%s-managed-%s"
+                toFieldPath: metadata.name
 ---
 apiVersion: apiextensions.crossplane.io/v1
 kind: CompositeResourceDefinition
