@@ -89,6 +89,12 @@ variable "enable_terranetes" {
   default     = true
 }
 
+variable "enable_transit_gateway" {
+  description = "Enable the transit gateway"
+  type        = bool
+  default     = false
+}
+
 variable "hub_account_id" {
   description = "When using a hub deployment options, this is the account where argocd is running"
   type        = string
@@ -116,6 +122,12 @@ variable "public_subnet_netmask" {
 variable "tags" {
   description = "The tags to apply to all resources"
   type        = map(string)
+}
+
+variable "transit_gateway_id" {
+  description = "The transit gateway ID"
+  type        = string
+  default     = null
 }
 
 variable "vpc_cidr" {
