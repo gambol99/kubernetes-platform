@@ -130,6 +130,14 @@ variable "transit_gateway_id" {
   default     = null
 }
 
+variable "transit_gateway_routes" {
+  description = "A collection of routes to add to the transit gateway"
+  type        = map(string)
+  default = {
+    private = "10.0.0.0/8"
+  }
+}
+
 variable "vpc_cidr" {
   description = "The CIDR block for the VPC, if not using an existing VPC"
   type        = string

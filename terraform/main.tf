@@ -1,7 +1,7 @@
 
 ## Provision a EKS cluster for the hub
 module "eks" {
-  source = "github.com/gambol99/terraform-aws-eks?ref=v0.3.1"
+  source = "github.com/gambol99/terraform-aws-eks?ref=v0.3.3"
 
   access_entries                 = var.access_entries
   cluster_enabled_log_types      = null
@@ -16,6 +16,7 @@ module "eks" {
   public_subnet_netmask          = var.public_subnet_netmask
   tags                           = local.tags
   transit_gateway_id             = var.transit_gateway_id
+  transit_gateway_routes         = var.transit_gateway_routes
   vpc_cidr                       = var.vpc_cidr
   vpc_id                         = var.vpc_id
 
@@ -23,19 +24,21 @@ module "eks" {
   argocd = {
     enabled = local.enable_argocd_pod_identity
   }
+
   external_secrets = {
     enabled = var.enable_external_secrets
   }
-  terranetes = {
-    enabled = var.enable_terranetes
-  }
+
   pod_identity = {
     crossplane = {
       description     = "Permissions for Crossplane to manage the cluster"
-      managed_arns    = ["arn:aws:iam::aws:role/AdministratorAccess"]
       name            = "crossplane-${local.cluster_name}"
       namespace       = "crossplane-system"
       service_account = "crossplane"
+
+      managed_policy_arns = {
+        AdministratorAccess = "arn:aws:iam::aws:role/AdministratorAccess"
+      }
     }
   }
 }

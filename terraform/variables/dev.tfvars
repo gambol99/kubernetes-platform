@@ -1,9 +1,5 @@
 ## Path to the cluster definition
-cluster_path           = "../release/standalone-aws/clusters/dev.yaml"
-enable_nat_gateway     = false
-enable_transit_gateway = true
-transit_gateway_id     = "tgw-0b1b2c3d4e5cif6g7h"
-
+cluster_path = "../release/standalone-aws/clusters/dev.yaml"
 ## Override revision or branch for the platform and tenant repositories
 revision_overrides = {
   platform_revision = "develop"
@@ -16,5 +12,3 @@ tags = {
   Product     = "EKS"
   Owner       = "Engineering"
 }
-
-
