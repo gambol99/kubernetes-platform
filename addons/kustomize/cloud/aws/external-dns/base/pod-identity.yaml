@@ -8,6 +8,7 @@ metadata:
     app.kubernetes.io/managed-by: platform
     app.kubernetes.io/name: external-dns
     app.kubernetes.io/part-of: external-dns
+  annotations:
     argo-cd.argoproj.io/sync-wave: "-10"
 spec:
   roleName: external-dns
