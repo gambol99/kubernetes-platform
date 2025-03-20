@@ -26,11 +26,9 @@ cluster_type: spoke
 tenant: test
 ## We use labels to enable/disable features in the tenant cluster
 labels:
-  enable_aws_ack_iam: "true"
   enable_cert_manager: "true"
   enable_external_secrets: "true"
   enable_karpenter_nodepools: "true"
-  enable_kro: "true"
   enable_kyverno: "true"
 ## Annotations are using for additional metadata about the tenant cluster
 annotations:
