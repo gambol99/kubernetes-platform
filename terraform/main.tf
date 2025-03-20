@@ -37,7 +37,7 @@ module "eks" {
       service_account = "crossplane"
 
       managed_policy_arns = {
-        AdministratorAccess = "arn:aws:iam::aws:role/AdministratorAccess"
+        AdministratorAccess = "arn:aws:iam::aws:policy/AdministratorAccess"
       }
     }
   }
