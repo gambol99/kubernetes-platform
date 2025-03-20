@@ -9,7 +9,7 @@ metadata:
   name: tenant-system-helm
   namespace: argocd
   annotations:
-    argocd.argoproj.io/sync-wave: "10"
+    argocd.argoproj.io/sync-wave: "20"
 spec:
   goTemplate: true
 
@@ -69,6 +69,8 @@ spec:
     metadata:
       name: "tenant-helm-{{ .path.basenameNormalized }}-{{ .metadata.labels.cluster_name }}"
       namespace: argocd
+      annotations:
+        argocd.argoproj.io/sync-wave: '{{ default "20" .sync.wave }}'
       labels:
         app.kubernetes.io/instance: "{{ .metadata.labels.cluster_name }}"
         app.kubernetes.io/managed-by: argocd

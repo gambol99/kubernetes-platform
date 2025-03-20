@@ -9,7 +9,7 @@ metadata:
   name: system-kustomize
   namespace: argocd
   annotations:
-    argocd.argoproj.io/sync-wave: "5"
+    argocd.argoproj.io/sync-wave: "10"
     kustomize.patch.appset.platform: "true"
 spec:
   goTemplate: true
@@ -77,7 +77,7 @@ spec:
       name: "system-kust-{{ .path.basenameNormalized }}-{{ .metadata.labels.cluster_name }}"
       namespace: argocd
       annotations:
-        argocd.argoproj.io/sync-wave: '{{ default "15" .sync.wave }}'
+        argocd.argoproj.io/sync-wave: '{{ default "10" .sync.wave }}'
       labels:
         app.kubernetes.io/instance: "{{ .metadata.labels.cluster_name }}"
         app.kubernetes.io/managed-by: argocd

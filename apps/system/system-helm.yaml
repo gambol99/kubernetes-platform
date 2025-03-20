@@ -9,7 +9,7 @@ metadata:
   name: system-helm
   namespace: argocd
   annotations:
-    argocd.argoproj.io/sync-wave: "1"
+    argocd.argoproj.io/sync-wave: "10"
     kustomize.patch.appset.platform: "true"
 spec:
   goTemplate: true
@@ -77,7 +77,7 @@ spec:
       name: "system-{{ normalize .feature }}-{{ .metadata.labels.cluster_name }}"
       namespace: argocd
       annotations:
-        argocd.argoproj.io/sync-wave: '{{ default "10" .sync.wave }}'
+        argocd.argoproj.io/sync-wave: '{{ default "5" .sync.wave }}'
       labels:
         app.kubernetes.io/instance: "{{ .metadata.labels.cluster_name }}"
         app.kubernetes.io/managed-by: argocd

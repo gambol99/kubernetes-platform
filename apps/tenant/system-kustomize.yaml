@@ -67,6 +67,8 @@ spec:
     metadata:
       name: "tenant-kust-{{ .path.basenameNormalized }}-{{ .metadata.labels.cluster_name }}"
       namespace: argocd
+      annotations:
+        argocd.argoproj.io/sync-wave: '{{ default "20" .sync.wave }}'
       labels:
         app.kubernetes.io/instance: "{{ .metadata.labels.cluster_name }}"
         app.kubernetes.io/managed-by: argocd
