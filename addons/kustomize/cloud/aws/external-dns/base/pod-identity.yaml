@@ -1,0 +1,38 @@
+---
+apiVersion: platform.local/v1alpha1
+kind: EKSPodIdentity
+metadata:
+  name: external-dns
+  labels:
+    app.kubernetes.io/instance: external-dns
+    app.kubernetes.io/managed-by: platform
+    app.kubernetes.io/name: external-dns
+    app.kubernetes.io/part-of: external-dns
+    argo-cd.argoproj.io/sync-wave: "-10"
+spec:
+  roleName: external-dns
+  serviceAccount: external-dns/external-dns
+  policy: |
+    {
+      "Version": "2012-10-17",
+      "Statement": [
+        {
+          "Effect": "Allow",
+          "Action": [
+            "route53:ChangeResourceRecordSets"
+          ],
+          "Resource": [
+            "arn:aws:route53:::hostedzone/*"
+          ]
+        },
+        {
+          "Effect": "Allow",
+          "Action": [
+            "route53:ListHostedZones",
+            "route53:ListResourceRecordSets",
+            "route53:ListTagsForResource"
+          ],
+          "Resource": ["*"]
+        }
+      ]
+    }

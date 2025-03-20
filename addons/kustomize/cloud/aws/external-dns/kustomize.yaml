@@ -1,0 +1,18 @@
+---
+kustomize:
+  ## Human friendly description (optional)
+  description: Provisions the external-dns resources
+  ## The feature flag used to enable the feature (required)
+  feature: external_dns
+  ## The path to the kustomize overlay (required)
+  path: base
+
+## The namespace options (required)
+namespace:
+  ## The name of the namespace to deploy the application (required)
+  name: external-dns
+
+## Synchronization options (optional)
+sync:
+  ## How to order the deployment of the resources (optional)
+  phase: primary
