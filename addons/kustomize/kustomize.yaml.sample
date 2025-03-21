@@ -15,9 +15,10 @@ kustomize:
     - target:
         kind: <KIND>
         name: <NAME>
-      path: <PATH>
-      key: <KEY>
-      default: <DEFAULT>
+      patch:
+        - path: <PATH>
+          key: <KEY>
+          default: <DEFAULT>
 
   ## A collection of common labels to apply (optional)
   commomLabels:
