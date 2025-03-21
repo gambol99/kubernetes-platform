@@ -1,6 +1,6 @@
 ---
-apiVersion: platform.local/v1alpha1
-kind: EKSPodIdentity
+apiVersion: aws.platform.upbound.io/v1alpha1
+kind: XPodIdentity
 metadata:
   name: external-dns
   labels:
@@ -11,29 +11,39 @@ metadata:
   annotations:
     argo-cd.argoproj.io/sync-wave: "-10"
 spec:
-  roleName: external-dns
-  serviceAccount: external-dns/external-dns
-  policy: |
-    {
-      "Version": "2012-10-17",
-      "Statement": [
-        {
-          "Effect": "Allow",
-          "Action": [
-            "route53:ChangeResourceRecordSets"
-          ],
-          "Resource": [
-            "arn:aws:route53:::hostedzone/*"
-          ]
-        },
-        {
-          "Effect": "Allow",
-          "Action": [
-            "route53:ListHostedZones",
-            "route53:ListResourceRecordSets",
-            "route53:ListTagsForResource"
-          ],
-          "Resource": ["*"]
-        }
-      ]
-    }
+  parameters:
+    ## The cluster name
+    clusterName: CLUSTER_NAME
+    ## The region to deploy the resources
+    region: REGION
+    ## The service account to associate the permissions
+    serviceAccount:
+      name: external-dns
+      namespace: external-dns
+    ## The policy to attach to the role
+    inlinePolicy:
+      - name: default
+        policy: |
+          {
+            "Version": "2012-10-17",
+            "Statement": [
+              {
+                "Effect": "Allow",
+                "Action": [
+                  "route53:ChangeResourceRecordSets"
+                ],
+                "Resource": [
+                  "arn:aws:route53:::hostedzone/*"
+                ]
+              },
+              {
+                "Effect": "Allow",
+                "Action": [
+                  "route53:ListHostedZones",
+                  "route53:ListResourceRecordSets",
+                  "route53:ListTagsForResource"
+                ],
+                "Resource": ["*"]
+              }
+            ]
+          }

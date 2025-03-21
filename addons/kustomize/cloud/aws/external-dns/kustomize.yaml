@@ -6,6 +6,20 @@ kustomize:
   feature: external_dns
   ## The path to the kustomize overlay (required)
   path: base
+  ## Patches
+  patches:
+    - target:
+        kind: XPodIdentity
+        name: external-dns
+      patch:
+        - op: replace
+          path: /spec/parameters/clusterName
+          key: metadata.labels.cluster_name
+          default: unknown
+        - op: replace
+          path: /spec/parameters/region
+          key: metadata.annotations.region
+          default: unknown
 
 ## The namespace options (required)
 namespace:
