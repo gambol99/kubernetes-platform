@@ -1,0 +1,9 @@
+---
+apiVersion: apiextensions.crossplane.io/v1alpha1
+kind: EnvironmentConfig
+metadata:
+  name: default
+data:
+  clusterName: CLUSTER_NAME
+  accountId: ACCOUNTID
+  region: REGION
