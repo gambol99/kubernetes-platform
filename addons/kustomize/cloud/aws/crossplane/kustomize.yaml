@@ -4,6 +4,24 @@ kustomize:
   feature: crossplane
   ## The entrypoint for the kustomize
   path: base
+  ## Patches
+  patches:
+    - target:
+        kind: EnvironmentConfig
+        name: default
+      patch:
+        - op: replace
+          path: /data/clusterName
+          key: metadata.labels.clusterName
+          default: unknown
+        - op: replace
+          path: /data/region
+          key: metadata.annotations.region
+          default: unknown
+        - op: replace
+          path: /data/accountId
+          key: metadata.annotations.accountId
+          default: unknown
 
 ## The namespace options
 namespace:
