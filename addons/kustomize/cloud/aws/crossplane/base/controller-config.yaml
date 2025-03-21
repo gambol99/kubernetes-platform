@@ -2,6 +2,5 @@
 apiVersion: pkg.crossplane.io/v1alpha1
 kind: ControllerConfig
 metadata:
-  name: function-timeouts
+  name: controller
 spec:
-  webhookTimeout: 60s
