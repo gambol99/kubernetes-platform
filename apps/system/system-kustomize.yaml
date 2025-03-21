@@ -144,10 +144,10 @@ spec:
             - target:
                 kind: {{ $change.target.kind }}
                 name: {{ $change.target.name }}
+              patch: |
               {{- range $patch := $change.patch }}
               {{- $params := splitList "." $patch.key }}
               {{- $value := $patch.default }}
-              patch: |
                 - op: {{ $patch.op }}
                   path: {{ $patch.path }}
                   {{- if eq (len $params) 1 }}
