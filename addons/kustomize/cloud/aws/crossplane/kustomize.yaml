@@ -10,19 +10,22 @@ kustomize:
         kind: EnvironmentConfig
         name: default
       patch:
-        - op: replace
-          path: /data/clusterName
-          key: metadata.labels.clusterName
+        - op: add
+          path: /data/cluster_name
+          key: metadata.labels.cluster_name
           default: unknown
-        - op: replace
+        - op: add
           path: /data/region
           key: metadata.annotations.region
           default: unknown
-        - op: replace
-          path: /data/accountId
-          key: metadata.annotations.accountId
+        - op: add
+          path: /data/platform_repository
+          key: metadata.annotations.platform_repository
           default: unknown
-
+        - op: add
+          path: /data/platform_revision
+          key: metadata.annotations.platform_revision
+          default: unknown
 ## The namespace options
 namespace:
   ## The namespace to deploy the resources
