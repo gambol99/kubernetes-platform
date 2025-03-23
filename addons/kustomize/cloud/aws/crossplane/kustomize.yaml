@@ -33,3 +33,4 @@ namespace:
 
 sync:
   phase: primary
+  max_duration: 30s
