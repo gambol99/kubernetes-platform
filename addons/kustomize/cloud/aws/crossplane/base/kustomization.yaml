@@ -7,5 +7,4 @@ resources:
   - controller-config.yaml
   - environment-config.yaml
   - providers.yaml
-  - providers-config.yaml
   - pod-identity.yaml
