@@ -4,7 +4,6 @@ kind: Kustomization
 
 resources:
   - functions.yaml
-  - controller-config.yaml
   - environment-config.yaml
   - providers.yaml
   - pod-identity.yaml
